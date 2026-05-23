@@ -103,12 +103,12 @@ export default function EndurancePage() {
               {
                 label: 'Highest point',
                 value: '14,505 ft',
-                note: 'Mt. Whitney summit',
+                sub: 'Mt. Whitney summit',
               },
               {
                 label: 'Day 2 start',
                 value: '2:27 AM',
-                note: 'Alpine start, summit by sunrise',
+                sub: 'Alpine start, summit by sunrise',
               },
             ]}
           />
@@ -168,7 +168,7 @@ export default function EndurancePage() {
               {
                 label: 'Top speed',
                 value: '42.9 mph',
-                note: 'On the descent',
+                sub: 'On the descent',
               },
             ]}
           />
@@ -219,13 +219,13 @@ export default function EndurancePage() {
               {
                 label: 'Finish',
                 value: '5:41:08',
-                note: 'Div rank 46 · Overall 714',
+                sub: 'Div rank 46 · Overall 714',
               },
               { label: 'Swim · 1.2 mi', value: '0:43:42' },
               {
                 label: 'Bike · 56 mi',
                 value: '2:44:15',
-                note: 'Div rank 39 — strongest leg',
+                sub: 'Div rank 39 — strongest leg',
               },
               { label: 'Run · 13.1 mi', value: '2:00:13' },
             ]}
