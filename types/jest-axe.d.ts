@@ -25,3 +25,8 @@ declare module 'jest-axe' {
     options?: Record<string, unknown>,
   ): Promise<AxeResults>;
 }
+
+// The Vitest assertion augmentation for `.toHaveNoViolations()` lives in
+// vitest.setup.ts (alongside the matcher's runtime registration), since
+// this file is a script and `declare module 'vitest'` here would
+// conflict with vitest's published types instead of augmenting them.

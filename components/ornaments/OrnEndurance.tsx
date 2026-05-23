@@ -5,10 +5,10 @@ export type EnduranceKind = 'tioga' | 'whitney' | 'race' | 'timeline';
 /**
  * Compact endurance ornaments — used on tiles + section thumbnails.
  *
- * - `tioga` / `cycling`     → elevation profile with a peak dot + summit label
- * - `whitney` / `summit`    → elevation profile with a triangular peak
- * - `race`                  → 3-leg SWIM/BIKE/RUN bar chart (bike highlighted)
- * - `timeline`              → labeled-tick legacy ribbon
+ * - `tioga`     → elevation profile with a peak dot + summit label
+ * - `whitney`   → elevation profile with a triangular peak
+ * - `race`      → 3-leg SWIM/BIKE/RUN bar chart (bike highlighted)
+ * - `timeline`  → labeled-tick legacy ribbon
  *
  * For the larger route SVGs that live on /endurance/, see `routes/` (built
  * during Phase 4).

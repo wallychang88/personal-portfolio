@@ -129,17 +129,31 @@ axis — Tailwind has no utility for variable-font axes.
 
 ## Photo strip + lightbox — `components/photo-strip.tsx`
 
-- `'use client'` — lightbox needs open/index state
-- `yet-another-react-lightbox` for the modal; CSS co-imported
+- `'use client'` — needs open/index state
+- The lightbox itself + its CSS live in `components/photo-strip-lightbox.tsx`,
+  pulled in via `next/dynamic({ssr: false})` so the ~12 kB JS + ~3 kB CSS
+  only load when the user clicks (cheap first-paint on every page)
 - Each thumbnail is a `<button>` opening the lightbox at its index
 - `aspect-[4/3]` framed crop, motion-safe hover scale + shadow lift
 - Empty galleries render an inline placeholder of the same footprint
 
 ## Motion library
 
-CSS keyframes in `app/globals.css` (the `.orn-*` block), with shorter
-Tailwind animation utilities also available via
-`tailwind.config.ts → theme.extend.animation`.
+CSS keyframes live in `app/globals.css` under `.orn-*` (sourced from
+`_unified.jsx`). Tailwind animation utilities are intentionally *not*
+configured — there's one place to edit motion, and it's the CSS file.
+
+**Motion-safe vs reduced-motion patterns:**
+- Component-level hover transforms (Tile lift, photo zoom): use the
+  Tailwind `motion-safe:` prefix on the utility, e.g.
+  `motion-safe:hover:-translate-y-1`.
+- Ornament animations driven by `.orn-*` classes: the single
+  `@media (prefers-reduced-motion: reduce)` block at the bottom of
+  `globals.css` neutralizes all of them.
+
+Both patterns coexist by design — `motion-safe:` is more local;
+the `.orn-*` reduce block keeps one source for all keyframe-driven
+ornaments.
 
 | Class | What it does | Source |
 |---|---|---|

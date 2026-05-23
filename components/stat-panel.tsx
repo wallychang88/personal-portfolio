@@ -31,11 +31,11 @@ export function StatPanel({ items }: { items: StatItem[] }) {
           key={item.label}
           className={
             'px-4 py-3.5 sm:px-[18px] sm:py-3.5 ' +
-            // Vertical hairline between cells; last cell + the rightmost
-            // in 2-col mode skip it.
+            // Vertical hairline between cells. At <sm we're 2-col, so the
+            // right column (odd indices) skips its right border. At >=sm
+            // we're 4-col, so :last:border-r-0 zeroes the rightmost.
             'sm:border-r sm:border-ink/[0.12] sm:last:border-r-0 ' +
-            (i % 2 === 1 ? 'border-r-0 ' : 'border-r border-ink/[0.12] ') +
-            (i % 2 === 1 ? '' : '')
+            (i % 2 === 1 ? 'border-r-0 ' : 'border-r border-ink/[0.12]')
           }
         >
           <dt className="font-mono text-[10.5px] tracking-stat uppercase text-ink-faint">

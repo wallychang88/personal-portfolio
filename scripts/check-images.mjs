@@ -33,8 +33,14 @@ while ((m = SRC_RE.exec(src))) {
     missing.push({ src: value, why: 'must start with /' });
     continue;
   }
-  // Path is relative to /public.
-  const disk = join(PUBLIC_DIR, value);
+  // Path is relative to /public. resolve() normalizes ../, so a
+  // malicious entry like "/foo/../../package.json" gets caught by the
+  // starts-with guard instead of escaping the public directory.
+  const disk = resolve(PUBLIC_DIR, '.' + value);
+  if (!disk.startsWith(PUBLIC_DIR + '/')) {
+    missing.push({ src: value, why: 'escapes public/ (likely a traversal)' });
+    continue;
+  }
   if (!existsSync(disk)) {
     missing.push({ src: value, why: 'file not in public/' });
   }

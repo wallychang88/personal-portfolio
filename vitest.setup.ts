@@ -28,3 +28,19 @@ expect.extend({
     return { pass, message };
   },
 });
+
+// Type-side: tell TS that Assertion gains the `.toHaveNoViolations()` method
+// we just registered at runtime. This is module augmentation (vitest is a
+// real published package), and this file is already a module (it has
+// top-level imports), so the declaration goes here rather than in the
+// jest-axe shim.
+declare module 'vitest' {
+  // Match Vitest's published Assertion<T = any> signature.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  interface Assertion<T = any> {
+    toHaveNoViolations(): T;
+  }
+  interface AsymmetricMatchersContaining {
+    toHaveNoViolations(): unknown;
+  }
+}

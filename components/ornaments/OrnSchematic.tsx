@@ -88,7 +88,7 @@ export function OrnSchematic({
       />
       {/* MediaPipe → ESP32 */}
       <path
-        className={`orn-draw d${Math.min((delay + 1) as 1 | 2 | 3 | 4 | 5, 5)}`}
+        className={`orn-draw d${Math.min(delay + 1, 5)}`}
         d={`M${width * 0.58},${height * 0.55} L${width * 0.61},${height * 0.55}`}
         stroke={accent}
         strokeWidth="1.4"
@@ -96,7 +96,7 @@ export function OrnSchematic({
       />
       {/* ESP32 → Relay */}
       <path
-        className={`orn-draw d${Math.min((delay + 2) as 1 | 2 | 3 | 4 | 5, 5)}`}
+        className={`orn-draw d${Math.min(delay + 2, 5)}`}
         d={`M${width * 0.79},${height * 0.55} L${width * 0.83},${height * 0.42}`}
         stroke={accent}
         strokeWidth="1.4"
@@ -114,7 +114,7 @@ export function OrnSchematic({
         r="3"
         fill={accent}
         className="orn-signal-pulse"
-        style={{ ['--orn-pulse-path' as string]: `path('${pulsePath}')` } as React.CSSProperties}
+        style={{ '--orn-pulse-path': `path('${pulsePath}')` } as React.CSSProperties}
       />
 
       {/* Rails label */}

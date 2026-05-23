@@ -106,11 +106,27 @@ for (const dir of SOURCE_DIRS) {
       const normalized = path.endsWith('/') ? path : path + '/';
       if (path === '/') continue;
 
-      // Allow direct asset paths (under /public/)
-      if (path.startsWith('/images/') || path.endsWith('.pdf') || path.endsWith('.png') || path.endsWith('.jpg')) {
-        const onDisk = join(ROOT, 'public', path);
-        const repoRoot = join(ROOT, path.slice(1)); // also tolerate /Walter-Chang-Resume.pdf at root
-        if (!existsSync(onDisk) && !existsSync(repoRoot)) {
+      // Allow direct asset paths (under /public/ or at the repo root).
+      if (
+        path.startsWith('/images/') ||
+        path.endsWith('.pdf') ||
+        path.endsWith('.png') ||
+        path.endsWith('.jpg') ||
+        path.endsWith('.jpeg') ||
+        path.endsWith('.webp') ||
+        path.endsWith('.avif') ||
+        path.endsWith('.svg') ||
+        path.endsWith('.gif')
+      ) {
+        const publicDir = resolve(ROOT, 'public');
+        const onDisk = resolve(publicDir, '.' + path);
+        const repoRoot = resolve(ROOT, '.' + path); // tolerate /Walter-Chang-Resume.pdf
+        // resolve() normalizes ../, so a malicious href like /a/../../etc/passwd
+        // wouldn't escape — we check the resolved path is still under the
+        // expected roots.
+        const underPublic = onDisk.startsWith(publicDir + '/') && existsSync(onDisk);
+        const underRoot = repoRoot.startsWith(ROOT + '/') && existsSync(repoRoot);
+        if (!underPublic && !underRoot) {
           issues.push({ file: relative(ROOT, file), href, why: 'asset not found' });
         }
         continue;
