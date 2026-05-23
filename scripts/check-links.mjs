@@ -69,7 +69,6 @@ const ROUTES = discoverRoutes();
 // Remove an entry once its phase lands.
 const PLANNED = new Set([
   '/kitchen/',   // Phase 7
-  '/writing/',   // Phase 6
   '/about/',     // Phase 8
   '/timeline/',  // Phase 9
 ]);
