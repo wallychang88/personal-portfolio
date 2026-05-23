@@ -68,7 +68,6 @@ const ROUTES = discoverRoutes();
 // tolerate references to them so /nav/footer can ship before every page.
 // Remove an entry once its phase lands.
 const PLANNED = new Set([
-  '/kitchen/',   // Phase 7
   '/about/',     // Phase 8
   '/timeline/',  // Phase 9
 ]);
