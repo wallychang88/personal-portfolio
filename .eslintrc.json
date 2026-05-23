@@ -1,0 +1,11 @@
+{
+  "extends": "next/core-web-vitals",
+  "rules": {
+    "no-restricted-imports": ["error", {
+      "patterns": [{
+        "group": [".design-handoff/*", "../.design-handoff/*", "**/.design-handoff/*"],
+        "message": "Never import from .design-handoff/ — _unified.jsx is an IIFE that mutates document at module scope and will break RSC. Use it as visual reference only; re-implement components in TSX from scratch."
+      }]
+    }]
+  }
+}
