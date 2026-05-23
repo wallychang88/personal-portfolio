@@ -3,17 +3,24 @@ import { CAT_HEX } from './catClass';
 /**
  * Kitchen bake curve — temp/time line with a steam wisp at the peak.
  * Mirrors the source `OrnBakeCurve` shape: a ramp up, plateau, cool-down.
+ *
+ * `peakLabel` annotates the peak data point inline (default "500°F"
+ * matches the source spec). Pass `peakLabel={null}` to hide the inline
+ * label entirely — useful when the top `label` doesn't carry a specific
+ * temperature.
  */
 export function OrnBakeCurve({
   width = 240,
   height = 70,
   delay = 1,
   label = 'OVEN · 500° · 22 MIN',
+  peakLabel = '500°F',
 }: {
   width?: number;
   height?: number;
   delay?: 1 | 2 | 3 | 4 | 5;
   label?: string;
+  peakLabel?: string | null;
 }) {
   const color = CAT_HEX.honey;
   const pts: ReadonlyArray<readonly [number, number]> = [
@@ -35,9 +42,11 @@ export function OrnBakeCurve({
       <path d={fillD} fill={color} opacity="0.13" />
       <path className={`orn-draw d${delay}`} d={d} fill="none" stroke={color} strokeWidth="1.6" strokeLinejoin="round" />
       <circle cx={100 * sx} cy={16 * sy} r="3" fill={color} />
-      <text x={106 * sx} y={16 * sy + 4} fontSize="10" fontFamily="JetBrains Mono, monospace" fill={color}>
-        500°F
-      </text>
+      {peakLabel && (
+        <text x={106 * sx} y={16 * sy + 4} fontSize="10" fontFamily="JetBrains Mono, monospace" fill={color}>
+          {peakLabel}
+        </text>
+      )}
       <g className="orn-steam" style={{ animationDelay: '-1s' }}>
         <ellipse cx={130 * sx} cy={6 * sy} rx="3" ry="4" fill={color} opacity="0.35" />
       </g>

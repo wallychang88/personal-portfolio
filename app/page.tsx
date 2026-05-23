@@ -86,7 +86,7 @@ export default function HomePage() {
             and in-stock inventory in one shape.
           </TileHook>
           <div className="mt-auto pt-3">
-            <OrnSparkline width={360} height={56} delay={2} cat="slate" label="ROD BUILDERS · 8 MO" endLabel="ongoing" />
+            <OrnSparkline width={360} height={56} delay={2} cat="slate" label="DISCOVERY · 8 MO" endLabel="→" />
           </div>
           <TileTags tags={['Marketplace', 'Founding']} />
         </Tile>
@@ -145,7 +145,13 @@ export default function HomePage() {
           <TileHook>Bagels are the trophy. Bread and pizza are practice.</TileHook>
           <div className="mt-auto pt-3 flex items-center gap-3">
             <OrnCrossSection width={72} height={54} />
-            <OrnBakeCurve width={170} height={54} delay={2} label="BOIL · BAKE · COOL" />
+            <OrnBakeCurve
+              width={170}
+              height={54}
+              delay={2}
+              label="BOIL · BAKE · COOL"
+              peakLabel={null}
+            />
           </div>
           <TileTags tags={['Bagels']} />
         </Tile>
