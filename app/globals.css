@@ -150,3 +150,128 @@ body {
   background: theme('colors.ink.DEFAULT');
   color: theme('colors.paper.DEFAULT');
 }
+
+/* ============================================================
+   Ornament motion — small CSS-only escape hatches for things
+   that don't lower nicely to Tailwind utilities. Mirrors the
+   .uni.* recipes in _unified.jsx (visual reference only).
+   ============================================================ */
+
+/* draw-in stroke animation (1.6s). Used by route lines + sparklines
+   to animate stroke-dashoffset from 1400 → 0. The stagger classes
+   d2..d5 add 150ms each. */
+.orn-draw {
+  stroke-dasharray: 1400;
+  stroke-dashoffset: 1400;
+  animation: orn-draw 1.6s cubic-bezier(.5,0,.2,1) forwards;
+}
+.orn-draw.d2 { animation-delay: 0.15s; }
+.orn-draw.d3 { animation-delay: 0.3s; }
+.orn-draw.d4 { animation-delay: 0.45s; }
+.orn-draw.d5 { animation-delay: 0.6s; }
+@keyframes orn-draw { to { stroke-dashoffset: 0; } }
+
+/* Sparkline / commit-grid / tenure bars scale up from 0. */
+.orn-bar-grow {
+  transform-origin: 50% 100%;
+  transform: scaleY(0);
+  animation: orn-bar-grow 700ms cubic-bezier(.2,.7,.3,1) forwards;
+}
+@keyframes orn-bar-grow { to { transform: scaleY(1); } }
+
+/* Hardware signal pulse along an inline offset-path. Set --orn-pulse-path
+   via the element's style attribute. ~94% browser support; older browsers
+   render a static dot in place. */
+.orn-signal-pulse {
+  offset-path: var(--orn-pulse-path);
+  offset-distance: 0%;
+  animation: orn-pulse 6s linear infinite;
+}
+@keyframes orn-pulse { to { offset-distance: 100%; } }
+
+/* Software cursor — blinks via visibility. */
+.orn-cursor {
+  display: inline-block;
+  width: 0.55ch;
+  background: theme('colors.slate');
+  animation: orn-blink 1s steps(2, start) infinite;
+  margin-left: 2px;
+  vertical-align: -0.1em;
+}
+@keyframes orn-blink { to { visibility: hidden; } }
+
+/* Steam wisp on kitchen ornaments. */
+.orn-steam {
+  transform-origin: 50% 100%;
+  animation: orn-steam 4s ease-in-out infinite;
+}
+@keyframes orn-steam {
+  0%   { opacity: 0;    transform: translateY(6px)  scale(0.7); }
+  30%  { opacity: 0.45; transform: translateY(-4px) scale(1); }
+  70%  { opacity: 0.25; transform: translateY(-14px) scale(1.15); }
+  100% { opacity: 0;    transform: translateY(-24px) scale(1.3); }
+}
+
+/* LED heartbeat — 1.4s, opacity + scale beat. */
+.orn-led {
+  animation: orn-heartbeat 1.4s ease-in-out infinite;
+}
+@keyframes orn-heartbeat {
+  0%, 60%, 100% { opacity: 1;    transform: scale(1); }
+  30%           { opacity: 0.45; transform: scale(0.85); }
+}
+
+/* Compass — slow idle drift; on hover it locks to +2deg. */
+.orn-compass {
+  transform-origin: 50% 50%;
+  transition: transform 600ms cubic-bezier(.2,.7,.3,1);
+  animation: orn-compass-idle 6s ease-in-out infinite;
+}
+.orn-compass:hover { transform: rotate(2deg); animation: none; }
+@keyframes orn-compass-idle {
+  0%, 100% { transform: rotate(0deg); }
+  50%      { transform: rotate(1deg); }
+}
+
+/* REV stamp — rotated -2deg at rest, flips Y on hover. */
+.orn-rev-stamp {
+  transform: rotate(-2deg);
+  transform-origin: 50% 50%;
+  transition: transform 320ms cubic-bezier(.2,.7,.3,1);
+}
+.orn-rev-stamp:hover { transform: rotate(-2deg) rotateY(180deg); }
+
+/* Drop-cap stamp — settles from -6px on mount. */
+.orn-dropcap-stamp {
+  animation: orn-dropcap-settle 700ms cubic-bezier(.2,.7,.3,1) both;
+}
+@keyframes orn-dropcap-settle {
+  from { transform: translateY(-6px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+/* Pull-quote underline rule — draws left-to-right after a beat. */
+.orn-pq-rule {
+  display: block;
+  height: 1px;
+  background: theme('colors.clay');
+  transform-origin: left center;
+  transform: scaleX(0);
+  animation: orn-pq-rule 600ms cubic-bezier(.2,.7,.3,1) 0.25s forwards;
+}
+@keyframes orn-pq-rule { to { transform: scaleX(1); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .orn-draw            { animation: none; stroke-dashoffset: 0; }
+  .orn-bar-grow        { animation: none; transform: scaleY(1); }
+  .orn-signal-pulse    { animation: none; opacity: 0; }
+  .orn-cursor          { animation: none; }
+  .orn-steam           { animation: none; opacity: 0; }
+  .orn-led             { animation: none; }
+  .orn-compass         { animation: none; transition: none; }
+  .orn-compass:hover   { transform: none; }
+  .orn-rev-stamp       { transition: none; }
+  .orn-rev-stamp:hover { transform: rotate(-2deg); }
+  .orn-dropcap-stamp   { animation: none; }
+  .orn-pq-rule         { animation: none; transform: scaleX(1); }
+}
