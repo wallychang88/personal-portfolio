@@ -1,15 +1,20 @@
-import type { TagCategory } from '../tag';
-
-export type { TagCategory };
-
 /**
- * Hex strings for each category accent. Matches `theme.colors.<cat>` in
- * tailwind.config.ts. Inline SVG (stroke/fill) can't reference Tailwind
- * tokens, so the hex literals live here as a single source.
+ * Single source of truth for the 5-category palette. Owns:
+ *   • the `TagCategory` literal type
+ *   • hex values for inline SVG (`CAT_HEX`)
+ *   • the Tailwind-class triplet per category (stripe / text / bg) plus
+ *     a couple of role-specific keys (`border`, `borderL`).
+ *
+ * Tag pills, Tile, FilterChips, and the ornament SVGs all consume from
+ * here. Adding a new accent? Edit this file + tailwind.config.ts and
+ * every consumer follows automatically. Don't fan out new lookup tables.
  *
  * Honey is darkened from the source `#D4923C` to `#B07A2A` for WCAG AA
  * contrast on small text. Deliberate divergence — see DESIGN.md.
  */
+
+export type TagCategory = 'sage' | 'rust' | 'slate' | 'honey' | 'clay';
+
 export const CAT_HEX: Record<TagCategory, string> = {
   sage:  '#6B8059',
   rust:  '#A14D2A',
@@ -19,22 +24,28 @@ export const CAT_HEX: Record<TagCategory, string> = {
 };
 
 export interface CatClasses {
-  /** `border-l-rust` — used as a 4px left stripe on Tile + section rules. */
-  stripe: string;
-  /** `text-rust` — for the eyebrow / label / ornament hex when rendered via Tailwind. */
-  text: string;
-  /** `bg-rust/[0.06]` — alpha-syntax background for tag pills + soft fills. */
-  bg: string;
-  /** Plain hex value, for inline SVG stroke/fill. */
-  hex: string;
+  /** `text-rust` — accent foreground. */
+  text:    string;
+  /** `border-rust` — accent border at full strength. */
+  border:  string;
+  /** `border-l-rust` — for the 4px Tile stripe (use with `border-l-[4px]`). */
+  borderL: string;
+  /** `bg-rust/[0.06]` — alpha-syntax soft fill (tag pill ground). 7% for honey/clay. */
+  bg:      string;
+  /** Plain hex literal — for inline SVG stroke/fill. */
+  hex:     string;
 }
 
+// Static map so Tailwind's content scanner sees every class as a literal
+// in source. Computed strings ("bg-" + cat) would get tree-shaken.
+const CLASSES: Record<TagCategory, CatClasses> = {
+  sage:  { text: 'text-sage',  border: 'border-sage',  borderL: 'border-l-sage',  bg: 'bg-sage/[0.06]',  hex: CAT_HEX.sage  },
+  rust:  { text: 'text-rust',  border: 'border-rust',  borderL: 'border-l-rust',  bg: 'bg-rust/[0.06]',  hex: CAT_HEX.rust  },
+  slate: { text: 'text-slate', border: 'border-slate', borderL: 'border-l-slate', bg: 'bg-slate/[0.06]', hex: CAT_HEX.slate },
+  honey: { text: 'text-honey', border: 'border-honey', borderL: 'border-l-honey', bg: 'bg-honey/[0.07]', hex: CAT_HEX.honey },
+  clay:  { text: 'text-clay',  border: 'border-clay',  borderL: 'border-l-clay',  bg: 'bg-clay/[0.07]',  hex: CAT_HEX.clay  },
+};
+
 export function catClasses(cat: TagCategory): CatClasses {
-  switch (cat) {
-    case 'sage':  return { stripe: 'border-l-sage',  text: 'text-sage',  bg: 'bg-sage/[0.06]',  hex: CAT_HEX.sage  };
-    case 'rust':  return { stripe: 'border-l-rust',  text: 'text-rust',  bg: 'bg-rust/[0.06]',  hex: CAT_HEX.rust  };
-    case 'slate': return { stripe: 'border-l-slate', text: 'text-slate', bg: 'bg-slate/[0.06]', hex: CAT_HEX.slate };
-    case 'honey': return { stripe: 'border-l-honey', text: 'text-honey', bg: 'bg-honey/[0.07]', hex: CAT_HEX.honey };
-    case 'clay':  return { stripe: 'border-l-clay',  text: 'text-clay',  bg: 'bg-clay/[0.07]',  hex: CAT_HEX.clay  };
-  }
+  return CLASSES[cat];
 }

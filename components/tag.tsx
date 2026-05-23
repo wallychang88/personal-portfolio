@@ -3,12 +3,15 @@
  * rotates deterministically per-tag so the same string always renders the
  * same color across the site.
  *
- * Background is the accent color at ~6% alpha (Tailwind slash-opacity
- * syntax). Border + text are the accent color at full strength. Mirrors
- * `_unified.jsx` `.uni .tag.<cat>` recipe.
+ * Background is the accent color at alpha 0.06 (or 0.07 for honey + clay);
+ * border + text are the accent color at full strength. Class lookup is
+ * routed through `components/ornaments/catClass.ts` so the palette has
+ * one source.
  */
 
-export type TagCategory = 'sage' | 'rust' | 'slate' | 'honey' | 'clay';
+import { catClasses, type TagCategory } from './ornaments/catClass';
+
+export type { TagCategory };
 
 const ROTATING: TagCategory[] = ['clay', 'sage', 'slate', 'rust', 'honey'];
 
@@ -20,21 +23,12 @@ function hash(str: string): number {
   return h;
 }
 
-function paletteFor(cat: TagCategory): string {
-  switch (cat) {
-    case 'sage':  return 'bg-sage/[0.06]  text-sage  border-sage';
-    case 'rust':  return 'bg-rust/[0.06]  text-rust  border-rust';
-    case 'slate': return 'bg-slate/[0.06] text-slate border-slate';
-    case 'honey': return 'bg-honey/[0.07] text-honey border-honey';
-    case 'clay':  return 'bg-clay/[0.07]  text-clay  border-clay';
-  }
-}
-
 export function Tag({ label, cat }: { label: string; cat?: TagCategory }) {
   const category = cat ?? ROTATING[hash(label) % ROTATING.length];
+  const c = catClasses(category);
   return (
     <span
-      className={`inline-flex items-center text-[11px] font-medium tracking-[0.01em] px-2.5 py-0.5 rounded-full border ${paletteFor(category)}`}
+      className={`inline-flex items-center text-[11px] font-medium tracking-[0.01em] px-2.5 py-0.5 rounded-full border ${c.bg} ${c.text} ${c.border}`}
     >
       {label}
     </span>

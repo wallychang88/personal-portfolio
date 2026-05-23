@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import type { TagCategory } from './tag';
+import { catClasses, type TagCategory } from './ornaments/catClass';
 
 /**
  * Bento tile — the universal card primitive across the homepage grid.
@@ -11,27 +11,12 @@ import type { TagCategory } from './tag';
  * client component needed.
  *
  * Category stripe is `border-l-[4px] border-<cat>` — clean DOM, no ::before
- * pseudo (per Pass 4 discipline rules in PORT-PLAN).
+ * pseudo (per Pass 4 discipline rules in PORT-PLAN). Palette via
+ * `catClasses()` so this file doesn't duplicate the lookup table.
  *
  * Span uses Tailwind's grid-column/row arbitrary spans so the parent
  * Bento layout can stay declarative. Default is 1×1.
  */
-
-const STRIPE: Record<TagCategory, string> = {
-  sage:  'border-l-sage',
-  rust:  'border-l-rust',
-  slate: 'border-l-slate',
-  honey: 'border-l-honey',
-  clay:  'border-l-clay',
-};
-
-const ARROW_TEXT: Record<TagCategory, string> = {
-  sage:  'text-sage',
-  rust:  'text-rust',
-  slate: 'text-slate',
-  honey: 'text-honey',
-  clay:  'text-clay',
-};
 
 export interface TileProps {
   /** Category accent for the stripe + arrow. */
@@ -72,11 +57,12 @@ export function Tile({
   children,
   className = '',
 }: TileProps) {
+  const c = catClasses(cat);
   const baseClasses = [
     'group/tile relative overflow-hidden flex flex-col',
     'bg-tile rounded-tile p-[22px]',
     'border border-ink/10',
-    `border-l-[4px] ${STRIPE[cat]}`,
+    `border-l-[4px] ${c.borderL}`,
     'shadow-hairline',
     'transition-[transform,box-shadow,border-color] duration-200',
     'motion-safe:hover:shadow-tile-hover',
@@ -97,7 +83,7 @@ export function Tile({
             'pointer-events-none absolute bottom-4 right-[18px] ' +
             'text-sm opacity-0 transition-[opacity,transform] duration-200 ' +
             'group-hover/tile:opacity-100 group-hover/tile:translate-x-0.5 ' +
-            ARROW_TEXT[cat]
+            c.text
           }
         >
           →
