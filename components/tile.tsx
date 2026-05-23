@@ -27,24 +27,29 @@ export interface TileProps {
   external?: boolean;
   /** Accessible label for the whole-tile link. Required when `href` is set. */
   ariaLabel?: string;
-  /** Bento grid column span (default 1). */
-  cols?: 1 | 2 | 3 | 4;
-  /** Bento grid row span (default 1). */
+  /** Bento grid column span at @[768px]+ (default 1). */
+  cols?: 1 | 2 | 3 | 4 | 6;
+  /** Bento grid row span at @[768px]+ (default 1). */
   rows?: 1 | 2 | 3;
   children: React.ReactNode;
   className?: string;
 }
 
-const COL_SPAN: Record<1 | 2 | 3 | 4, string> = {
-  1: 'col-span-1',
-  2: 'col-span-2',
-  3: 'col-span-3',
-  4: 'col-span-4',
+// Tiles stack into a single column under the @[768px] container-query
+// breakpoint, then claim their bento span once the band grid switches
+// to 6-column mode. Classes are static literals so Tailwind's content
+// scanner picks them up.
+const COL_SPAN: Record<NonNullable<TileProps['cols']>, string> = {
+  1: 'col-span-1 @[768px]:col-span-1',
+  2: 'col-span-1 @[768px]:col-span-2',
+  3: 'col-span-1 @[768px]:col-span-3',
+  4: 'col-span-1 @[768px]:col-span-4',
+  6: 'col-span-1 @[768px]:col-span-6',
 };
-const ROW_SPAN: Record<1 | 2 | 3, string> = {
+const ROW_SPAN: Record<NonNullable<TileProps['rows']>, string> = {
   1: 'row-span-1',
-  2: 'row-span-2',
-  3: 'row-span-3',
+  2: 'row-span-1 @[768px]:row-span-2',
+  3: 'row-span-1 @[768px]:row-span-3',
 };
 
 export function Tile({
