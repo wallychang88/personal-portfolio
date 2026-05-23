@@ -10,6 +10,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "check-links": "node scripts/check-links.mjs",
+    "check-images": "node scripts/check-images.mjs",
     "new-photo": "node scripts/new-photo.mjs"
   },
   "dependencies": {
