@@ -128,6 +128,38 @@ ground-truth from `WALLY.md` or Wally's confirmed additions. See
 
 ---
 
+## Phase 2 review carry-overs (2026-05-23)
+
+Cross-model review (codex + Claude subagent) on the foundation diff
+flagged these — all deferred to the right phase rather than fixed in
+the Phase 2 cleanup pass.
+
+- **Phase 3 (homepage).** Load JetBrains Mono via `next/font/google`
+  in `app/layout.tsx` and either rely on the `--font-mono` CSS variable
+  in ornament SVGs (currently they pass the literal "JetBrains Mono"
+  family, which only renders if the font is system-installed).
+- **Phase 3 (homepage).** Add `@container` to the main canvas div in
+  `app/layout.tsx` so descendants can use `@[768px]:` / `@[1100px]:`
+  arbitrary container-query utilities. DESIGN.md already documents
+  this; the layout change is the missing piece.
+- **Phase 3 (homepage).** When Bento tiles wrap ornaments, audit the
+  aria-label coordination: `PAHomeSchematic` is `aria-hidden` (correct)
+  but the parent Tile needs an `aria-label="doorpi — hardware project"`
+  or similar so screen readers get the meaning the visual schematic
+  carries.
+- **Phase 4 (sharp pipeline).** Replace the current
+  `Photo.src: string` shape in `lib/galleries.ts` with the
+  `PhotoEntry { slug, gallery, alt, width, height, caption? }` model
+  from PORT-PLAN Codex Correction #7. `<picture>` then derives the
+  three `<source srcset>` paths from `{gallery, slug}` by convention.
+  `scripts/check-images.mjs` will need a rewrite to match.
+- **Phase 6 (writing/MDX).** Augment `scripts/check-links.mjs` with a
+  post-build pass over `out/**/*.html` so computed hrefs (template
+  literals, MDX expressions) get caught. Today the script only sees
+  static `href="..."` string literals.
+
+---
+
 ## Engineering hygiene before declaring done
 
 - `pnpm build` clean (no errors, no warnings worth ignoring).
