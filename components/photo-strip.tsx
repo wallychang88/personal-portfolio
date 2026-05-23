@@ -1,20 +1,30 @@
 'use client';
 
 import { useState } from 'react';
-import Lightbox from 'yet-another-react-lightbox';
-import 'yet-another-react-lightbox/styles.css';
+import dynamic from 'next/dynamic';
 import type { Photo } from '@/lib/galleries';
 
 /**
  * Photo strip — horizontal row of images with optional captions. Clicking
  * any image opens a fullscreen lightbox at that index.
  *
- * Client component: lightbox needs open/close state. The lightbox CSS
- * is co-imported so it ships alongside this boundary.
+ * The lightbox itself + its CSS are lazy-loaded via next/dynamic — they
+ * only enter the bundle once the user clicks. Pages using PhotoStrip
+ * stay under their first-load budget for the 90%+ of visitors who never
+ * open the modal.
  *
  * Empty galleries render a quiet placeholder with the same vertical
  * footprint so layout doesn't shift when photos arrive.
  */
+
+// `next/dynamic` with `ssr: false` is the codex- + Claude-recommended pattern
+// for client-only libraries that pull in CSS. The wrapper imports
+// `yet-another-react-lightbox/styles.css` inside its own module, so the CSS
+// only ships with the lazy chunk too.
+const LazyLightbox = dynamic(() => import('./photo-strip-lightbox'), {
+  ssr: false,
+  loading: () => null,
+});
 
 export function PhotoStrip({
   photos,
@@ -81,18 +91,13 @@ export function PhotoStrip({
         </div>
       </figure>
 
-      <Lightbox
-        open={openAt !== null}
-        index={openAt ?? 0}
-        close={() => setOpenAt(null)}
-        slides={photos.map((p) => ({
-          src: p.src,
-          alt: p.alt,
-          width: p.width,
-          height: p.height,
-          description: p.caption,
-        }))}
-      />
+      {openAt !== null && (
+        <LazyLightbox
+          photos={photos}
+          index={openAt}
+          onClose={() => setOpenAt(null)}
+        />
+      )}
     </>
   );
 }
