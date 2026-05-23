@@ -24,3 +24,9 @@ export { OrnReadingMeter }  from './OrnReadingMeter';
 
 export { OrnEndurance, type EnduranceKind } from './OrnEndurance';
 export { OrnCompassRose }   from './OrnCompassRose';
+export { ContourBackground } from './ContourBackground';
+
+// Large route SVGs for /endurance/ trophy spreads.
+export { RouteWhitney }     from './routes/RouteWhitney';
+export { RouteTioga }       from './routes/RouteTioga';
+export { RouteIronman }     from './routes/RouteIronman';
