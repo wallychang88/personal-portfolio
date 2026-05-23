@@ -1,0 +1,51 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.*
+.yarn/install-state.gz
+
+# Next.js
+.next/
+out/
+
+# Production builds
+build/
+dist/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Test output
+coverage/
+.nyc_output/
+
+# Local design-handoff bundle: large frozen reference, not source.
+# Kept locally for porting; not committed.
+.design-handoff/
+
+# Temporary
+*.tmp
+*.bak
+
+# Stray local artifacts not part of the site (resume PDF intentionally kept).
+*.pptx
+*.PPTX

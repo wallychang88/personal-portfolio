@@ -1,0 +1,152 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   Editorial base styles. Keep this file small — most styling
+   should live in component classes or Tailwind utilities.
+   ============================================================ */
+
+html {
+  background: theme('colors.paper.DEFAULT');
+  color: theme('colors.ink.DEFAULT');
+  /* Crisper text on hi-DPI macOS; safe to leave on for everyone. */
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  font-family: theme('fontFamily.sans');
+  line-height: 1.6;
+}
+
+/* The serif display family carries the brand. Use it for headlines,
+   section labels, and the occasional pull-quote — not body copy. */
+.font-serif {
+  font-feature-settings: 'ss01' on, 'liga' on, 'kern' on;
+}
+
+/* Long-form prose blocks (project deep-dives, writing posts).
+   This is the editorial container — wider line-height, drop-cap
+   optional, generous spacing between paragraphs. */
+.prose-editorial {
+  font-size: 1.0625rem; /* 17px */
+  line-height: 1.72;
+  color: theme('colors.ink.muted');
+}
+
+.prose-editorial p {
+  margin: 0 0 1.4em;
+}
+
+.prose-editorial h2 {
+  font-family: theme('fontFamily.serif');
+  font-weight: 400;
+  font-size: 1.875rem;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  color: theme('colors.ink.DEFAULT');
+  margin: 3rem 0 1rem;
+}
+
+.prose-editorial h3 {
+  font-family: theme('fontFamily.serif');
+  font-weight: 500;
+  font-size: 1.375rem;
+  line-height: 1.25;
+  color: theme('colors.ink.DEFAULT');
+  margin: 2.25rem 0 0.75rem;
+}
+
+.prose-editorial a {
+  color: theme('colors.ink.DEFAULT');
+  border-bottom: 1px solid theme('colors.ink.faint');
+  transition: border-color 120ms ease;
+}
+
+.prose-editorial a:hover {
+  border-bottom-color: theme('colors.ink.DEFAULT');
+}
+
+.prose-editorial blockquote {
+  font-family: theme('fontFamily.serif');
+  font-style: italic;
+  font-size: 1.25rem;
+  line-height: 1.5;
+  color: theme('colors.ink.DEFAULT');
+  border-left: 2px solid theme('colors.ink.DEFAULT');
+  padding: 0.25rem 0 0.25rem 1.25rem;
+  margin: 2rem 0;
+}
+
+.prose-editorial code {
+  font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 0.92em;
+  background: theme('colors.paper.deep');
+  padding: 0.1em 0.35em;
+  border-radius: 3px;
+}
+
+.prose-editorial pre {
+  font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 0.825rem;
+  line-height: 1.6;
+  background: #1C1B17;
+  color: #F4EFE2;
+  padding: 1.25rem 1.5rem;
+  border-radius: 4px;
+  overflow-x: auto;
+  margin: 1.75rem 0;
+}
+
+.prose-editorial pre code {
+  background: transparent;
+  padding: 0;
+  color: inherit;
+}
+
+.prose-editorial ul,
+.prose-editorial ol {
+  margin: 0 0 1.4em;
+  padding-left: 1.25em;
+}
+
+.prose-editorial li {
+  margin-bottom: 0.4em;
+}
+
+.prose-editorial hr {
+  border: none;
+  text-align: center;
+  margin: 3rem 0;
+  color: theme('colors.ink.faint');
+}
+
+.prose-editorial hr::after {
+  content: '· · ·';
+  font-family: theme('fontFamily.serif');
+  letter-spacing: 0.5em;
+}
+
+/* Drop-cap utility for the first paragraph of a longread. */
+.drop-cap::first-letter {
+  font-family: theme('fontFamily.serif');
+  float: left;
+  font-size: 4.25rem;
+  line-height: 0.88;
+  font-weight: 400;
+  margin: 0.15rem 0.65rem 0 -0.2rem;
+  color: theme('colors.ink.DEFAULT');
+}
+
+/* Focus ring — accessible, on-theme. */
+:focus-visible {
+  outline: 2px solid theme('colors.ink.DEFAULT');
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+::selection {
+  background: theme('colors.ink.DEFAULT');
+  color: theme('colors.paper.DEFAULT');
+}
