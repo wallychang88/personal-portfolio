@@ -130,23 +130,22 @@ ground-truth from `WALLY.md` or Wally's confirmed additions. See
 
 ## Design review carryovers (2026-05-25)
 
-Audit ran on Phase 9-complete branch (`f6b3a24` → `21c8b95`). Design
-score A−, AI slop score A. Full report at
+Audit ran on Phase 9-complete branch. Design score A−, AI slop score A.
+Full report at
 `~/.gstack/projects/PersonalPortfolio/designs/design-audit-20260525/design-audit.md`.
-One finding shipped (mobile nav overflow); rest are below.
 
-- **FINDING-002 a11y (medium):** move `<Nav>` and `<Footer>` out of `<main>`
-  in `app/layout.tsx`. Landmark structure currently nests them inside main;
-  should be siblings. Flagged by codex.
-- **FINDING-003 polish:** desaturate OrnLED color from `#29C463` to a
-  warm-palette green (e.g. `#5C8A5E` or tie to the `sage` token). Currently
-  the only saturated color on the site.
-- **FINDING-004 a11y (polish):** bump footer link + FilterChips vertical
-  padding to `py-1.5` so touch targets clear WCAG 2.5.8 minimum (24px).
-- **FINDING-006 polish:** declare `:root { color-scheme: light; }` in
-  `globals.css` so scrollbar / native controls don't inherit OS dark mode.
+Shipped 2026-05-25:
+- ~~FINDING-001 mobile nav overflow~~ (commit `21c8b95`)
+- ~~FINDING-002 landmark structure~~ (commit `a0a83d0`)
+- ~~FINDING-003 OrnLED desaturate~~ (commit `c1331a8`)
+- ~~FINDING-004 touch targets (footer + filter-chips + see-all)~~ (commit `e2c0e66`)
+- ~~FINDING-006 color-scheme: light~~ (commit `11bfd4e`)
+
+Deferred:
 - **FINDING-007 polish:** add a single ornament to `/writing/` and `/kitchen/`
   empty states so they read as anticipatory rather than under-construction.
+  Holding until real content lands — the right ornament depends on what the
+  first essay / first batch turns out to be.
 
 ---
 
