@@ -49,3 +49,4 @@ coverage/
 # Stray local artifacts not part of the site (resume PDF intentionally kept).
 *.pptx
 *.PPTX
+.gstack/

@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Content — Wally Chang</title>
+  </head>
+  <body>
+    <!--
+      Decap CMS — single-page admin UI. Loads the bundle from unpkg so
+      the main site bundle stays untouched. Configuration lives next door
+      at /admin/config.yml.
+
+      Local editing:  `pnpm cms`  (proxies git via decap-server on :8081)
+      Production:     needs the GitHub OAuth bridge — see CLAUDE.md.
+    -->
+    <script src="https://unpkg.com/decap-cms@^3.12.0/dist/decap-cms.js"></script>
+  </body>
+</html>

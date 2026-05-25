@@ -1,0 +1,63 @@
+# Decap CMS configuration.
+#
+# Two backends:
+#   - local_backend: true  → talks to decap-server on :8081 (no auth,
+#     `pnpm cms` to launch). This is the working mode until the GitHub
+#     bridge is wired.
+#   - backend: github       → production. Requires a small OAuth bridge
+#     (Cloudflare Worker or standalone Vercel function). The `repo`
+#     field below must point at the published GitHub repo before this
+#     mode works.
+
+backend:
+  name: github
+  repo: wallychang/personal-portfolio   # TODO: update once repo is pushed
+  branch: main
+
+local_backend: true
+
+media_folder: public/images
+public_folder: /images
+
+publish_mode: simple
+
+collections:
+  - name: essays
+    label: Essays
+    label_singular: Essay
+    folder: content/essays
+    create: true
+    slug: "{{slug}}"
+    extension: md
+    format: frontmatter
+    summary: "{{date}} — {{title}}"
+    fields:
+      - { label: "Slug (URL piece)", name: slug, widget: string, hint: "lowercase-with-hyphens — must match the filename" }
+      - { label: "Date", name: date, widget: datetime, format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false, picker_utc: false }
+      - { label: "Title", name: title, widget: string }
+      - { label: "Hook (one-line summary)", name: hook, widget: string }
+      - { label: "Excerpt (italic pull-quote in the index)", name: excerpt, widget: text }
+      - { label: "Category", name: cat, widget: select, options: [sage, rust, slate, honey, clay] }
+      - { label: "Category label (display, e.g. Endurance, Software)", name: catLabel, widget: string }
+      - { label: "Body", name: body, widget: markdown }
+
+  - name: batches
+    label: Bake batches
+    label_singular: Batch
+    folder: content/batches
+    create: true
+    slug: "{{slug}}"
+    extension: md
+    format: frontmatter
+    summary: "#{{number}} · {{kind}} · {{title}}"
+    fields:
+      - { label: "Slug (URL piece)", name: slug, widget: string }
+      - { label: "Date", name: date, widget: datetime, format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false, picker_utc: false }
+      - { label: "Batch number", name: number, widget: number, value_type: int, min: 1 }
+      - { label: "Kind", name: kind, widget: select, options: [bagel, bread, pizza] }
+      - { label: "Title", name: title, widget: string }
+      - { label: "Hydration", name: hydration, widget: string, required: false }
+      - { label: "Ferment", name: ferment, widget: string, required: false }
+      - { label: "Oven", name: oven, widget: string, required: false }
+      - { label: "Notes (one line per note)", name: notes, widget: list, required: false, default: [] }
+      - { label: "Body (optional long-form)", name: body, widget: markdown, required: false }
