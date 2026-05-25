@@ -67,9 +67,7 @@ const ROUTES = discoverRoutes();
 // Routes that PORT-PLAN says will exist by v1 but haven't shipped yet. We
 // tolerate references to them so /nav/footer can ship before every page.
 // Remove an entry once its phase lands.
-const PLANNED = new Set([
-  '/timeline/',  // Phase 9
-]);
+const PLANNED = new Set([]);
 
 const HREF_RE = /href\s*=\s*(?:"([^"]+)"|'([^']+)'|\{['"`]([^'"`]+)['"`]\})/g;
 

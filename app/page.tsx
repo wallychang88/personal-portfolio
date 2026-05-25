@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { Tile } from '@/components/tile';
 import {
   OrnEndurance,
@@ -10,6 +11,7 @@ import {
   PAHomeSchematic,
 } from '@/components/ornaments';
 import { Tag } from '@/components/tag';
+import { TIMELINE_SORTED } from '@/lib/timeline';
 
 /**
  * Homepage — time-banded Bento.
@@ -210,6 +212,18 @@ export default function HomePage() {
           <TileTags tags={['ML', 'Research']} />
         </Tile>
       </Band>
+
+      <footer className="mt-10 pt-5 border-t border-paper-edge flex items-baseline justify-between gap-6">
+        <div className="font-mono text-[10.5px] tracking-meta uppercase text-ink-faint">
+          The Bento cherry-picks. The timeline is exhaustive.
+        </div>
+        <Link
+          href="/timeline/"
+          className="font-serif italic text-[14px] text-ink-soft hover:text-ink transition-colors whitespace-nowrap"
+        >
+          See all {TIMELINE_SORTED.length} entries →
+        </Link>
+      </footer>
     </div>
   );
 }
