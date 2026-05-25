@@ -10,6 +10,9 @@
 html {
   background: theme('colors.paper.DEFAULT');
   color: theme('colors.ink.DEFAULT');
+  /* Paper editorial is light-only by design; opt out of dark-mode native
+     widgets (scrollbars, form controls) so they stay paper-aligned. */
+  color-scheme: light;
   /* Crisper text on hi-DPI macOS; safe to leave on for everyone. */
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
