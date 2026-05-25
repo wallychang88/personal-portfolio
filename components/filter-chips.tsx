@@ -98,7 +98,7 @@ function ChipRow({
             aria-pressed={active}
             onClick={() => onActivate(opt.value)}
             className={
-              'inline-flex items-center px-3 py-1 rounded-full ' +
+              'inline-flex items-center px-3 py-1.5 rounded-full ' +
               'font-sans text-xs font-medium select-none ' +
               'border transition-[background,color,border-color] duration-200 ' +
               (active

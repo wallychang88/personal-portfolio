@@ -219,7 +219,7 @@ export default function HomePage() {
         </div>
         <Link
           href="/timeline/"
-          className="font-serif italic text-[14px] text-ink-soft hover:text-ink transition-colors whitespace-nowrap"
+          className="-mr-2 px-2 py-1 font-serif italic text-[14px] text-ink-soft hover:text-ink transition-colors whitespace-nowrap"
         >
           See all {TIMELINE_SORTED.length} entries →
         </Link>

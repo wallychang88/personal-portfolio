@@ -10,11 +10,11 @@ export function Footer() {
             San Francisco · Data Scientist at Extend · Founder of RodSmith
           </div>
         </div>
-        <ul className="flex gap-6 text-[12px] uppercase tracking-eyebrow text-ink-soft">
+        <ul className="-mx-2 flex flex-wrap gap-x-4 sm:gap-x-5 text-[12px] uppercase tracking-eyebrow text-ink-soft">
           <li>
             <a
               href="mailto:wallychang88@gmail.com"
-              className="hover:text-ink transition-colors"
+              className="block px-2 py-1.5 hover:text-ink transition-colors"
             >
               Email
             </a>
@@ -22,7 +22,7 @@ export function Footer() {
           <li>
             <a
               href="https://github.com/wallychang88"
-              className="hover:text-ink transition-colors"
+              className="block px-2 py-1.5 hover:text-ink transition-colors"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -30,7 +30,7 @@ export function Footer() {
             </a>
           </li>
           <li>
-            <Link href="/about/" className="hover:text-ink transition-colors">
+            <Link href="/about/" className="block px-2 py-1.5 hover:text-ink transition-colors">
               Colophon
             </Link>
           </li>
