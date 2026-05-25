@@ -8,7 +8,7 @@ export function OrnLED({ label = 'unlock' }: { label?: string }) {
       <span
         aria-hidden="true"
         className="orn-led inline-block h-2 w-2 rounded-full"
-        style={{ background: '#29C463', boxShadow: '0 0 6px rgba(41,196,99,0.55)' }}
+        style={{ background: '#5C8A5E', boxShadow: '0 0 6px rgba(92,138,94,0.55)' }}
       />
       {label}
     </span>
