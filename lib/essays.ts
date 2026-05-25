@@ -1,11 +1,22 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import matter from 'gray-matter';
+import { z } from 'zod';
 import type { TagCategory } from '@/components/ornaments/catClass';
 
 /**
- * Essay metadata. Bodies live at `app/writing/[slug]/page.mdx` (or
- * eventually `content/essays/<slug>.mdx`) once that wiring exists.
- * For v1 the list is empty by design — see PORT-PLAN Pass 7 + WALLY.md
- * open question #5. The first essay is the gating piece.
+ * Essays. Source files live at `content/essays/*.md` — one file per
+ * essay. Frontmatter shape is enforced by EssayFrontmatter (zod) so a
+ * malformed entry fails the build loudly instead of shipping broken.
+ *
+ * v1 ships with an empty directory by design — see PORT-PLAN Pass 7 +
+ * WALLY.md open question #5. The first essay is the gating piece.
+ *
+ * To add an essay: drop `content/essays/<slug>.md` with frontmatter +
+ * body, or use the Decap admin at `/admin/` once production OAuth is
+ * wired (today: `pnpm dev` + the local_backend mode).
  */
+
 export interface EssayMeta {
   slug: string;
   /** ISO 'YYYY-MM-DD' — sort newest first. */
@@ -21,9 +32,48 @@ export interface EssayMeta {
   wordCount: number;
   /** Pre-rendered reading time string, e.g. "9 MIN". */
   readingTime: string;
+  /** Raw markdown body. Empty if the file is frontmatter-only. */
+  body: string;
 }
 
-export const ESSAYS: ReadonlyArray<EssayMeta> = [];
+const TAG_CATEGORY = z.enum(['sage', 'rust', 'slate', 'honey', 'clay']);
+
+const EssayFrontmatter = z.object({
+  slug: z.string().min(1),
+  date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'date must be YYYY-MM-DD'),
+  title: z.string().min(1),
+  hook: z.string().min(1),
+  excerpt: z.string().min(1),
+  cat: TAG_CATEGORY,
+  catLabel: z.string().min(1),
+});
+
+const CONTENT_DIR = path.join(process.cwd(), 'content', 'essays');
+
+function loadEssays(): EssayMeta[] {
+  if (!fs.existsSync(CONTENT_DIR)) return [];
+
+  const files = fs
+    .readdirSync(CONTENT_DIR)
+    .filter((f) => f.endsWith('.md') || f.endsWith('.mdx'));
+
+  return files.map((file) => {
+    const raw = fs.readFileSync(path.join(CONTENT_DIR, file), 'utf-8');
+    const { data, content } = matter(raw);
+    const fm = EssayFrontmatter.parse(data);
+    const body = content.trim();
+    const wordCount = body ? body.split(/\s+/).length : 0;
+    const readingMinutes = Math.max(1, Math.round(wordCount / 220));
+    return {
+      ...fm,
+      wordCount,
+      readingTime: `${readingMinutes} MIN`,
+      body,
+    };
+  });
+}
+
+export const ESSAYS: ReadonlyArray<EssayMeta> = loadEssays();
 
 /** Sorted by date, newest first. */
 export const ESSAYS_SORTED: ReadonlyArray<EssayMeta> = [...ESSAYS].sort((a, b) =>
