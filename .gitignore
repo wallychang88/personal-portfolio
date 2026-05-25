@@ -50,3 +50,6 @@ coverage/
 *.pptx
 *.PPTX
 .gstack/
+
+# Vercel CLI — project linking state. Created by `vercel link`. Local-only.
+.vercel/

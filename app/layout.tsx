@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Fraunces, Inter, JetBrains_Mono } from 'next/font/google';
+import { Analytics } from '@vercel/analytics/next';
 import './globals.css';
 import { Nav } from '@/components/nav';
 import { Footer } from '@/components/footer';
@@ -53,6 +54,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             for bento layout. */}
         <main className="@container">{children}</main>
         <Footer />
+        {/* First-party, cookie-less. Loads only in production via the
+            package's NODE_ENV guard — no script on `pnpm dev`. */}
+        <Analytics />
       </body>
     </html>
   );
