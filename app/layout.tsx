@@ -47,14 +47,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       className={`${fraunces.variable} ${inter.variable} ${jetbrainsMono.variable}`}
     >
       <body className="min-h-screen bg-paper text-ink antialiased">
+        <Nav />
         {/* @container makes the main canvas a container-query root so
             descendants can use arbitrary @[768px]: / @[1100px]: spans
             for bento layout. */}
-        <main className="@container">
-          <Nav />
-          {children}
-          <Footer />
-        </main>
+        <main className="@container">{children}</main>
+        <Footer />
       </body>
     </html>
   );
