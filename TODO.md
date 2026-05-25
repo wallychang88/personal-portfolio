@@ -149,19 +149,37 @@ Deferred:
 
 ---
 
-## Follow-on architecture asks (2026-05-25, surfaced during design review)
+## Follow-on architecture asks (2026-05-25)
 
-- **In-app content editing interface.** Three honest paths: Tina CMS
-  (polished, Vercel-native, git-based — recommended), Decap CMS (zero spend,
-  git-based, scrappier), or drop `output: 'export'` for a dynamic DB-backed
-  admin (breaks CLAUDE.md architectural invariant — flag before pursuing).
-  Both Tina and Decap add an `/admin/` route and preserve static export.
-- **Vercel hosting upgrade.** Site already deploys to Vercel as-is. The
-  upgrades worth considering: `vercel.ts` typed config (replaces
-  vercel.json), preview deployments per branch (free with GitHub connect),
-  and Vercel Analytics (drop-in, no third-party script). All compatible
-  with the static-HTML invariant. Adopting Tina/Decap above is when that
-  invariant would actually bend.
+Shipped this session — Decap CMS + Vercel Analytics:
+
+- ~~In-app content editing interface~~ — Decap CMS wired at `/admin/`
+  with `local_backend: true`. Essays + batches now live as markdown
+  under `content/` (commits `903ecba` + `da92ef6`). See "Editing
+  content from the browser" in CLAUDE.md.
+- ~~Vercel Analytics~~ — drop-in `<Analytics />` in `app/layout.tsx`
+  (commit `5fd3373`). Cookie-less, ships in production only.
+- ~~Vercel CLI workflow documented~~ — `CLAUDE.md` has the link/deploy
+  recipe. Wally still needs to run `vercel login` + `vercel link`
+  once locally to associate the repo with a Vercel project.
+
+Deferred:
+
+- **Decap GitHub OAuth bridge** — the deployed `/admin/` needs a small
+  OAuth handler to swap a GitHub `code` for a token. Two clean paths:
+  Cloudflare Worker (decaporator / decap-server-oauth-cloudflare-worker
+  style) or a tiny standalone Vercel function project (separate from
+  this static-export site). Until then, edits happen via `pnpm cms` +
+  `pnpm dev` + http://localhost:3000/admin/.
+- **`config.yml` repo URL** — `public/admin/config.yml` currently
+  points at `wallychang/personal-portfolio` (placeholder). Update once
+  the repo is pushed to GitHub.
+- **`vercel link` + GitHub-Vercel connect** — needs Wally's Vercel
+  account auth; documented in CLAUDE.md, not run by the agent.
+- **Decap collections for timeline / trophies / galleries** — these
+  still live in `lib/*.ts` because they had content already and lower
+  edit frequency. Migrate when there's a clear editing-from-browser
+  need (e.g. on a phone while away from VS Code).
 
 ---
 

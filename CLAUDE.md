@@ -237,11 +237,53 @@ pnpm install
 pnpm dev        # localhost:3000
 pnpm build      # → ./out/ (static HTML)
 pnpm new-photo  # add a photo to a gallery
+pnpm cms        # → :8081 decap-server, pair with `pnpm dev` for /admin/
 pnpm lint
 ```
 
 Deploys to Vercel, Netlify, GitHub Pages, S3+CloudFront — anywhere
-that serves static files.
+that serves static files. Vercel is the configured target; the rest
+work because `output: 'export'` produces a self-contained `out/`.
+
+### Editing content from the browser (`/admin/`)
+
+Essays and bake batches are git-backed markdown under `content/`.
+The Decap CMS admin at `/admin/` is wired in `public/admin/`:
+
+```bash
+pnpm cms                 # terminal 1 — proxies git on :8081
+pnpm dev                 # terminal 2 — serves the site on :3000
+# open http://localhost:3000/admin/  → edit, save (writes to content/*.md)
+git add content && git commit
+```
+
+`local_backend: true` in `public/admin/config.yml` makes this work
+with zero auth. For production (deployed Vercel site) Decap needs a
+small GitHub OAuth bridge — deferred follow-up, see "Vercel CLI"
+below for env-var handling once it's wired.
+
+### Vercel CLI
+
+The deploy path is the CLI, not hand-authored `vercel.json` /
+`vercel.ts`. Wally runs these locally; agents document, don't run.
+
+```bash
+vercel login                       # one-time, opens browser
+vercel link                        # link this repo to a Vercel project
+                                   # (writes .vercel/, which is gitignored)
+vercel env add DECAP_GITHUB_CLIENT_ID production
+vercel env pull                    # mirror env into .env.local for dev
+vercel                             # deploy a preview
+vercel --prod                      # deploy to production
+```
+
+Preview deployments fire automatically on every `git push` once the
+GitHub repo is connected to the Vercel project (set up via the
+Vercel dashboard, not the CLI). No additional code wiring needed —
+preview URLs come back on the PR.
+
+Vercel Analytics is on (added in commit `5fd3373`); page-view data
+shows up in the Vercel project dashboard. Cookie-less, no banner.
 
 ## Cross-file propagation
 
