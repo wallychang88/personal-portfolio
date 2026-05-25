@@ -128,6 +128,44 @@ ground-truth from `WALLY.md` or Wally's confirmed additions. See
 
 ---
 
+## Design review carryovers (2026-05-25)
+
+Audit ran on Phase 9-complete branch (`f6b3a24` → `21c8b95`). Design
+score A−, AI slop score A. Full report at
+`~/.gstack/projects/PersonalPortfolio/designs/design-audit-20260525/design-audit.md`.
+One finding shipped (mobile nav overflow); rest are below.
+
+- **FINDING-002 a11y (medium):** move `<Nav>` and `<Footer>` out of `<main>`
+  in `app/layout.tsx`. Landmark structure currently nests them inside main;
+  should be siblings. Flagged by codex.
+- **FINDING-003 polish:** desaturate OrnLED color from `#29C463` to a
+  warm-palette green (e.g. `#5C8A5E` or tie to the `sage` token). Currently
+  the only saturated color on the site.
+- **FINDING-004 a11y (polish):** bump footer link + FilterChips vertical
+  padding to `py-1.5` so touch targets clear WCAG 2.5.8 minimum (24px).
+- **FINDING-006 polish:** declare `:root { color-scheme: light; }` in
+  `globals.css` so scrollbar / native controls don't inherit OS dark mode.
+- **FINDING-007 polish:** add a single ornament to `/writing/` and `/kitchen/`
+  empty states so they read as anticipatory rather than under-construction.
+
+---
+
+## Follow-on architecture asks (2026-05-25, surfaced during design review)
+
+- **In-app content editing interface.** Three honest paths: Tina CMS
+  (polished, Vercel-native, git-based — recommended), Decap CMS (zero spend,
+  git-based, scrappier), or drop `output: 'export'` for a dynamic DB-backed
+  admin (breaks CLAUDE.md architectural invariant — flag before pursuing).
+  Both Tina and Decap add an `/admin/` route and preserve static export.
+- **Vercel hosting upgrade.** Site already deploys to Vercel as-is. The
+  upgrades worth considering: `vercel.ts` typed config (replaces
+  vercel.json), preview deployments per branch (free with GitHub connect),
+  and Vercel Analytics (drop-in, no third-party script). All compatible
+  with the static-HTML invariant. Adopting Tina/Decap above is when that
+  invariant would actually bend.
+
+---
+
 ## Phase 2 review carry-overs (2026-05-23)
 
 Cross-model review (codex + Claude subagent) on the foundation diff
