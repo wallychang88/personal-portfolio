@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import {
   OrnCompassRose,
-  OrnCursor,
   OrnEndurance,
   OrnThumbStamp,
 } from '@/components/ornaments';
@@ -28,7 +27,6 @@ export const metadata: Metadata = {
  *   1. Bio (no rule — paper)
  *   2. Endurance identity (sage)
  *   3. Kitchen identity (honey)
- *   4. Colophon (slate)
  */
 export default function AboutPage() {
   return (
@@ -37,7 +35,6 @@ export default function AboutPage() {
       <BioSection />
       <EnduranceIdentity />
       <KitchenIdentity />
-      <Colophon />
     </div>
   );
 }
@@ -218,91 +215,3 @@ function KitchenIdentity() {
   );
 }
 
-function Colophon() {
-  return (
-    <section className="relative pt-9 pb-6 border-t-4 border-slate">
-      <div className="text-[11px] font-sans font-semibold tracking-eyebrow uppercase text-slate mb-3.5 flex items-center">
-        <span className="mr-2 font-mono">▍</span>Colophon
-      </div>
-      <h2
-        className="font-serif text-[26px] sm:text-[30px] @[1100px]:text-[32px] leading-[1.08] tracking-[-0.014em] text-ink mb-7 [text-wrap:balance]"
-        style={{ fontVariationSettings: '"opsz" 60, "wght" 400' }}
-      >
-        How this site is built.<OrnCursor />
-      </h2>
-
-      <div className="grid grid-cols-1 @[1024px]:grid-cols-2 gap-10">
-        <div className="font-mono text-[12.5px] leading-[1.9] text-ink-muted">
-          <ColophonHeader>{'// stack'}</ColophonHeader>
-          <ColophonRow k="framework">Next.js 14 (app router)</ColophonRow>
-          <ColophonRow k="styling">Tailwind v3 + custom CSS</ColophonRow>
-          <ColophonRow k="export">
-            <span className="text-slate">output: &apos;export&apos;</span>{' '}
-            · static
-          </ColophonRow>
-          <ColophonRow k="analytics">none, on purpose</ColophonRow>
-
-          <ColophonHeader className="mt-3.5">{'// fonts'}</ColophonHeader>
-          <ColophonRow k="display">
-            <span className="font-serif italic" style={{ fontVariationSettings: '"opsz" 36, "wght" 400' }}>
-              Fraunces
-            </span>{' '}
-            · variable opsz
-          </ColophonRow>
-          <ColophonRow k="ui">Inter</ColophonRow>
-          <ColophonRow k="mono">JetBrains Mono</ColophonRow>
-
-          <ColophonHeader className="mt-3.5">{'// source'}</ColophonHeader>
-          <div className="mt-1">
-            <a
-              href="https://github.com/wallychang88"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-ink border-b border-slate/60 hover:border-slate transition-colors"
-            >
-              github.com/wallychang88
-            </a>
-          </div>
-          <div className="mt-1">
-            <a
-              href="/Walter-Chang-Resume.pdf"
-              className="text-ink border-b border-slate/60 hover:border-slate transition-colors"
-            >
-              Resume — Walter-Chang-Resume.pdf
-            </a>
-          </div>
-        </div>
-
-        <div
-          className="font-serif text-[16px] sm:text-[17px] leading-[1.7] text-ink-muted [text-wrap:pretty]"
-          style={{ fontVariationSettings: '"opsz" 18, "wght" 400' }}
-        >
-          <p className="mb-4">
-            The repo is open. Pull requests with typo fixes are welcome.
-            Pull requests adding analytics are not.
-          </p>
-          <p>
-            Long-form prose lives in MDX. Data ornaments are static SVGs
-            generated at build. All motion is vanilla CSS, gated on
-            <code className="mx-1 text-[0.85em] font-mono">prefers-reduced-motion</code>.
-          </p>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function ColophonHeader({ children, className = '' }: { children: React.ReactNode; className?: string }) {
-  return (
-    <div className={`text-ink-faint mb-2 tracking-[0.08em] ${className}`}>{children}</div>
-  );
-}
-
-function ColophonRow({ k, children }: { k: string; children: React.ReactNode }) {
-  return (
-    <div>
-      <span className="text-ink-faint inline-block w-[100px]">{k}</span>
-      {children}
-    </div>
-  );
-}

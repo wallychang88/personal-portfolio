@@ -5,8 +5,10 @@ import { CAT_HEX } from '../catClass';
  * → Trail Crest → summit → return. Built for the /endurance/ Whitney
  * trophy spread.
  *
- * Gridlines every 2,000 ft from 4k to 14k. Trail Camp marker, dawn-push
- * tick at 2:27, summit pin at 14,505 ft, label "summit" in rust.
+ * Chart spans 8,000–15,000 ft so the trail (8,360 → 14,505) fills the
+ * frame and the summit pin has breathing room below the SVG top edge.
+ * Gridlines every 2,000 ft. Trail Camp marker, dawn-push tick at 2:27,
+ * summit pin at 14,505 ft.
  *
  * For the compact tile variant, see OrnEndurance with kind="whitney".
  */
@@ -22,12 +24,26 @@ export function RouteWhitney({
   const sx = width / 880;
   const sy = height / 220;
 
+  const altMin = 8000;
+  const altMax = 15000;
+  const yFor = (alt: number) => ((altMax - alt) / (altMax - altMin)) * 220;
+
   // Profile: Portal (8,360 ft) → Outpost (10,360) → Trail Camp (12,039) →
   // 99 switchbacks → Trail Crest (13,650) → summit (14,505) → return.
   const pts: ReadonlyArray<readonly [number, number]> = [
-    [0, 200], [60, 178], [120, 158], [180, 138], [240, 118],
-    [320, 96], [400, 82], [500, 64], [580, 38], [650, 22],
-    [720, 56], [800, 110], [880, 200],
+    [0,   yFor(8360)],   // Portal
+    [60,  yFor(9100)],
+    [120, yFor(9800)],
+    [180, yFor(10360)],  // Outpost Camp
+    [240, yFor(11100)],
+    [320, yFor(11600)],
+    [400, yFor(12039)],  // Trail Camp ← marker (sp[6])
+    [500, yFor(12500)],  // dawn push past Trail Camp ← tick (sp[7])
+    [580, yFor(13650)],  // Trail Crest
+    [650, yFor(14505)],  // summit ← pin (sp[9])
+    [720, yFor(13650)],  // descent through Trail Crest
+    [800, yFor(12039)],  // descent through Trail Camp
+    [880, yFor(8360)],   // return to Portal
   ];
   const sp = pts.map(([px, py]) => [px * sx, py * sy] as const);
   const d = sp.map((p, i) => `${i === 0 ? 'M' : 'L'}${p[0].toFixed(1)},${p[1].toFixed(1)}`).join(' ');
@@ -37,8 +53,8 @@ export function RouteWhitney({
     ` L${width},${height} Z`;
 
   const grid = [];
-  for (const alt of [4000, 6000, 8000, 10000, 12000, 14000]) {
-    const y = ((14600 - alt) / 14600) * height;
+  for (const alt of [8000, 10000, 12000, 14000]) {
+    const y = ((altMax - alt) / (altMax - altMin)) * height;
     grid.push(
       <line key={`g${alt}`} x1="0" y1={y} x2={width} y2={y} stroke="#1C1B17" strokeWidth="0.4" strokeDasharray="2 5" opacity="0.18" />,
     );
@@ -46,7 +62,7 @@ export function RouteWhitney({
       <text
         key={`l${alt}`}
         x="6"
-        y={y - 3}
+        y={y - 4}
         fontSize="9.5"
         fontFamily="JetBrains Mono, monospace"
         fill="#5C5A52"
@@ -68,10 +84,10 @@ export function RouteWhitney({
       <path d={fillD} fill={color} opacity="0.14" />
       <path className="orn-draw" d={d} fill="none" stroke={color} strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" />
 
-      {/* Trail Camp marker (overnight). */}
+      {/* Trail Camp marker (overnight). Label sits above the dot. */}
       <circle cx={trailCampMarker[0]} cy={trailCampMarker[1]} r="4" fill="#FBF8F1" stroke={color} strokeWidth="1.6" />
       <text
-        x={trailCampMarker[0] + 6}
+        x={trailCampMarker[0] + 8}
         y={trailCampMarker[1] - 8}
         fontSize="10.5"
         fontFamily="JetBrains Mono, monospace"
@@ -80,11 +96,11 @@ export function RouteWhitney({
         Trail Camp · 12,039 ft
       </text>
 
-      {/* Dawn push tick — labels "02:27" in rust. */}
-      <line x1={dawnTick[0]} y1={dawnTick[1] - 16} x2={dawnTick[0]} y2={dawnTick[1] - 4} stroke={accent} strokeWidth="1.2" />
+      {/* Dawn push tick — labels "02:27" in rust, anchored above the tick. */}
+      <line x1={dawnTick[0]} y1={dawnTick[1] - 18} x2={dawnTick[0]} y2={dawnTick[1] - 6} stroke={accent} strokeWidth="1.2" />
       <text
         x={dawnTick[0] + 6}
-        y={dawnTick[1] - 18}
+        y={dawnTick[1] - 22}
         fontSize="10.5"
         fontFamily="JetBrains Mono, monospace"
         fontWeight="600"
@@ -93,27 +109,20 @@ export function RouteWhitney({
         dawn push · 02:27
       </text>
 
-      {/* Summit pin. */}
+      {/* Summit pin — label below pin tip so it never gets clipped at top. */}
       <polygon
         points={`${summit[0] - 7},${summit[1] + 2} ${summit[0] + 7},${summit[1] + 2} ${summit[0]},${summit[1] - 11}`}
         fill={accent}
       />
       <text
-        x={summit[0] + 12}
-        y={summit[1] + 3}
+        x={summit[0] + 10}
+        y={summit[1] + 14}
         fontSize="11"
         fontFamily="JetBrains Mono, monospace"
         fontWeight="700"
         fill={accent}
       >
         14,505 ft · summit
-      </text>
-
-      <text x="6" y={height - 6} fontSize="9.5" fontFamily="JetBrains Mono, monospace" fill="#5C5A52" letterSpacing="0.04em">
-        Whitney Portal
-      </text>
-      <text x={width - 6} y={height - 6} textAnchor="end" fontSize="9.5" fontFamily="JetBrains Mono, monospace" fill="#5C5A52" letterSpacing="0.04em">
-        return
       </text>
     </svg>
   );

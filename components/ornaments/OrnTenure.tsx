@@ -28,12 +28,19 @@ export function OrnTenure({
 }) {
   const color = CAT_HEX[cat];
   const total = items.reduce((s, i) => s + i.frac, 0) || 1;
+  // Layout pinned to the available height: kicker (top), bar, segment
+  // labels (bottom). Each gets a clear band — no clipping or overlap
+  // even at the smallest height we ship (56).
+  const kickerY = 11;
+  const barH = 12;
+  const labelGap = 4;        // gap between bar bottom and label top
+  const labelFont = 9.5;
+  const labelLine = labelFont + 2;
+  const barY = height - labelLine - labelGap - barH;
   let x = 4;
-  const barY = 30;
-  const barH = 14;
   return (
     <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} className="block" aria-hidden="true">
-      <text x="0" y="11" fontSize="9.5" fontFamily="JetBrains Mono, monospace" letterSpacing="0.06em" fill={color}>
+      <text x="0" y={kickerY} fontSize="9.5" fontFamily="JetBrains Mono, monospace" letterSpacing="0.06em" fill={color}>
         {label}
       </text>
       {items.map((it, i) => {
@@ -52,9 +59,9 @@ export function OrnTenure({
             />
             <text
               x={x + w / 2}
-              y={barY + barH + 14}
+              y={barY + barH + labelGap + labelFont}
               textAnchor="middle"
-              fontSize="9.5"
+              fontSize={labelFont}
               fontFamily="JetBrains Mono, monospace"
               fill={color}
             >

@@ -95,8 +95,14 @@ export function OrnEndurance({
     const swimW = swim * totalW;
     const bikeW = bike * totalW;
     const runW = run * totalW;
-    const barY = Math.round(height * 0.45);
-    const barH = Math.max(16, height * 0.3);
+    // Layout: kicker (top) · bike-rank label · bar group (bottom).
+    // The bike bar is raised by `lift`; we anchor the rank label above
+    // the raised top, not the baseline, so they never overlap.
+    const lift = 3;
+    const barH = Math.max(12, Math.round(height * 0.24));
+    const barY = height - barH - 4;
+    const bikeTopY = barY - lift;
+    const labelY = bikeTopY - 7;
     return (
       <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} className="block" aria-hidden="true">
         <text x="0" y="11" fontSize="9.5" fontFamily="JetBrains Mono, monospace" letterSpacing="0.06em" fill={color}>
@@ -115,11 +121,11 @@ export function OrnEndurance({
         <rect
           className="orn-bar-grow"
           x={2 + swimW + 2}
-          y={barY - 3}
+          y={bikeTopY}
           width={bikeW}
-          height={barH + 6}
+          height={barH + lift * 2}
           fill={color}
-          style={{ animationDelay: `${delay * 0.15 + 0.15}s`, transformOrigin: `${2 + swimW + 2 + bikeW / 2}px ${barY + barH + 3}px` }}
+          style={{ animationDelay: `${delay * 0.15 + 0.15}s`, transformOrigin: `${2 + swimW + 2 + bikeW / 2}px ${bikeTopY + barH + lift * 2}px` }}
         />
         <rect
           className="orn-bar-grow"
@@ -133,7 +139,7 @@ export function OrnEndurance({
         />
         <text
           x={2 + swimW + 2 + bikeW / 2}
-          y={barY - 6}
+          y={labelY}
           textAnchor="middle"
           fontSize="10"
           fontFamily="JetBrains Mono, monospace"
