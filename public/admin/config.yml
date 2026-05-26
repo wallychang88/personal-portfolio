@@ -11,7 +11,7 @@
 
 backend:
   name: github
-  repo: wallychang/personal-portfolio   # TODO: update once repo is pushed
+  repo: wallychang88/personal-portfolio
   branch: main
 
 local_backend: true
