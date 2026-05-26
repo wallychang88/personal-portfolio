@@ -13,8 +13,15 @@
       at /admin/config.yml.
 
       Local editing:  `pnpm cms`  (proxies git via decap-server on :8081)
+                      open http://localhost:3000/admin/index.html
       Production:     needs the GitHub OAuth bridge — see CLAUDE.md.
+
+      Preview wiring: preview.css holds a standalone copy of the
+      editorial typography from app/globals.css. preview-templates.js
+      registers per-collection React components so the right pane shows
+      what the published page will look like.
     -->
     <script src="https://unpkg.com/decap-cms@^3.12.0/dist/decap-cms.js"></script>
+    <script src="/admin/preview-templates.js"></script>
   </body>
 </html>

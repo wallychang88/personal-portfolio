@@ -27,37 +27,127 @@ collections:
     label_singular: Essay
     folder: content/essays
     create: true
-    slug: "{{slug}}"
+    # Decap auto-slugifies the title into the filename — "Tioga, before
+    # the cars." becomes tioga-before-the-cars.md. lib/essays.ts derives
+    # the URL slug from the filename, so there's no separate slug field.
+    # The filename is locked at create time; changing the title later
+    # won't rename the file (which is what we want — published URLs stay
+    # stable).
+    slug: "{{title}}"
     extension: md
     format: frontmatter
     summary: "{{date}} — {{title}}"
     fields:
-      - { label: "Slug (URL piece)", name: slug, widget: string, hint: "lowercase-with-hyphens — must match the filename" }
-      - { label: "Date", name: date, widget: datetime, format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false, picker_utc: false }
-      - { label: "Title", name: title, widget: string }
-      - { label: "Hook (one-line summary)", name: hook, widget: string }
-      - { label: "Excerpt (italic pull-quote in the index)", name: excerpt, widget: text }
-      - { label: "Category", name: cat, widget: select, options: [sage, rust, slate, honey, clay] }
-      - { label: "Category label (display, e.g. Endurance, Software)", name: catLabel, widget: string }
-      - { label: "Body", name: body, widget: markdown }
+      - label: "Publish date"
+        name: date
+        widget: datetime
+        format: "YYYY-MM-DD"
+        date_format: "YYYY-MM-DD"
+        time_format: false
+        picker_utc: false
+        hint: "Used to sort the /writing/ index. Newest first."
+
+      - label: "Title"
+        name: title
+        widget: string
+        hint: "The big serif headline at the top of the essay. End with a period — it's the editorial voice."
+
+      - label: "Hook"
+        name: hook
+        widget: string
+        hint: "One sentence. Shown beside the title in the /writing/ index. Don't restate the title."
+
+      - label: "Excerpt"
+        name: excerpt
+        widget: text
+        hint: "Italic pull-quote shown in the index. Pick the line from the essay you'd want a stranger to read first."
+
+      - label: "Category"
+        name: cat
+        widget: select
+        options:
+          - { label: "Sage — endurance", value: sage }
+          - { label: "Rust — hardware / projects", value: rust }
+          - { label: "Slate — software / roles", value: slate }
+          - { label: "Honey — kitchen", value: honey }
+          - { label: "Clay — writing", value: clay }
+        hint: "Drives the tag-pill color in the index. Pick the dominant theme."
+
+      - label: "Category label"
+        name: catLabel
+        widget: string
+        hint: "The text shown next to the eyebrow, e.g. Endurance, Software, Kitchen. Title-case, one or two words."
+
+      - label: "Body"
+        name: body
+        widget: markdown
+        hint: "The essay itself. Use the toolbar — no need to memorize markdown. First paragraph automatically gets the drop-cap."
 
   - name: batches
     label: Bake batches
     label_singular: Batch
     folder: content/batches
     create: true
-    slug: "{{slug}}"
+    # Filename auto-derived: "Batch 42 · Rye bagels, cold-shock skin."
+    # becomes batch-42-rye-bagels-cold-shock-skin.md. lib/batches.ts
+    # derives the slug from the filename — no manual slug field needed.
+    slug: "{{title}}"
     extension: md
     format: frontmatter
     summary: "#{{number}} · {{kind}} · {{title}}"
     fields:
-      - { label: "Slug (URL piece)", name: slug, widget: string }
-      - { label: "Date", name: date, widget: datetime, format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false, picker_utc: false }
-      - { label: "Batch number", name: number, widget: number, value_type: int, min: 1 }
-      - { label: "Kind", name: kind, widget: select, options: [bagel, bread, pizza] }
-      - { label: "Title", name: title, widget: string }
-      - { label: "Hydration", name: hydration, widget: string, required: false }
-      - { label: "Ferment", name: ferment, widget: string, required: false }
-      - { label: "Oven", name: oven, widget: string, required: false }
-      - { label: "Notes (one line per note)", name: notes, widget: list, required: false, default: [] }
-      - { label: "Body (optional long-form)", name: body, widget: markdown, required: false }
+      - label: "Bake date"
+        name: date
+        widget: datetime
+        format: "YYYY-MM-DD"
+        date_format: "YYYY-MM-DD"
+        time_format: false
+        picker_utc: false
+
+      - label: "Batch number"
+        name: number
+        widget: number
+        value_type: int
+        min: 1
+        hint: "Sequential. Find the last number in /kitchen/ and add 1."
+
+      - label: "Kind"
+        name: kind
+        widget: select
+        options: [bagel, bread, pizza]
+
+      - label: "Title"
+        name: title
+        widget: string
+        hint: "Short. What's interesting about this bake."
+
+      - label: "Hydration"
+        name: hydration
+        widget: string
+        required: false
+        hint: "Optional. e.g. \"62%\" or \"65% poolish\""
+
+      - label: "Ferment"
+        name: ferment
+        widget: string
+        required: false
+        hint: "Optional. e.g. \"36h cold + 2h warm\""
+
+      - label: "Oven"
+        name: oven
+        widget: string
+        required: false
+        hint: "Optional. e.g. \"500°F · stone · 22 min\""
+
+      - label: "Notes"
+        name: notes
+        widget: list
+        required: false
+        default: []
+        hint: "Short bullet observations. One line per note. The 'Add' button creates more."
+
+      - label: "Body (optional long-form)"
+        name: body
+        widget: markdown
+        required: false
+        hint: "Only if there's more to say than fits in the bullets. Most batches don't need this."

@@ -250,10 +250,21 @@ work because `output: 'export'` produces a self-contained `out/`.
 Essays and bake batches are git-backed markdown under `content/`.
 The Decap CMS admin at `/admin/` is wired in `public/admin/`:
 
+- `public/admin/index.html` — admin shell, loads Decap from unpkg
+- `public/admin/config.yml` — collections + field schemas (self-documenting
+  hints under every field)
+- `public/admin/preview.css` — standalone copy of editorial typography
+  for the preview pane (Fraunces, .prose-editorial, drop-cap). **Keep in
+  sync with `app/globals.css`** if you restyle.
+- `public/admin/preview-templates.js` — React components that render
+  each collection in the preview pane the same shape the published page
+  will. Mirror `app/writing/[slug]/page.tsx` once that exists.
+
 ```bash
 pnpm cms                 # terminal 1 — proxies git on :8081
 pnpm dev                 # terminal 2 — serves the site on :3000
-# open http://localhost:3000/admin/  → edit, save (writes to content/*.md)
+# open http://localhost:3000/admin/index.html  (NOT /admin/ — see below)
+# edit, save → writes to content/*.md
 git add content && git commit
 ```
 
@@ -261,6 +272,12 @@ git add content && git commit
 with zero auth. For production (deployed Vercel site) Decap needs a
 small GitHub OAuth bridge — deferred follow-up, see "Vercel CLI"
 below for env-var handling once it's wired.
+
+**Why `/admin/index.html` and not `/admin/`:** `next dev` doesn't
+auto-resolve `public/<dir>/index.html` for `/<dir>/` URLs — it tries
+to find an app route first and 404s. On the deployed static site
+(Vercel, etc.) `/admin/` works normally because static-file hosts do
+index resolution. Only the local dev URL needs the explicit filename.
 
 ### Vercel CLI
 

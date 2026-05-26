@@ -32,9 +32,17 @@ export interface BatchNote {
   body: string;
 }
 
+// Mirror lib/essays.ts: accept both quoted ISO strings (Decap) and
+// unquoted YAML dates (hand-edits) on the canonical YYYY-MM-DD shape.
+const isoDateString = z.preprocess(
+  (v) => (v instanceof Date ? v.toISOString().slice(0, 10) : v),
+  z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'date must be YYYY-MM-DD'),
+);
+
+// Slug is derived from the filename in loadBatches() — not from
+// frontmatter — so there's no manual sync to keep.
 const BatchFrontmatter = z.object({
-  slug: z.string().min(1),
-  date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'date must be YYYY-MM-DD'),
+  date: isoDateString,
   number: z.number().int().positive(),
   kind: z.enum(['bagel', 'bread', 'pizza']),
   title: z.string().min(1),
@@ -59,6 +67,7 @@ function loadBatches(): BatchNote[] {
     const fm = BatchFrontmatter.parse(data);
     return {
       ...fm,
+      slug: file.replace(/\.mdx?$/, ''),
       body: content.trim(),
     };
   });
