@@ -1,0 +1,14 @@
+name = "decap-oauth-personal-portfolio"
+main = "src/index.ts"
+compatibility_date = "2026-05-25"
+
+# Non-secret env. The site's production origin — the Worker only relays
+# tokens back to a window opened from this exact origin.
+# Update if you add a custom domain (e.g. https://wallychang.com).
+[vars]
+ALLOWED_ORIGIN = "https://personal-portfolio-alpha-livid-19.vercel.app"
+
+# Secrets — set interactively via `wrangler secret put <NAME>`:
+#   GITHUB_CLIENT_ID       (from the GitHub OAuth App)
+#   GITHUB_CLIENT_SECRET   (from the GitHub OAuth App; one-time view)
+#   STATE_SECRET           (any random ~32-byte string; signs the OAuth state cookie)
