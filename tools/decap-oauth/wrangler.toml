@@ -2,6 +2,11 @@ name = "decap-oauth-personal-portfolio"
 main = "src/index.ts"
 compatibility_date = "2026-05-25"
 
+# Enable the workers.dev preview URL so the bridge is reachable at
+# <name>.<account>.workers.dev — this is what Decap's base_url points at.
+# Off by default on new Workers (Cloudflare's security default).
+workers_dev = true
+
 # Non-secret env. The site's production origin — the Worker only relays
 # tokens back to a window opened from this exact origin.
 # Update if you add a custom domain (e.g. https://wallychang.com).
