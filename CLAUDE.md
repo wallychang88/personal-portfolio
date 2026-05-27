@@ -244,6 +244,9 @@ pnpm lint
 Deploys to Vercel, Netlify, GitHub Pages, S3+CloudFront — anywhere
 that serves static files. Vercel is the configured target; the rest
 work because `output: 'export'` produces a self-contained `out/`.
+Live at **https://wallychang88.com** — every push to `main` auto-deploys
+via the GitHub ↔ Vercel integration; branch pushes get preview URLs
+attached to the PR.
 
 ### Editing content from the browser (`/admin/`)
 
@@ -269,9 +272,14 @@ git add content && git commit
 ```
 
 `local_backend: true` in `public/admin/config.yml` makes this work
-with zero auth. For production (deployed Vercel site) Decap needs a
-small GitHub OAuth bridge — deferred follow-up, see "Vercel CLI"
-below for env-var handling once it's wired.
+with zero auth. Production `/admin/` at https://wallychang88.com/admin/
+is wired through a Cloudflare Worker OAuth bridge at
+`tools/decap-oauth/` — see its `README.md` for deploy/secrets. Redeploy
+the Worker with `pnpm cms:deploy` (wraps `wrangler deploy --cwd
+tools/decap-oauth` so the root Next.js project isn't auto-detected).
+The Worker's `ALLOWED_ORIGIN` env var must exactly match the origin
+where /admin/ is served from — update + redeploy if the canonical
+domain changes.
 
 **Why `/admin/index.html` and not `/admin/`:** `next dev` doesn't
 auto-resolve `public/<dir>/index.html` for `/<dir>/` URLs — it tries
@@ -281,23 +289,18 @@ index resolution. Only the local dev URL needs the explicit filename.
 
 ### Vercel CLI
 
-The deploy path is the CLI, not hand-authored `vercel.json` /
-`vercel.ts`. Wally runs these locally; agents document, don't run.
+Project is already linked (`.vercel/` is gitignored, lives only
+locally). Day-to-day deploys flow through git — push to `main` →
+production, push to branch → preview attached to PR. The CLI is
+only needed for one-offs:
 
 ```bash
-vercel login                       # one-time, opens browser
-vercel link                        # link this repo to a Vercel project
-                                   # (writes .vercel/, which is gitignored)
-vercel env add DECAP_GITHUB_CLIENT_ID production
-vercel env pull                    # mirror env into .env.local for dev
-vercel                             # deploy a preview
-vercel --prod                      # deploy to production
+vercel ls                          # list recent deploys + status
+vercel inspect <url>               # deep info on a specific deploy
+vercel logs <url>                  # runtime logs (minimal for static export)
+vercel env pull                    # mirror prod env into .env.local
+vercel --prod                      # force a production deploy from local
 ```
-
-Preview deployments fire automatically on every `git push` once the
-GitHub repo is connected to the Vercel project (set up via the
-Vercel dashboard, not the CLI). No additional code wiring needed —
-preview URLs come back on the PR.
 
 Vercel Analytics is on (added in commit `5fd3373`); page-view data
 shows up in the Vercel project dashboard. Cookie-less, no banner.

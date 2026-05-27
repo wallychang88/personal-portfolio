@@ -30,7 +30,7 @@ At <https://github.com/settings/developers> → OAuth Apps → New OAuth App:
 | Field | Value |
 | --- | --- |
 | Application name | Decap CMS — personal-portfolio |
-| Homepage URL | https://personal-portfolio-alpha-livid-19.vercel.app |
+| Homepage URL | https://wallychang88.com |
 | Authorization callback URL | `<worker URL>/callback` (from `wrangler deploy` output) |
 
 Save → copy Client ID. Generate a new client secret → copy immediately

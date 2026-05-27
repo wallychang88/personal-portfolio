@@ -8,10 +8,11 @@ compatibility_date = "2026-05-25"
 workers_dev = true
 
 # Non-secret env. The site's production origin — the Worker only relays
-# tokens back to a window opened from this exact origin.
-# Update if you add a custom domain (e.g. https://wallychang.com).
+# tokens back to a window opened from this exact origin. Origin is
+# protocol+host+port, no trailing slash. If you add an additional domain,
+# extend the Worker to accept a comma-separated list (currently single).
 [vars]
-ALLOWED_ORIGIN = "https://personal-portfolio-alpha-livid-19.vercel.app"
+ALLOWED_ORIGIN = "https://wallychang88.com"
 
 # Secrets — set interactively via `wrangler secret put <NAME>`:
 #   GITHUB_CLIENT_ID       (from the GitHub OAuth App)
