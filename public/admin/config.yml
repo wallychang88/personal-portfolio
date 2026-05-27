@@ -34,13 +34,18 @@ collections:
   - name: pages
     label: Pages
     label_singular: Page
+    # extension/format hint so Decap parses the file shape correctly.
+    # Without these, Decap doesn't recognize .mdx and gives back a blank
+    # editor. format: frontmatter splits the file into YAML frontmatter
+    # (maps to non-body fields) and a body string (maps to the `body`
+    # field). The body is MDX (markdown + component JSX), so we use a
+    # code widget for it — the markdown widget would mangle <Section> tags.
+    extension: mdx
+    format: frontmatter
     files:
       - file: content/about.mdx
         label: About
         name: about
-        # extension/format hint so Decap writes back with the right shape.
-        # The body is MDX (markdown + component JSX), so we use a code
-        # widget for it — the markdown widget would mangle <Section> tags.
         fields:
           - label: "Title"
             name: title
