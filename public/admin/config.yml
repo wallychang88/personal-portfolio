@@ -13,7 +13,13 @@ backend:
   name: github
   repo: wallychang88/personal-portfolio
   branch: main
+  # OAuth broker — a tiny Cloudflare Worker that holds the GitHub OAuth
+  # client_secret. Source + deploy docs live in tools/decap-oauth/.
+  # auth_endpoint defaults to "auth" → hits <base_url>/auth.
+  base_url: https://decap-oauth-personal-portfolio.wallychang88.workers.dev
 
+# local_backend stays true so `pnpm cms` + `pnpm dev` still works locally
+# (Decap auto-detects localhost and uses the local proxy instead of base_url).
 local_backend: true
 
 media_folder: public/images
