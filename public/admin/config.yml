@@ -34,13 +34,12 @@ collections:
   - name: pages
     label: Pages
     label_singular: Page
-    # extension/format hint so Decap parses the file shape correctly.
-    # Without these, Decap doesn't recognize .mdx and gives back a blank
-    # editor. format: frontmatter splits the file into YAML frontmatter
-    # (maps to non-body fields) and a body string (maps to the `body`
-    # field). The body is MDX (markdown + component JSX), so we use a
-    # code widget for it — the markdown widget would mangle <Section> tags.
-    extension: mdx
+    # format: frontmatter so Decap splits the file into YAML frontmatter
+    # (maps to non-body fields) and the rest as a body string. Without
+    # this hint Decap doesn't recognize .mdx and presents a blank editor.
+    # extension is implied by the per-file `file:` path. The body is MDX
+    # (markdown + component JSX), so we use a code widget — the markdown
+    # widget would mangle <Section> tags.
     format: frontmatter
     files:
       - file: content/about.mdx
@@ -60,6 +59,11 @@ collections:
           - label: "Body (MDX)"
             name: body
             widget: code
+            # output_code_only forces the widget to store the value as a
+            # plain string instead of {lang, code} object — required when
+            # the body comes from frontmatter parsing (a string). Without
+            # this, Decap crashes trying to call .get('code') on a string.
+            output_code_only: true
             default_language: markdown
             hint: "Markdown with embedded JSX. Wrap top-of-page prose in <Prose>...</Prose>. Use <Section accent=\"sage|honey|rust|slate|clay\" symbol=\"◆\" eyebrow=\"Endurance identity\" heading=\"…\">…</Section> for accented sections; nest <SectionOrnament>…</SectionOrnament> inside for the top-right ornament. Available components: Section, SectionOrnament, Prose, Callout, OrnCompassRose, OrnEndurance, OrnThumbStamp."
 
