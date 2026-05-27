@@ -132,7 +132,7 @@ corporate about-us, NOT a Bootstrap-style resume.
 /kitchen/              Cooking + baking, image-led           (pending — split from /writing/ on 2026-05-21)
 /writing/              Index of essays                       (pending)
 /writing/[slug]/       Individual posts                      (pending)
-/about/                Bio + endurance + colophon            (pending)
+/about/                Bio + endurance + kitchen identity    (built — MDX from content/about.mdx)
 ```
 
 Nav order is intentional: **Index → Projects → Endurance → Kitchen →

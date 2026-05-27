@@ -28,6 +28,36 @@ public_folder: /images
 publish_mode: simple
 
 collections:
+  # Singletons — pages with one file each, edited in place. Decap's
+  # "files" collection type for single-doc pages (about, future home
+  # tagline, etc.).
+  - name: pages
+    label: Pages
+    label_singular: Page
+    files:
+      - file: content/about.mdx
+        label: About
+        name: about
+        # extension/format hint so Decap writes back with the right shape.
+        # The body is MDX (markdown + component JSX), so we use a code
+        # widget for it — the markdown widget would mangle <Section> tags.
+        fields:
+          - label: "Title"
+            name: title
+            widget: string
+            hint: "The big serif headline at the top of /about/. End with a period — it's the editorial voice."
+
+          - label: "Tagline"
+            name: tagline
+            widget: string
+            hint: "Italic one-liner under the title. Geography · era · the through-line in 6-8 words."
+
+          - label: "Body (MDX)"
+            name: body
+            widget: code
+            default_language: markdown
+            hint: "Markdown with embedded JSX. Wrap top-of-page prose in <Prose>...</Prose>. Use <Section accent=\"sage|honey|rust|slate|clay\" symbol=\"◆\" eyebrow=\"Endurance identity\" heading=\"…\">…</Section> for accented sections; nest <SectionOrnament>…</SectionOrnament> inside for the top-right ornament. Available components: Section, SectionOrnament, Prose, Callout, OrnCompassRose, OrnEndurance, OrnThumbStamp."
+
   - name: essays
     label: Essays
     label_singular: Essay
