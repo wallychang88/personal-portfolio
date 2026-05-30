@@ -101,6 +101,7 @@ corporate about-us, NOT a Bootstrap-style resume.
 | `TODO.md` | Running scoreboard of pending work, blocked items, open questions. Update at the start and end of every session. |
 | `content/timeline/{date}-{slug}.md` | Homepage timeline entries. One file per entry — frontmatter has date + kind + tags, body is the hook prose. Loaded by `lib/timeline.ts`, sorted newest-first. |
 | `content/galleries/{id}.yml` | Photo manifest, one file per gallery. Frontmatter has `label`, optional `hint`, and a `photos:` list of `{ src, alt, caption? }`. Empty `photos:` renders an elegant placeholder. Loaded by `lib/galleries.ts`. |
+| `content/projects/{slug}.mdx` | Project deep-dives. Frontmatter holds the header chrome (kicker / title / dek / meta / tags / corner badges); body is MDX (prose + figures + marginalia). Loaded by `lib/projects.ts`; dynamic route at `app/projects/[slug]/page.tsx` builds one HTML file per slug. |
 
 ## Tech stack
 
@@ -126,8 +127,7 @@ corporate about-us, NOT a Bootstrap-style resume.
 
 ```
 /                      Timeline-driven homepage              (built)
-/projects/doorpi/      Long-form deep-dive                   (built — drafted)
-/projects/rodsmith/    Long-form deep-dive                   (pending — see TODO.md)
+/projects/[slug]/      Long-form deep-dives                  (built — MDX from content/projects/*.mdx; doorpi drafted, rodsmith pending — see TODO.md)
 /endurance/            Three trophy activities, photo strips (built — galleries empty)
 /kitchen/              Cooking + baking, image-led           (pending — split from /writing/ on 2026-05-21)
 /writing/              Index of essays                       (pending)
@@ -148,13 +148,15 @@ app/
 ├── layout.tsx              Root layout, fonts, Nav, Footer
 ├── globals.css             Tailwind + .prose-editorial + drop-cap
 ├── page.tsx                Homepage (timeline)
-├── projects/doorpi/page.tsx
+├── projects/[slug]/page.tsx   Dynamic project deep-dives (MDX)
 └── endurance/page.tsx
 
 components/
 ├── nav.tsx
 ├── footer.tsx
 ├── article-shell.tsx       Shared chrome for long-form pages
+├── section.tsx             <Section> + <Prose> + <Callout> for /about/ MDX
+├── project-shell.tsx       <Figure> + <ProjectColumns> + <MarginaliaCard> + <EndNote> for /projects/*/ MDX
 ├── timeline-entry.tsx
 ├── tag.tsx                 Deterministic palette per tag
 ├── photo-strip.tsx         Gallery + empty-state placeholder
@@ -165,6 +167,7 @@ lib/
 ├── essays.ts               Loads content/essays/*.md
 ├── batches.ts              Loads content/batches/*.md
 ├── galleries.ts            Loads content/galleries/*.yml
+├── projects.ts             Loads content/projects/*.mdx
 └── timeline.ts             Loads content/timeline/*.md
 
 content/
@@ -172,6 +175,7 @@ content/
 ├── essays/                 One markdown per essay
 ├── batches/                One markdown per bake batch
 ├── galleries/              One YAML per photo gallery
+├── projects/               One MDX per project deep-dive
 └── timeline/               One markdown per timeline entry
 
 scripts/
@@ -241,6 +245,57 @@ Two paths:
   caption, alt. Copies into `public/images/{gallery-id}/` and appends
   the entry to the gallery's YAML file. CLI alt to /admin/ for batch
   additions.
+
+### Adding a project deep-dive
+
+Two paths:
+
+- `/admin/` → Project deep-dives → "New Project". Decap auto-derives
+  the filename from the title.
+- Hand-edit: create `content/projects/{slug}.mdx`. Frontmatter:
+
+```mdx
+---
+title: doorpi — a door that knows my face and waits for a peace sign.
+dek: Pi Zero + ESP32 + MediaPipe. A face-match unlock with a peace-sign verification step before the relay fires.
+kicker: Project · Shipped · April 2026
+meta: Solo build · running 24/7 on doorpihost
+tags: [Hardware, Computer Vision, Python]
+cat: rust                      # rust | slate | sage | honey | clay
+description: "<meta name=description> — one sentence."
+badges:                        # optional corner ornaments
+  - { type: rev, rev: v3, text: REV }
+  - { type: led, label: "unlock · operational", mobileLabel: unlock }
+order: 1                       # optional; for a future /projects/ index
+---
+
+<Figure label="Fig. 01 · system schematic · v3" caption="…">
+  <OrnSchematic width={1130} height={210} delay={1} />
+</Figure>
+
+<ProjectColumns>
+
+<ProjectMarginalia>
+  <MarginaliaCard label="Build · current" caption={"shipped · apr 2026\nrunning · 24/7"}>
+    <OrnRevStamp rev="v3">REV</OrnRevStamp>
+    <OrnLED label="unlock" />
+  </MarginaliaCard>
+</ProjectMarginalia>
+
+First paragraph of body prose.
+
+Second paragraph.
+
+<EndNote>Long-form writeup in progress.</EndNote>
+
+</ProjectColumns>
+```
+
+Components available in the body: `Figure`, `ProjectColumns`,
+`ProjectMarginalia`, `MarginaliaCard`, `EndNote`, `Prose`, `Section`,
+`SectionOrnament`, `Callout`, `StatPanel`, and the ornaments
+`OrnSchematic`, `OrnRevStamp`, `OrnLED`, `OrnPullQuote`. Add more to
+the components map in `app/projects/[slug]/page.tsx` as you need them.
 
 ### Writing copy
 
@@ -344,6 +399,11 @@ When you change one of these, search the codebase for the others:
   from the consuming page (`app/endurance/page.tsx`, `app/kitchen/page.tsx`).
   `scripts/new-photo.mjs` auto-discovers galleries from the directory,
   so no allow-list to update there.
+- New project deep-dive → add `content/projects/{slug}.mdx`. The
+  dynamic route auto-discovers it via `getAllProjects()`. If the body
+  uses a component that isn't already in the components map at
+  `app/projects/[slug]/page.tsx`, add it there too (imports inside MDX
+  are silently dropped by `next-mdx-remote/rsc`).
 - Tailwind token change → `globals.css` `.prose-editorial` styles may
   reference colors directly via `theme()`.
 

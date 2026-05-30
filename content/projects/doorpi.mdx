@@ -1,0 +1,41 @@
+---
+title: doorpi — a door that knows my face and waits for a peace sign.
+dek: Pi Zero + ESP32 + MediaPipe. A face-match unlock with a peace-sign verification step before the relay fires.
+kicker: Project · Shipped · April 2026
+meta: Solo build · running 24/7 on doorpihost
+tags:
+  - Hardware
+  - Computer Vision
+  - Python
+cat: rust
+description: doorpi v3 — a face-ID door unlock with a peace-sign verification step. Pi Zero W + ESP32 + MediaPipe. Long-form writeup in progress.
+badges:
+  - type: rev
+    rev: v3
+    text: REV
+  - type: led
+    label: unlock · operational
+    mobileLabel: unlock
+order: 1
+---
+
+<Figure label="Fig. 01 · system schematic · v3" caption="camera → Pi → MediaPipe → ESP32 → 12V latch">
+  <OrnSchematic width={1130} height={210} delay={1} />
+</Figure>
+
+<ProjectColumns>
+
+<ProjectMarginalia>
+  <MarginaliaCard label="Build · current" caption={"shipped · apr 2026\nrunning · 24/7"}>
+    <OrnRevStamp rev="v3">REV</OrnRevStamp>
+    <OrnLED label="unlock" />
+  </MarginaliaCard>
+</ProjectMarginalia>
+
+doorpi v3 shipped in April 2026. It is the third revision of a face-recognition + peace-sign door unlock that runs continuously on a small box behind a fixture in my apartment lobby. Pi Zero W on the capture side, ESP32 on the strike-plate side, the latch in the middle.
+
+The peace sign is the part I am most proud of. It is the one-bit confirmation that the unlock was on purpose — the door does not open because my face happened to appear in the frame, only because I deliberately said it should.
+
+<EndNote>Long-form writeup in progress — the real notes on the camera-driver fight, the auto-exposure rewrite, and the peace-sign stability gate land in a later revision.</EndNote>
+
+</ProjectColumns>
