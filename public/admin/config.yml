@@ -119,6 +119,79 @@ collections:
             required: false
             hint: "Optional. Short caption shown under the image."
 
+  - name: timeline
+    label: Timeline
+    label_singular: Entry
+    folder: content/timeline
+    create: true
+    # Slug includes the sortDate prefix so a plain directory listing
+    # sorts chronologically (oldest → newest); lib/timeline.ts re-sorts
+    # to newest-first for display.
+    slug: "{{sortDate}}-{{title}}"
+    extension: md
+    format: frontmatter
+    summary: "{{sortDate}} — {{title}}"
+    fields:
+      - label: "Sort date"
+        name: sortDate
+        widget: datetime
+        format: "YYYY-MM-DD"
+        date_format: "YYYY-MM-DD"
+        time_format: false
+        picker_utc: false
+        hint: "ISO date (YYYY-MM-DD). Used to sort + to prefix the filename. Doesn't have to match the displayed date below."
+
+      - label: "Display date"
+        name: date
+        widget: string
+        hint: "What the reader sees in the date column. \"May 2026\", \"Fall 2025 →\", \"2021 — 2024\" — whatever shape the entry deserves."
+
+      - label: "Kind"
+        name: kind
+        widget: select
+        options:
+          - { label: "Project — something I built", value: project }
+          - { label: "Writing — essay or opinion piece", value: writing }
+          - { label: "Role — job or major engagement", value: role }
+          - { label: "Coursework — academic project or paper", value: coursework }
+          - { label: "Milestone — degree, talk, race, anything notable", value: milestone }
+        hint: "Drives the kind label color + sort within same-day entries."
+
+      - label: "Kind label"
+        name: kindLabel
+        widget: string
+        required: false
+        hint: "Optional. Small caption under the date — e.g. \"Project · shipped\", \"Endurance · trophy day\", \"Role · current\"."
+
+      - label: "Title"
+        name: title
+        widget: string
+        hint: "The headline. Sentence case for milestones (\"Tioga Road, before the cars.\"), title case for roles + projects."
+
+      - label: "Tags"
+        name: tags
+        widget: list
+        default: []
+        hint: "Short topic tags shown as pills. Editor: type, hit Enter, repeat."
+
+      - label: "Link"
+        name: href
+        widget: string
+        required: false
+        hint: "Optional. Internal route like /projects/doorpi/ or external URL. Omit for headline-only entries."
+
+      - label: "Opens in new tab"
+        name: external
+        widget: boolean
+        required: false
+        default: false
+        hint: "Only meaningful if Link is set. True for external URLs (target=\"_blank\")."
+
+      - label: "Hook"
+        name: body
+        widget: markdown
+        hint: "1-3 sentences. The reader's reason to click — what was hard, what was beautiful, what surprised you. Don't restate the title."
+
   - name: essays
     label: Essays
     label_singular: Essay

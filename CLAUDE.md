@@ -99,7 +99,7 @@ corporate about-us, NOT a Bootstrap-style resume.
 | `WALLY.md` | Canonical bio + voice brief. Identity, audience, voice register, through-line, personal threads, career arc, trophy activities, open questions. **Read before writing any copy.** |
 | `design-brief.md` | The brief for claude.ai/design. Mirrors `WALLY.md` and adds visual concepts already explored (A: paper, B: cover, C: inky), explicit page asks, hard constraints. **Read before any visual change.** |
 | `TODO.md` | Running scoreboard of pending work, blocked items, open questions. Update at the start and end of every session. |
-| `lib/timeline.ts` | Homepage timeline data. Edit to add/edit/remove entries. Sorted newest-first by `sortDate`. |
+| `content/timeline/{date}-{slug}.md` | Homepage timeline entries. One file per entry — frontmatter has date + kind + tags, body is the hook prose. Loaded by `lib/timeline.ts`, sorted newest-first. |
 | `content/galleries/{id}.yml` | Photo manifest, one file per gallery. Frontmatter has `label`, optional `hint`, and a `photos:` list of `{ src, alt, caption? }`. Empty `photos:` renders an elegant placeholder. Loaded by `lib/galleries.ts`. |
 
 ## Tech stack
@@ -165,13 +165,14 @@ lib/
 ├── essays.ts               Loads content/essays/*.md
 ├── batches.ts              Loads content/batches/*.md
 ├── galleries.ts            Loads content/galleries/*.yml
-└── timeline.ts             (TS for now; migration pending)
+└── timeline.ts             Loads content/timeline/*.md
 
 content/
 ├── about.mdx               Bio page
 ├── essays/                 One markdown per essay
 ├── batches/                One markdown per bake batch
-└── galleries/              One YAML per photo gallery
+├── galleries/              One YAML per photo gallery
+└── timeline/               One markdown per timeline entry
 
 scripts/
 └── new-photo.mjs           `pnpm new-photo` interactive helper — CLI alt to /admin/
@@ -202,20 +203,31 @@ Subject to change when Wally returns from `claude.ai/design`. Update
 
 ## Conventions
 
-### Adding a timeline entry — edit `lib/timeline.ts`
+### Adding a timeline entry
 
-```ts
-{
-  sortDate: '2026-05-14',           // ISO; sort only
-  date: 'May 2026',                 // displayed
-  kind: 'milestone',                // project | writing | role | coursework | milestone
-  kindLabel: 'Endurance · trophy day', // optional caption under date
-  title: 'Tioga Road, before the cars.',
-  hook: '…',                        // 2–3 sentences, punchy
-  tags: ['Cycling', 'Sierras'],
-  href: '/endurance/',              // optional
-  external: false,
-}
+Two paths:
+
+- `/admin/` → Timeline → "New Entry". Decap auto-derives the filename
+  from sortDate + title (`{sortDate}-{title-slug}.md`).
+- Hand-edit: create `content/timeline/{sortDate}-{slug}.md` with this
+  shape:
+
+```markdown
+---
+sortDate: 2026-05-14         # ISO; sorts the file
+date: May 2026               # what the reader sees
+kind: milestone              # project | writing | role | coursework | milestone
+kindLabel: Endurance · trophy day   # optional small caption under date
+title: Tioga Road, before the cars.
+tags:
+  - Cycling
+  - Sierras
+href: /endurance/            # optional; internal route or external URL
+external: false              # only meaningful if href is set
+---
+
+2–3 sentences, punchy. This is the "hook" — what the reader sees
+below the title.
 ```
 
 ### Adding a photo
@@ -324,8 +336,10 @@ shows up in the Vercel project dashboard. Cookie-less, no banner.
 
 When you change one of these, search the codebase for the others:
 
-- New timeline `kind` → `TimelineKind` type (`lib/timeline.ts`) +
-  `components/timeline-entry.tsx` rendering.
+- New timeline `kind` → `TimelineKind` zod enum + `TIMELINE_KIND` array
+  (`lib/timeline.ts`) + the Decap select widget options (`public/admin/config.yml`)
+  + `components/timeline-entry.tsx` rendering + the `KIND_COLOR` map
+  in `public/admin/preview-templates.js`.
 - New gallery id → create `content/galleries/{id}.yml` + reference it
   from the consuming page (`app/endurance/page.tsx`, `app/kitchen/page.tsx`).
   `scripts/new-photo.mjs` auto-discovers galleries from the directory,

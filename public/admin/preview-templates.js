@@ -380,4 +380,146 @@
   });
 
   CMS.registerPreviewTemplate('galleries', GalleryPreview);
+
+  /* ------------------------------------------------------------------
+     Timeline entry preview.
+     Mirrors the timeline-entry component on the homepage: date column,
+     kind label, title, hook prose, tag pills. The preview is a single
+     entry (Decap edits one file at a time).
+     ------------------------------------------------------------------ */
+  var KIND_COLOR = {
+    project: 'slate',
+    writing: 'clay',
+    role: 'slate',
+    coursework: 'clay',
+    milestone: 'sage',
+  };
+
+  var TimelinePreview = createClass({
+    render: function () {
+      var data = this.props.entry.get('data');
+      var date = data.get('date') || '';
+      var kind = data.get('kind') || 'milestone';
+      var kindLabel = data.get('kindLabel') || '';
+      var title = data.get('title') || '';
+      var tags = data.get('tags');
+      var tagsArr = tags && tags.toJS ? tags.toJS() : [];
+      var href = data.get('href') || '';
+
+      var accent = KIND_COLOR[kind] || 'sage';
+
+      return h(
+        'div',
+        { className: 'preview-shell' },
+        h(
+          'div',
+          {
+            style: {
+              display: 'grid',
+              gridTemplateColumns: '120px 1fr',
+              gap: '24px',
+              alignItems: 'baseline',
+            },
+          },
+          h(
+            'div',
+            null,
+            h(
+              'div',
+              {
+                style: {
+                  fontFamily: 'JetBrains Mono, monospace',
+                  fontSize: '11px',
+                  letterSpacing: '0.06em',
+                  textTransform: 'uppercase',
+                  color: '#5C5A52',
+                  marginBottom: '4px',
+                },
+              },
+              date || empty('date')
+            ),
+            kindLabel
+              ? h(
+                  'div',
+                  {
+                    style: {
+                      fontFamily: 'JetBrains Mono, monospace',
+                      fontSize: '10px',
+                      letterSpacing: '0.06em',
+                      color: '#8A8678',
+                    },
+                  },
+                  kindLabel
+                )
+              : null
+          ),
+          h(
+            'div',
+            null,
+            h(
+              'h2',
+              {
+                className: 'essay-title',
+                style: { fontSize: '24px', lineHeight: '1.15', marginBottom: '8px' },
+              },
+              title || empty('Add a title'),
+              href
+                ? h(
+                    'span',
+                    {
+                      style: {
+                        fontSize: '11px',
+                        fontFamily: 'JetBrains Mono, monospace',
+                        color: '#8A8678',
+                        marginLeft: '8px',
+                        fontWeight: 'normal',
+                      },
+                    },
+                    '→ ' + href
+                  )
+                : null
+            ),
+            h(
+              'div',
+              {
+                style: {
+                  fontFamily: 'Fraunces, serif',
+                  fontSize: '15px',
+                  lineHeight: '1.55',
+                  color: '#44423C',
+                  marginBottom: '12px',
+                },
+              },
+              this.props.widgetFor('body')
+            ),
+            tagsArr.length > 0
+              ? h(
+                  'div',
+                  { style: { display: 'flex', gap: '6px', flexWrap: 'wrap' } },
+                  tagsArr.map(function (tag, i) {
+                    return h(
+                      'span',
+                      {
+                        key: i,
+                        className: 'pill ' + accent,
+                        style: {
+                          fontSize: '11px',
+                          padding: '2px 8px',
+                          borderRadius: '999px',
+                          border: '1px solid currentColor',
+                          opacity: 0.85,
+                        },
+                      },
+                      tag
+                    );
+                  })
+                )
+              : null
+          )
+        )
+      );
+    },
+  });
+
+  CMS.registerPreviewTemplate('timeline', TimelinePreview);
 })();
