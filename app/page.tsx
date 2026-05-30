@@ -243,15 +243,14 @@ function Hero() {
         className="font-serif text-[44px] sm:text-[56px] @[1100px]:text-[62px] leading-[1.05] tracking-[-0.018em] text-ink mb-6 [text-wrap:balance]"
         style={{ fontVariationSettings: '"opsz" 144, "wght" 400' }}
       >
-        Wally Chang documents projects, miles, and dough.
+        Welcome to the portfolio.
       </h1>
       <p
         className="font-serif text-[18px] sm:text-[20px] leading-[1.55] text-ink-muted max-w-[720px] [text-wrap:pretty]"
         style={{ fontVariationSettings: '"opsz" 24, "wght" 400' }}
       >
-        Data scientist at Extend. Founder of RodSmith. Builder of small hardware.
-        The portfolio is the long view — work, endurance, and what&rsquo;s
-        coming out of the oven.
+        The anti-resume. A mix of things that I find significant, not all
+        professional. Get to know me!
       </p>
     </section>
   );
