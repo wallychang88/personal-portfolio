@@ -28,7 +28,7 @@ const config: Config = {
         // 5-category accent system. Each is a single color value used as
         // foreground; tag pills derive background via alpha-syntax
         // (e.g. bg-sage/[0.06]). No surface variant.
-        //   sage  → endurance
+        //   sage  → sweat
         //   rust  → hardware / projects
         //   slate → software / roles
         //   honey → kitchen (darkened from #D4923C for WCAG AA on small text)

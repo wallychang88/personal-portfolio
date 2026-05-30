@@ -65,7 +65,7 @@ Transform tasks into verifiable goals:
   ArticleShell pattern, every `href` resolves, mobile reads at 375px."
 - "Restyle to Concept B" → "Tailwind tokens updated, homepage matches
   design output at desktop + 375px, no regressions on `/projects/doorpi`
-  or `/endurance`."
+  or `/sweat`."
 
 For multi-step tasks state a brief plan:
 
@@ -128,15 +128,15 @@ corporate about-us, NOT a Bootstrap-style resume.
 ```
 /                      Timeline-driven homepage              (built)
 /projects/[slug]/      Long-form deep-dives                  (built — MDX from content/projects/*.mdx; doorpi drafted, rodsmith pending — see TODO.md)
-/endurance/            Three trophy activities, photo strips (built — galleries empty)
+/sweat/                Three trophy activities, photo strips (built — galleries empty)
 /kitchen/              Cooking + baking, image-led           (pending — split from /writing/ on 2026-05-21)
 /writing/              Index of essays                       (pending)
 /writing/[slug]/       Individual posts                      (pending)
 /about/                Bio + endurance + kitchen identity    (built — MDX from content/about.mdx)
 ```
 
-Nav order is intentional: **Index → Projects → Endurance → Kitchen →
-Writing → About.** Both body registers (endurance, kitchen) sit before
+Nav order is intentional: **Index → Projects → Sweat → Kitchen →
+Writing → About.** Both body registers (sweat, kitchen) sit before
 the reflective ones (writing, about). Cooking and baking are deliberately
 separated from /writing/ — `/kitchen/` is its own image-led page; the
 Kitchen filter chip in /writing/ should be removed.
@@ -149,7 +149,7 @@ app/
 ├── globals.css             Tailwind + .prose-editorial + drop-cap
 ├── page.tsx                Homepage (timeline)
 ├── projects/[slug]/page.tsx   Dynamic project deep-dives (MDX)
-└── endurance/page.tsx
+└── sweat/page.tsx
 
 components/
 ├── nav.tsx
@@ -221,12 +221,12 @@ Two paths:
 sortDate: 2026-05-14         # ISO; sorts the file
 date: May 2026               # what the reader sees
 kind: milestone              # project | writing | role | coursework | milestone
-kindLabel: Endurance · trophy day   # optional small caption under date
+kindLabel: Sweat · trophy day       # optional small caption under date
 title: Tioga Road, before the cars.
 tags:
   - Cycling
   - Sierras
-href: /endurance/            # optional; internal route or external URL
+href: /sweat/                # optional; internal route or external URL
 external: false              # only meaningful if href is set
 ---
 
@@ -396,7 +396,7 @@ When you change one of these, search the codebase for the others:
   + `components/timeline-entry.tsx` rendering + the `KIND_COLOR` map
   in `public/admin/preview-templates.js`.
 - New gallery id → create `content/galleries/{id}.yml` + reference it
-  from the consuming page (`app/endurance/page.tsx`, `app/kitchen/page.tsx`).
+  from the consuming page (`app/sweat/page.tsx`, `app/kitchen/page.tsx`).
   `scripts/new-photo.mjs` auto-discovers galleries from the directory,
   so no allow-list to update there.
 - New project deep-dive → add `content/projects/{slug}.mdx`. The

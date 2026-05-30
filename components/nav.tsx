@@ -1,11 +1,11 @@
 import Link from 'next/link';
 
-// Index → Projects → Endurance → Kitchen → Writing → About.
-// Body registers (endurance, kitchen) sit before the reflective ones.
+// Index → Projects → Sweat → Kitchen → Writing → About.
+// Body registers (sweat, kitchen) sit before the reflective ones.
 const NAV_ITEMS: { href: string; label: string }[] = [
   { href: '/', label: 'Index' },
   { href: '/projects/doorpi/', label: 'Projects' },
-  { href: '/endurance/', label: 'Endurance' },
+  { href: '/sweat/', label: 'Sweat' },
   { href: '/kitchen/', label: 'Kitchen' },
   { href: '/writing/', label: 'Writing' },
   { href: '/about/', label: 'About' },

@@ -3,7 +3,7 @@ import { CAT_HEX } from '../catClass';
 /**
  * IRONMAN 70.3 race profile — Swim · T1 · Bike · T2 · Run, sized by
  * actual split fractions, with Bike elevated + at full opacity to mark
- * div-rank 39. Built for the /endurance/ Ironman trophy spread.
+ * div-rank 39. Built for the /sweat/ Ironman trophy spread.
  *
  * Splits per WALLY.md (5:41:08 total):
  *   Swim  0:43:42  · T1 0:06:20  · Bike 2:44:15  · T2 0:06:38  · Run 2:00:13

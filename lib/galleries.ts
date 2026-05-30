@@ -6,7 +6,7 @@ import { z } from 'zod';
 /**
  * Photo galleries — source files live at `content/galleries/{id}.yml`,
  * one file per gallery. The filename (sans extension) is the gallery
- * ID consumers reference (e.g. `endurance_whitney`, `baking_bagels`).
+ * ID consumers reference (e.g. `sweat_whitney`, `baking_bagels`).
  *
  * Add a photo from /admin/ (Decap "Galleries" collection) or by hand:
  *   1. Drop the file into `public/images/{gallery_id}/` (create the
@@ -19,7 +19,7 @@ import { z } from 'zod';
  */
 
 const PhotoSchema = z.object({
-  /** Path relative to `/public`, e.g. `/images/endurance/whitney-trout.jpg`. */
+  /** Path relative to `/public`, e.g. `/images/sweat_whitney/whitney-trout.jpg`. */
   src: z.string().min(1),
   /** Alt text. Required for accessibility. */
   alt: z.string().min(1),

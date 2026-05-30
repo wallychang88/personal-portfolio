@@ -2,7 +2,7 @@ import { CAT_HEX } from '../catClass';
 
 /**
  * Large Whitney elevation profile — Portal → Trail Camp → 99 switchbacks
- * → Trail Crest → summit → return. Built for the /endurance/ Whitney
+ * → Trail Crest → summit → return. Built for the /sweat/ Whitney
  * trophy spread.
  *
  * Chart spans 8,000–15,000 ft so the trail (8,360 → 14,505) fills the

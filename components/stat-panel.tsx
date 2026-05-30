@@ -2,7 +2,7 @@
  * Stat panel — 4-up grid with top + bottom hairlines and a vertical
  * hairline between each cell. Mirrors the `.uni .stat-panel` recipe in
  * _unified.jsx (visual reference only). Used for trophy splits on
- * /endurance/ + bake stats on /kitchen/.
+ * /sweat/ + bake stats on /kitchen/.
  *
  * The label is mono uppercase (eyebrow), the value is display-weight
  * Fraunces (opsz 36 / wght 500), the sub is mono.

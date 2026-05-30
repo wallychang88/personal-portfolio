@@ -2,7 +2,7 @@
 sortDate: 2023-11-30
 date: 2021 — 2024
 kind: milestone
-kindLabel: Endurance · varsity
+kindLabel: Sweat · varsity
 title: Three seasons on Cornell Sprint Football (#87).
 tags:
   - Cornell

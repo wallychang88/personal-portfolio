@@ -32,8 +32,8 @@ export default function NotFound() {
         <Link href="/" className="block hover:text-ink transition-colors">
           → return to the index
         </Link>
-        <Link href="/endurance/" className="block hover:text-ink transition-colors">
-          → /endurance/ — the trophy days
+        <Link href="/sweat/" className="block hover:text-ink transition-colors">
+          → /sweat/ — the trophy days
         </Link>
         <Link href="/projects/doorpi/" className="block hover:text-ink transition-colors">
           → /projects/doorpi/ — the door

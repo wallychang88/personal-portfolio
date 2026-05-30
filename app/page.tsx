@@ -54,12 +54,12 @@ export default function HomePage() {
 
         <Tile
           cat="sage"
-          href="/endurance/#tioga"
+          href="/sweat/#tioga"
           ariaLabel="Tioga Road opening weekend"
           cols={3}
           rows={2}
         >
-          <Eyebrow>Endurance · Trophy day · May 2026</Eyebrow>
+          <Eyebrow>Sweat · Trophy day · May 2026</Eyebrow>
           <TileTitle big>Tioga Road, before the cars.</TileTitle>
           <TileHook>
             88 miles through Yosemite on opening weekend, after the road was plowed
@@ -95,12 +95,12 @@ export default function HomePage() {
 
         <Tile
           cat="sage"
-          href="/endurance/#whitney"
+          href="/sweat/#whitney"
           ariaLabel="Mt. Whitney alpine start"
           cols={2}
           rows={2}
         >
-          <Eyebrow>Endurance · Trophy · Jul 2025</Eyebrow>
+          <Eyebrow>Sweat · Trophy · Jul 2025</Eyebrow>
           <TileTitle>Mount Whitney, alpine start.</TileTitle>
           <TileHook>
             2:27 AM summit push out of Trail Camp. Sunrise at 14,505 ft — the
@@ -162,7 +162,7 @@ export default function HomePage() {
       <Band label="BEFORE NOW" range="2021 – 2024">
         <Tile
           cat="sage"
-          href="/endurance/#ironman"
+          href="/sweat/#ironman"
           ariaLabel="IRONMAN 70.3 Indian Wells"
           cols={2}
           rows={1}
@@ -178,7 +178,7 @@ export default function HomePage() {
 
         <Tile
           cat="sage"
-          href="/about/#endurance"
+          href="/about/#sweat"
           ariaLabel="Cornell Sprint Football"
           cols={2}
           rows={1}

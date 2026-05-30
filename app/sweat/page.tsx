@@ -13,15 +13,15 @@ import { GALLERIES, type GalleryId } from '@/lib/galleries';
 import { TROPHIES, type Trophy } from '@/lib/trophies';
 
 export const metadata: Metadata = {
-  title: 'Endurance — Wally Chang',
+  title: 'Sweat — Wally Chang',
   description:
     'Three trophy days from the field atlas — Mount Whitney, Tioga Road, and IRONMAN 70.3 Indian Wells.',
 };
 
 const GALLERY_FOR: Record<Trophy['slug'], GalleryId> = {
-  whitney: 'endurance_whitney',
-  tioga:   'endurance_tioga',
-  ironman: 'endurance_ironman',
+  whitney: 'sweat_whitney',
+  tioga:   'sweat_tioga',
+  ironman: 'sweat_ironman',
 };
 
 const ROUTE_FOR: Record<Trophy['slug'], React.ReactNode> = {
@@ -30,7 +30,7 @@ const ROUTE_FOR: Record<Trophy['slug'], React.ReactNode> = {
   ironman: <RouteIronman />,
 };
 
-export default function EndurancePage() {
+export default function SweatPage() {
   return (
     <div className="relative">
       <ContourBackground width={1280} height={2800} />

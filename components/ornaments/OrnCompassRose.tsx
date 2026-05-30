@@ -1,7 +1,7 @@
 import { CAT_HEX, type TagCategory } from './catClass';
 
 /**
- * Compass rose for the /endurance/ masthead. 16-tick dial with N-S vanes,
+ * Compass rose for the /sweat/ masthead. 16-tick dial with N-S vanes,
  * a 6s idle drift, and a -2deg hover lock. Pure CSS hover — server-safe.
  */
 export function OrnCompassRose({
