@@ -522,4 +522,130 @@
   });
 
   CMS.registerPreviewTemplate('timeline', TimelinePreview);
+
+  /* ------------------------------------------------------------------
+     Project deep-dive preview.
+     Same approach as AboutPreview: title + dek + meta at full fidelity,
+     body MDX shown as source in a mono block since the components
+     can't be re-resolved in the preview iframe. Deployed page is the
+     authoritative render.
+     ------------------------------------------------------------------ */
+  var ProjectPreview = createClass({
+    render: function () {
+      var data = this.props.entry.get('data');
+      var title = data.get('title') || '';
+      var dek = data.get('dek') || '';
+      var kicker = data.get('kicker') || '';
+      var meta = data.get('meta') || '';
+      var cat = data.get('cat') || 'rust';
+      var tags = data.get('tags');
+      var tagsArr = tags && tags.toJS ? tags.toJS() : [];
+      var body = data.get('body') || '';
+
+      return h(
+        'div',
+        { className: 'preview-shell' },
+        h(
+          'div',
+          { className: 'eyebrow ' + cat },
+          kicker || empty('kicker (e.g. Project · Shipped · April 2026)'),
+        ),
+        h(
+          'h1',
+          { className: 'essay-title', style: { fontSize: '40px', lineHeight: '1.05' } },
+          title || empty('Add a title (ends with a period)'),
+        ),
+        dek
+          ? h(
+              'p',
+              {
+                className: 'essay-hook',
+                style: { fontStyle: 'italic', fontSize: '20px' },
+              },
+              dek,
+            )
+          : h('p', { className: 'essay-hook' }, empty('Add a dek')),
+        h(
+          'div',
+          {
+            style: {
+              marginTop: '14px',
+              display: 'flex',
+              flexWrap: 'wrap',
+              gap: '12px',
+              alignItems: 'center',
+              fontFamily: 'JetBrains Mono, monospace',
+              fontSize: '11.5px',
+              color: '#5C5A52',
+            },
+          },
+          meta ? h('span', {}, meta) : null,
+          tagsArr.length > 0
+            ? h(
+                'div',
+                { style: { display: 'flex', gap: '6px', flexWrap: 'wrap' } },
+                tagsArr.map(function (tag, i) {
+                  return h(
+                    'span',
+                    {
+                      key: i,
+                      className: 'pill ' + cat,
+                      style: {
+                        fontSize: '11px',
+                        padding: '2px 8px',
+                        borderRadius: '999px',
+                        border: '1px solid currentColor',
+                        opacity: 0.85,
+                      },
+                    },
+                    tag,
+                  );
+                }),
+              )
+            : null,
+        ),
+        h(
+          'div',
+          {
+            style: {
+              marginTop: '32px',
+              padding: '16px 20px',
+              border: '1px solid #E8E1CE',
+              background: '#F4EFE2',
+              borderRadius: '4px',
+              fontSize: '12px',
+              color: '#5C5A52',
+              lineHeight: '1.5',
+            },
+          },
+          'Body is MDX (markdown + components). The preview shows metadata only — the deployed /projects/{slug}/ is the authoritative render. Use Save & Preview to deploy to a preview URL.',
+        ),
+        body
+          ? h(
+              'pre',
+              {
+                style: {
+                  marginTop: '16px',
+                  padding: '14px 16px',
+                  background: '#FBF8F1',
+                  border: '1px solid #E8E1CE',
+                  borderRadius: '4px',
+                  fontSize: '11.5px',
+                  lineHeight: '1.55',
+                  fontFamily: 'JetBrains Mono, monospace',
+                  whiteSpace: 'pre-wrap',
+                  wordBreak: 'break-word',
+                  color: '#1C1B17',
+                  maxHeight: '480px',
+                  overflow: 'auto',
+                },
+              },
+              body,
+            )
+          : null,
+      );
+    },
+  });
+
+  CMS.registerPreviewTemplate('projects', ProjectPreview);
 })();
