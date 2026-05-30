@@ -1,10 +1,12 @@
 import type { Metadata } from 'next';
 import { ESSAYS_SORTED } from '@/lib/essays';
+import { getWritingPage } from '@/lib/writing-page';
+
+const writing = getWritingPage();
 
 export const metadata: Metadata = {
-  title: 'Writing — Wally Chang',
-  description:
-    'Slow notes — on the work, the miles, and the dough. Essays in revision; the first one lands here when it stops embarrassing me.',
+  title: writing.metaTitle,
+  description: writing.metaDescription,
 };
 
 /**
@@ -19,8 +21,8 @@ export const metadata: Metadata = {
  *     actually present (drop the "Kitchen" chip per AUDIT —
  *     /kitchen/ has its own page)
  *
- * No FilterChips, no row component yet; both are deferred to keep the
- * v1 page honest about its emptiness.
+ * Hero + empty-state copy live in content/writing.mdx, edited via
+ * /admin/ → Pages → Writing.
  */
 export default function WritingPage() {
   return (
@@ -36,21 +38,19 @@ function Hero() {
     <section className="pt-16 sm:pt-24 pb-10 sm:pb-12 max-w-[920px]">
       <div className="text-[11px] font-sans font-semibold tracking-eyebrow uppercase text-clay mb-5 flex items-center">
         <span className="font-serif italic text-clay mr-2 text-[16px] leading-none">¶</span>
-        Writing
+        {writing.eyebrow}
       </div>
       <h1
         className="font-serif text-[40px] sm:text-[52px] @[1100px]:text-[60px] leading-[1.04] tracking-[-0.018em] text-ink mb-6 [text-wrap:balance]"
         style={{ fontVariationSettings: '"opsz" 144, "wght" 400' }}
       >
-        Slow notes — on the work, the miles, and the dough.
+        {writing.heading}
       </h1>
       <p
         className="font-serif text-[18px] sm:text-[19px] leading-[1.55] text-ink-muted max-w-[700px] [text-wrap:pretty]"
         style={{ fontVariationSettings: '"opsz" 24, "wght" 400' }}
       >
-        Essays I update when I have the time and don&rsquo;t update when I
-        don&rsquo;t. Sorted by the day I started writing each — not by
-        category, because the mix is the point.
+        {writing.dek}
       </p>
     </section>
   );
@@ -61,11 +61,10 @@ function EmptyState() {
     <section className="mt-2 pt-10 border-t border-paper-edge">
       <div className="max-w-[720px]">
         <p className="font-serif italic text-[18px] sm:text-[20px] leading-[1.5] text-ink-muted [text-wrap:pretty]">
-          The first one is in revision. It will land here when it stops
-          embarrassing me.
+          {writing.emptyBody}
         </p>
         <p className="mt-4 font-mono text-[11px] tracking-meta uppercase text-ink-faint">
-          No essays · 0 of 0 · come back soon
+          {writing.emptyCaption}
         </p>
       </div>
     </section>
