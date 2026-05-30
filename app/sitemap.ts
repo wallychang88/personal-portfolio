@@ -15,7 +15,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const lastModified = new Date();
   const routes: Array<{ path: string; priority: number }> = [
     { path: '/',                  priority: 1.0 },
-    { path: '/endurance/',        priority: 0.8 },
+    { path: '/sweat/',            priority: 0.8 },
     { path: '/projects/doorpi/',  priority: 0.8 },
     { path: '/writing/',          priority: 0.6 },
     { path: '/kitchen/',          priority: 0.6 },

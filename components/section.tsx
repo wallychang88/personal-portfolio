@@ -25,7 +25,7 @@ interface SectionProps {
   accent: SectionAccent;
   /** Glyph rendered before the eyebrow text — e.g. "◆", "✤", "▣". */
   symbol?: string;
-  /** Small-caps label above the heading, e.g. "Endurance identity". */
+  /** Small-caps label above the heading, e.g. "Sweat identity". */
   eyebrow: string;
   /** Section h2. */
   heading: string;

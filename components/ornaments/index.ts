@@ -1,6 +1,6 @@
 // Barrel for the 5-category ornament library. Each file is a single SVG
 // or stamp ornament. Routes/ (large endurance route SVGs) is built during
-// Phase 4 when the /endurance/ page lands.
+// Phase 4 when the /sweat/ page lands.
 
 export { catClasses, CAT_HEX, type TagCategory, type CatClasses } from './catClass';
 
@@ -26,7 +26,7 @@ export { OrnEndurance, type EnduranceKind } from './OrnEndurance';
 export { OrnCompassRose }   from './OrnCompassRose';
 export { ContourBackground } from './ContourBackground';
 
-// Large route SVGs for /endurance/ trophy spreads.
+// Large route SVGs for /sweat/ trophy spreads.
 export { RouteWhitney }     from './routes/RouteWhitney';
 export { RouteTioga }       from './routes/RouteTioga';
 export { RouteIronman }     from './routes/RouteIronman';

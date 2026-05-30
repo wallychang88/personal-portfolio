@@ -65,7 +65,7 @@ collections:
             # this, Decap crashes trying to call .get('code') on a string.
             output_code_only: true
             default_language: markdown
-            hint: "Markdown with embedded JSX. Wrap top-of-page prose in <Prose>...</Prose>. Use <Section accent=\"sage|honey|rust|slate|clay\" symbol=\"◆\" eyebrow=\"Endurance identity\" heading=\"…\">…</Section> for accented sections; nest <SectionOrnament>…</SectionOrnament> inside for the top-right ornament. Available components: Section, SectionOrnament, Prose, Callout, OrnCompassRose, OrnEndurance, OrnThumbStamp."
+            hint: "Markdown with embedded JSX. Wrap top-of-page prose in <Prose>...</Prose>. Use <Section accent=\"sage|honey|rust|slate|clay\" symbol=\"◆\" eyebrow=\"Sweat identity\" heading=\"…\">…</Section> for accented sections; nest <SectionOrnament>…</SectionOrnament> inside for the top-right ornament. Available components: Section, SectionOrnament, Prose, Callout, OrnCompassRose, OrnEndurance, OrnThumbStamp."
 
   - name: galleries
     label: Galleries
@@ -73,8 +73,8 @@ collections:
     folder: content/galleries
     extension: yml
     format: yaml
-    # Gallery IDs are referenced from page code (e.g. app/endurance reads
-    # `endurance_whitney`), so creating new gallery files from /admin/
+    # Gallery IDs are referenced from page code (e.g. app/sweat reads
+    # `sweat_whitney`), so creating new gallery files from /admin/
     # without also wiring them into a page is a footgun. Disable create;
     # existing galleries are still editable.
     create: false
@@ -161,7 +161,7 @@ collections:
         name: kindLabel
         widget: string
         required: false
-        hint: "Optional. Small caption under the date — e.g. \"Project · shipped\", \"Endurance · trophy day\", \"Role · current\"."
+        hint: "Optional. Small caption under the date — e.g. \"Project · shipped\", \"Sweat · trophy day\", \"Role · current\"."
 
       - label: "Title"
         name: title
@@ -242,7 +242,7 @@ collections:
         options:
           - { label: "Rust — hardware / projects", value: rust }
           - { label: "Slate — software / roles", value: slate }
-          - { label: "Sage — endurance", value: sage }
+          - { label: "Sage — sweat", value: sage }
           - { label: "Honey — kitchen", value: honey }
           - { label: "Clay — writing", value: clay }
         hint: "Drives the eyebrow + tag-pill color. Rust for hardware, slate for software-only."
@@ -342,7 +342,7 @@ collections:
         name: cat
         widget: select
         options:
-          - { label: "Sage — endurance", value: sage }
+          - { label: "Sage — sweat", value: sage }
           - { label: "Rust — hardware / projects", value: rust }
           - { label: "Slate — software / roles", value: slate }
           - { label: "Honey — kitchen", value: honey }

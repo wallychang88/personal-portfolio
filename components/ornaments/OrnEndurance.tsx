@@ -10,7 +10,7 @@ export type EnduranceKind = 'tioga' | 'whitney' | 'race' | 'timeline';
  * - `race`      → 3-leg SWIM/BIKE/RUN bar chart (bike highlighted)
  * - `timeline`  → labeled-tick legacy ribbon
  *
- * For the larger route SVGs that live on /endurance/, see `routes/` (built
+ * For the larger route SVGs that live on /sweat/, see `routes/` (built
  * during Phase 4).
  */
 export function OrnEndurance({

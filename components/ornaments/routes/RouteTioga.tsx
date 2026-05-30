@@ -3,7 +3,7 @@ import { CAT_HEX } from '../catClass';
 /**
  * Large Tioga Road elevation profile — Crane Flat west of the gate,
  * climbing through Tuolumne Meadows to Tioga Pass at 9,945 ft, then the
- * long drop east toward Mono Lake. Built for the /endurance/ Tioga
+ * long drop east toward Mono Lake. Built for the /sweat/ Tioga
  * trophy spread.
  *
  * Gridlines every 2,000 ft from 4k to 10k. Gate marker on the start,
