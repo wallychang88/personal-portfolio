@@ -30,13 +30,13 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Wally Chang — projects, miles, and dough',
+  title: 'Wally Chang — the anti-resume',
   description:
-    'A working notebook from Wally Chang — data scientist at Extend, founder of RodSmith, builder of small hardware. The portfolio is the long view: work, endurance, and what’s coming out of the oven.',
+    'The anti-resume. A mix of things I find significant, not all professional. Data scientist at Extend, founder of RodSmith.',
   authors: [{ name: 'Wally Chang' }],
   openGraph: {
     title: 'Wally Chang',
-    description: 'Projects, miles, and dough — the long view.',
+    description: 'The anti-resume — get to know me.',
     type: 'website',
   },
 };
