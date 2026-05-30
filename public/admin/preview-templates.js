@@ -234,4 +234,150 @@
   });
 
   CMS.registerPreviewTemplate('about', AboutPreview);
+
+  /* ------------------------------------------------------------------
+     Gallery preview.
+     Photo strip layout — mirrors the PhotoStrip component on the
+     deployed page (one row of thumbnails with optional captions).
+     ------------------------------------------------------------------ */
+  var GalleryPreview = createClass({
+    render: function () {
+      var data = this.props.entry.get('data');
+      var label = data.get('label') || '';
+      var hint = data.get('hint') || '';
+      var photos = data.get('photos');
+      var photosArr = photos && photos.toJS ? photos.toJS() : [];
+
+      var photoEls = photosArr.map(function (p, i) {
+        return h(
+          'figure',
+          {
+            key: i,
+            style: {
+              margin: 0,
+              flex: '0 0 200px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '6px',
+            },
+          },
+          p.src
+            ? h('img', {
+                src: p.src,
+                alt: p.alt || '',
+                style: {
+                  width: '200px',
+                  height: '140px',
+                  objectFit: 'cover',
+                  borderRadius: '3px',
+                  border: '1px solid #E8E1CE',
+                  display: 'block',
+                },
+              })
+            : h(
+                'div',
+                {
+                  style: {
+                    width: '200px',
+                    height: '140px',
+                    background: '#F4EFE2',
+                    border: '1px dashed #E8E1CE',
+                    borderRadius: '3px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '11px',
+                    color: '#8A8678',
+                  },
+                },
+                'no image'
+              ),
+          p.caption
+            ? h(
+                'figcaption',
+                {
+                  style: {
+                    fontSize: '12px',
+                    color: '#5C5A52',
+                    lineHeight: '1.4',
+                    fontFamily: 'Fraunces, serif',
+                  },
+                },
+                p.caption
+              )
+            : null
+        );
+      });
+
+      return h(
+        'div',
+        { className: 'preview-shell' },
+        h('div', { className: 'eyebrow sage' }, 'Gallery'),
+        h(
+          'h1',
+          { className: 'essay-title', style: { fontSize: '32px', lineHeight: '1.1' } },
+          label || empty('Add a label')
+        ),
+        hint
+          ? h(
+              'p',
+              {
+                className: 'essay-hook',
+                style: {
+                  fontStyle: 'italic',
+                  fontSize: '13px',
+                  color: '#5C5A52',
+                  borderLeft: '2px solid #E8E1CE',
+                  paddingLeft: '12px',
+                  margin: '12px 0 24px',
+                },
+              },
+              hint
+            )
+          : null,
+        h(
+          'div',
+          {
+            style: {
+              fontFamily: 'JetBrains Mono, monospace',
+              fontSize: '10.5px',
+              letterSpacing: '0.08em',
+              textTransform: 'uppercase',
+              color: '#8A8678',
+              marginBottom: '14px',
+            },
+          },
+          photosArr.length + ' photo' + (photosArr.length === 1 ? '' : 's')
+        ),
+        photosArr.length > 0
+          ? h(
+              'div',
+              {
+                style: {
+                  display: 'flex',
+                  gap: '16px',
+                  flexWrap: 'wrap',
+                },
+              },
+              photoEls
+            )
+          : h(
+              'div',
+              {
+                style: {
+                  padding: '24px',
+                  border: '1px dashed #E8E1CE',
+                  borderRadius: '4px',
+                  fontSize: '13px',
+                  color: '#8A8678',
+                  textAlign: 'center',
+                },
+              },
+              'No photos yet — the page will render an elegant placeholder.'
+            )
+      );
+    },
+  });
+
+  CMS.registerPreviewTemplate('galleries', GalleryPreview);
 })();

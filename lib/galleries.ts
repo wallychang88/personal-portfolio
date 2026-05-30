@@ -1,74 +1,76 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import yaml from 'js-yaml';
+import { z } from 'zod';
+
 /**
- * Photo galleries — the single source of truth for which images appear
- * where on the site.
+ * Photo galleries — source files live at `content/galleries/{id}.yml`,
+ * one file per gallery. The filename (sans extension) is the gallery
+ * ID consumers reference (e.g. `endurance_whitney`, `baking_bagels`).
  *
- * Adding a photo:
+ * Add a photo from /admin/ (Decap "Galleries" collection) or by hand:
  *   1. Drop the file into `public/images/{gallery_id}/` (create the
  *      folder if it doesn't exist yet).
- *   2. Add an entry to the array below. Caption is what the reader sees;
- *      alt is for screen readers and search indexers.
+ *   2. Add an entry to the `photos:` array in the gallery's YAML file.
+ *      `alt` is required (accessibility); `caption` is optional.
  *
- * Or, faster: run `pnpm new-photo` from the project root and answer the
- * prompts. The script will copy the file in and add the entry for you.
- *
- * Galleries with an empty array render an elegant placeholder; the page
- * does not break.
+ * Galleries with an empty `photos:` array render an elegant placeholder
+ * — the page does not break.
  */
 
-export interface Photo {
+const PhotoSchema = z.object({
   /** Path relative to `/public`, e.g. `/images/endurance/whitney-trout.jpg`. */
-  src: string;
-  /** Short caption shown under the image (optional). */
-  caption?: string;
+  src: z.string().min(1),
   /** Alt text. Required for accessibility. */
-  alt: string;
+  alt: z.string().min(1),
+  /** Short caption shown under the image. */
+  caption: z.string().optional(),
   /** Optional natural dimensions for layout hinting. */
-  width?: number;
-  height?: number;
+  width: z.number().int().positive().optional(),
+  height: z.number().int().positive().optional(),
+});
+
+export type Photo = z.infer<typeof PhotoSchema>;
+
+const GallerySchema = z.object({
+  label: z.string().min(1),
+  hint: z.string().optional(),
+  photos: z.array(PhotoSchema).default([]),
+});
+
+const DIR = path.join(process.cwd(), 'content', 'galleries');
+
+function loadGalleries(): Record<string, readonly Photo[]> {
+  if (!fs.existsSync(DIR)) return {};
+  const files = fs
+    .readdirSync(DIR)
+    .filter((f) => f.endsWith('.yml') || f.endsWith('.yaml'));
+
+  const out: Record<string, readonly Photo[]> = {};
+  for (const file of files) {
+    const id = file.replace(/\.ya?ml$/, '');
+    const raw = fs.readFileSync(path.join(DIR, file), 'utf-8');
+    const data = yaml.load(raw);
+    const parsed = GallerySchema.parse(data);
+    out[id] = parsed.photos;
+  }
+  return out;
 }
 
-export const GALLERIES = {
-  // ────────────────────────────────────────────────────────────────
-  //  Endurance
-  // ────────────────────────────────────────────────────────────────
+/**
+ * All galleries, keyed by ID (filename sans extension). Loaded once at
+ * module-init / build time.
+ */
+export const GALLERIES: Readonly<Record<string, readonly Photo[]>> =
+  loadGalleries();
 
-  endurance_whitney: [] satisfies Photo[],
-  // Suggested: 3-5 photos.
-  // Ideas: trout at 12k, alpine camp at dusk, summit at sunrise, the
-  // descent, the trailhead sign at the end. Wide landscape orientation
-  // looks best in the strip layout.
+/**
+ * Gallery ID type. With YAML files the set is dynamic; this is just
+ * `string` rather than a literal union. Decap's "select gallery"
+ * widgets and zod parsing protect against typos at edit + build time.
+ */
+export type GalleryId = string;
 
-  endurance_tioga: [] satisfies Photo[],
-  // Suggested: 3-5 photos.
-  // Ideas: empty road through Tioga Pass, you + Olivia on a switchback,
-  // the rim view over Tuolumne Meadows, max-speed descent.
-
-  endurance_ironman: [] satisfies Photo[],
-  // Suggested: 2-3 photos.
-  // Ideas: pre-race transition, bike leg shot if anyone caught one,
-  // finish-line photo. (The official Ironman photographer photos work
-  // too — those are usually licensed for personal use.)
-
-  // ────────────────────────────────────────────────────────────────
-  //  Kitchen
-  // ────────────────────────────────────────────────────────────────
-
-  baking_bagels: [] satisfies Photo[],
-  // The trophy bake. Show: dough rings before boil, the boil itself,
-  // sesame/everything topping shots, the crumb cross-section, a stack.
-  // Bagels are the headline; do them justice.
-
-  baking_pizza: [] satisfies Photo[],
-  // Practice rounds. Show: the dough, the leoparding on the crust, a
-  // finished pizza top-down on a board.
-
-  baking_bread: [] satisfies Photo[],
-  // Sourdough loaves, crumb shots, anything that came out of a Dutch
-  // oven and looked like it deserved a portrait.
-} as const;
-
-export type GalleryId = keyof typeof GALLERIES;
-
-export function getGallery(id: GalleryId): readonly Photo[] {
-  return GALLERIES[id];
+export function getGallery(id: string): readonly Photo[] {
+  return GALLERIES[id] ?? [];
 }

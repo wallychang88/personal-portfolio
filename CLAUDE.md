@@ -100,7 +100,7 @@ corporate about-us, NOT a Bootstrap-style resume.
 | `design-brief.md` | The brief for claude.ai/design. Mirrors `WALLY.md` and adds visual concepts already explored (A: paper, B: cover, C: inky), explicit page asks, hard constraints. **Read before any visual change.** |
 | `TODO.md` | Running scoreboard of pending work, blocked items, open questions. Update at the start and end of every session. |
 | `lib/timeline.ts` | Homepage timeline data. Edit to add/edit/remove entries. Sorted newest-first by `sortDate`. |
-| `lib/galleries.ts` | Photo manifest. Each gallery is an array of `{ src, alt, caption? }`. Empty arrays render an elegant placeholder. |
+| `content/galleries/{id}.yml` | Photo manifest, one file per gallery. Frontmatter has `label`, optional `hint`, and a `photos:` list of `{ src, alt, caption? }`. Empty `photos:` renders an elegant placeholder. Loaded by `lib/galleries.ts`. |
 
 ## Tech stack
 
@@ -161,13 +161,22 @@ components/
 └── stat-panel.tsx          4-column stat block
 
 lib/
-├── timeline.ts
-└── galleries.ts
+├── about.ts                Loads content/about.mdx
+├── essays.ts               Loads content/essays/*.md
+├── batches.ts              Loads content/batches/*.md
+├── galleries.ts            Loads content/galleries/*.yml
+└── timeline.ts             (TS for now; migration pending)
+
+content/
+├── about.mdx               Bio page
+├── essays/                 One markdown per essay
+├── batches/                One markdown per bake batch
+└── galleries/              One YAML per photo gallery
 
 scripts/
-└── new-photo.mjs           `pnpm new-photo` interactive helper
+└── new-photo.mjs           `pnpm new-photo` interactive helper — CLI alt to /admin/
 
-public/images/{gallery}/    Photos referenced by lib/galleries.ts
+public/images/{gallery}/    Photos referenced by content/galleries/{id}.yml
 ```
 
 ## Design tokens (current — Concept A "paper editorial")
@@ -211,9 +220,15 @@ Subject to change when Wally returns from `claude.ai/design`. Update
 
 ### Adding a photo
 
-`pnpm new-photo` is the reliable path. Prompts for path, gallery,
-slug, caption, alt. Copies into `public/images/` and appends to
-`lib/galleries.ts`. Hand-editing both is fine if you prefer.
+Two paths:
+
+- `/admin/` → Galleries → pick a gallery → "Photos" list → "Add Photo".
+  Upload lands in `public/images/{gallery-id}/`; entry writes back to
+  `content/galleries/{gallery-id}.yml`.
+- `pnpm new-photo` from the terminal. Prompts for path, gallery, slug,
+  caption, alt. Copies into `public/images/{gallery-id}/` and appends
+  the entry to the gallery's YAML file. CLI alt to /admin/ for batch
+  additions.
 
 ### Writing copy
 
@@ -311,8 +326,10 @@ When you change one of these, search the codebase for the others:
 
 - New timeline `kind` → `TimelineKind` type (`lib/timeline.ts`) +
   `components/timeline-entry.tsx` rendering.
-- New gallery id → `GalleryId` type (`lib/galleries.ts`) + the
-  hardcoded allow-list in `scripts/new-photo.mjs`.
+- New gallery id → create `content/galleries/{id}.yml` + reference it
+  from the consuming page (`app/endurance/page.tsx`, `app/kitchen/page.tsx`).
+  `scripts/new-photo.mjs` auto-discovers galleries from the directory,
+  so no allow-list to update there.
 - Tailwind token change → `globals.css` `.prose-editorial` styles may
   reference colors directly via `theme()`.
 

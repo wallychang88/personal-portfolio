@@ -1,48 +1,52 @@
 #!/usr/bin/env node
-// check-images.mjs — every photo entry in lib/galleries.ts must point to a
+// check-images.mjs — every `src:` in content/galleries/*.yml must point to a
 // real file under public/. Exits 1 on the first missing image.
 //
-// Implementation: regex-grep the literal galleries module for `src:` /
-// `src: "..."` strings. No bundler — keeps this script standalone.
+// Implementation: regex-grep across all gallery YAML files. No bundler —
+// keeps this script standalone (no js-yaml dep required).
 
-import { readFileSync, existsSync } from 'node:fs';
+import { readFileSync, existsSync, readdirSync, statSync } from 'node:fs';
 import { resolve, join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const GALLERIES_PATH = join(ROOT, 'lib', 'galleries.ts');
+const GALLERIES_DIR = join(ROOT, 'content', 'galleries');
 const PUBLIC_DIR = join(ROOT, 'public');
 
-if (!existsSync(GALLERIES_PATH)) {
-  console.error(`check-images: cannot find ${GALLERIES_PATH}`);
-  process.exit(1);
+if (!existsSync(GALLERIES_DIR)) {
+  console.log('check-images: no content/galleries/ — nothing to verify.');
+  process.exit(0);
 }
 
-const src = readFileSync(GALLERIES_PATH, 'utf8');
+const files = readdirSync(GALLERIES_DIR).filter(
+  (f) => f.endsWith('.yml') || f.endsWith('.yaml'),
+);
 
-// Match `src: '...'` or `src: "..."` inside the gallery entries.
-const SRC_RE = /src\s*:\s*['"]([^'"]+)['"]/g;
+// Match `src: '...'` or `src: "..."` (Decap writes either; YAML accepts
+// both). Also matches an unquoted `src: /path/to/file.jpg`.
+const SRC_RE = /(?:^|\s)src\s*:\s*['"]?([^'"\n]+)['"]?/gm;
 
 const missing = [];
 let total = 0;
-let m;
-while ((m = SRC_RE.exec(src))) {
-  const value = m[1];
-  total++;
-  if (!value.startsWith('/')) {
-    missing.push({ src: value, why: 'must start with /' });
-    continue;
-  }
-  // Path is relative to /public. resolve() normalizes ../, so a
-  // malicious entry like "/foo/../../package.json" gets caught by the
-  // starts-with guard instead of escaping the public directory.
-  const disk = resolve(PUBLIC_DIR, '.' + value);
-  if (!disk.startsWith(PUBLIC_DIR + '/')) {
-    missing.push({ src: value, why: 'escapes public/ (likely a traversal)' });
-    continue;
-  }
-  if (!existsSync(disk)) {
-    missing.push({ src: value, why: 'file not in public/' });
+
+for (const file of files) {
+  const raw = readFileSync(join(GALLERIES_DIR, file), 'utf8');
+  let m;
+  while ((m = SRC_RE.exec(raw))) {
+    const value = m[1].trim();
+    total++;
+    if (!value.startsWith('/')) {
+      missing.push({ file, src: value, why: 'must start with /' });
+      continue;
+    }
+    const disk = resolve(PUBLIC_DIR, '.' + value);
+    if (!disk.startsWith(PUBLIC_DIR + '/')) {
+      missing.push({ file, src: value, why: 'escapes public/ (likely traversal)' });
+      continue;
+    }
+    if (!existsSync(disk)) {
+      missing.push({ file, src: value, why: 'file not in public/' });
+    }
   }
 }
 
@@ -52,12 +56,12 @@ if (total === 0) {
 }
 
 if (missing.length === 0) {
-  console.log(`check-images: ${total} photo entries — all files present on disk.`);
+  console.log(`check-images: ${total} photo entries across ${files.length} galleries — all files present on disk.`);
   process.exit(0);
 }
 
 console.error(`check-images: ${missing.length}/${total} broken image reference(s):`);
-for (const { src: s, why } of missing) {
-  console.error(`  ${s}  (${why})`);
+for (const { file, src: s, why } of missing) {
+  console.error(`  ${file}: ${s}  (${why})`);
 }
 process.exit(1);

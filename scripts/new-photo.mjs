@@ -5,25 +5,17 @@
  * Usage:
  *   pnpm new-photo
  *
- * Prompts for:
- *   - source path of the image on your computer
- *   - which gallery it belongs to (endurance_whitney, baking_bagels, ...)
- *   - caption (optional, shown to readers)
- *   - alt text (required for accessibility)
+ * Prompts for source path, gallery, filename slug, caption (optional),
+ * and alt text (required). Copies the image into `public/images/{gallery}/`
+ * and appends an entry to `content/galleries/{gallery}.yml`.
  *
- * The script:
- *   1. Copies the image into `public/images/{gallery}/{slug}.{ext}`,
- *      slugifying the filename so spaces and special characters don't
- *      break URLs.
- *   2. Appends an entry to the appropriate array in `lib/galleries.ts`.
+ * Decap CMS at /admin/ does the same thing through a browser — this
+ * script is the keep-your-hands-on-keys path for batch additions.
  *
- * If anything goes wrong, no changes are written — the script bails before
- * touching `lib/galleries.ts`.
- *
- * Requires Node 18+. No external dependencies.
+ * Requires Node 18+. No external dependencies (raw YAML appending).
  */
 
-import { readFile, writeFile, mkdir, copyFile, stat } from 'node:fs/promises';
+import { readFile, writeFile, mkdir, copyFile, stat, readdir } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { join, basename, extname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -31,41 +23,105 @@ import { createInterface } from 'node:readline/promises';
 import { stdin as input, stdout as output } from 'node:process';
 
 const ROOT = resolve(fileURLToPath(import.meta.url), '..', '..');
-const GALLERIES_FILE = join(ROOT, 'lib', 'galleries.ts');
+const GALLERIES_DIR = join(ROOT, 'content', 'galleries');
 const PUBLIC_IMAGES = join(ROOT, 'public', 'images');
-
-// Allow-list of gallery keys. Keep in sync with lib/galleries.ts.
-const GALLERY_IDS = [
-  'endurance_whitney',
-  'endurance_tioga',
-  'endurance_ironman',
-  'baking_bagels',
-  'baking_pizza',
-  'baking_bread',
-];
 
 const ALLOWED_EXT = new Set(['.jpg', '.jpeg', '.png', '.webp', '.avif']);
 
 function slugify(name) {
   return name
     .toLowerCase()
-    .replace(/\.[^/.]+$/, '') // strip extension
+    .replace(/\.[^/.]+$/, '')
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '')
     .slice(0, 60);
 }
 
+async function discoverGalleries() {
+  const files = await readdir(GALLERIES_DIR);
+  return files
+    .filter((f) => f.endsWith('.yml') || f.endsWith('.yaml'))
+    .map((f) => f.replace(/\.ya?ml$/, ''))
+    .sort();
+}
+
 async function prompt(rl, question) {
-  const answer = await rl.question(question);
-  return answer.trim();
+  return (await rl.question(question)).trim();
+}
+
+function bail(rl, msg) {
+  console.error(`\n✗  ${msg}\n`);
+  rl.close();
+  process.exit(1);
+}
+
+/**
+ * Append a photo entry to a gallery's YAML file. We treat YAML as text
+ * rather than parse-and-serialize so the editor's hand-written
+ * formatting (comments, blank lines, `hint: >- …`) survives. The
+ * `photos:` list is matched and a new entry is inserted at the bottom.
+ */
+async function appendPhotoEntry(galleryFile, entry) {
+  const raw = await readFile(galleryFile, 'utf8');
+
+  // Find the `photos:` key.
+  const photosIdx = raw.search(/^photos\s*:/m);
+  if (photosIdx === -1) {
+    throw new Error(`No \`photos:\` key in ${galleryFile}.`);
+  }
+
+  // Two shapes to handle:
+  //   photos: []            → replace [] with a populated list
+  //   photos:               → append below the last `- src:` item
+  //     - src: ...
+  const afterKey = raw.slice(photosIdx);
+  const emptyMatch = afterKey.match(/^photos\s*:\s*\[\s*\]/);
+  if (emptyMatch) {
+    const head = raw.slice(0, photosIdx);
+    const tail = raw.slice(photosIdx + emptyMatch[0].length);
+    return `${head}photos:\n${entry}${tail}`;
+  }
+
+  // Non-empty list: find the end of the YAML list (next top-level key
+  // or EOF). Top-level keys at column 0 that aren't part of the photos
+  // list mark the end.
+  const lines = raw.split('\n');
+  let startLine = -1;
+  for (let i = 0; i < lines.length; i++) {
+    if (/^photos\s*:/.test(lines[i])) {
+      startLine = i;
+      break;
+    }
+  }
+  let endLine = lines.length;
+  for (let i = startLine + 1; i < lines.length; i++) {
+    // A new top-level key (no leading whitespace, contains `:`) ends the list.
+    if (/^\S.*:/.test(lines[i])) {
+      endLine = i;
+      break;
+    }
+  }
+  const before = lines.slice(0, endLine).join('\n');
+  const after = lines.slice(endLine).join('\n');
+  const sep = before.endsWith('\n') ? '' : '\n';
+  return `${before}${sep}${entry}${after ? '\n' + after : ''}`;
 }
 
 async function main() {
+  if (!existsSync(GALLERIES_DIR)) {
+    console.error(`No ${GALLERIES_DIR} — has the galleries migration run?`);
+    process.exit(1);
+  }
+  const galleryIds = await discoverGalleries();
+  if (galleryIds.length === 0) {
+    console.error('No gallery YAML files found in content/galleries/.');
+    process.exit(1);
+  }
+
   const rl = createInterface({ input, output });
 
   console.log('\n📸  Add a photo to a gallery\n');
 
-  // 1. Source path
   const src = await prompt(rl, 'Path to image file: ');
   if (!src) bail(rl, 'No path provided. Aborting.');
 
@@ -81,19 +137,17 @@ async function main() {
   if (!stats.isFile()) bail(rl, 'Path is not a file.');
   console.log(`  ✓ ${(stats.size / 1024).toFixed(0)} KB · ${ext}`);
 
-  // 2. Gallery
   console.log('\nAvailable galleries:');
-  GALLERY_IDS.forEach((id, i) => console.log(`  ${i + 1}. ${id}`));
+  galleryIds.forEach((id, i) => console.log(`  ${i + 1}. ${id}`));
   const galleryChoice = await prompt(rl, '\nPick a gallery (number or name): ');
   let gallery;
   if (/^\d+$/.test(galleryChoice)) {
-    gallery = GALLERY_IDS[parseInt(galleryChoice, 10) - 1];
+    gallery = galleryIds[parseInt(galleryChoice, 10) - 1];
   } else {
-    gallery = GALLERY_IDS.find((id) => id === galleryChoice);
+    gallery = galleryIds.find((id) => id === galleryChoice);
   }
   if (!gallery) bail(rl, `Unknown gallery: ${galleryChoice}`);
 
-  // 3. Slug
   const suggestedSlug = slugify(basename(absoluteSrc));
   const slugInput = await prompt(
     rl,
@@ -102,78 +156,41 @@ async function main() {
   const slug = slugify(slugInput || suggestedSlug);
   if (!slug) bail(rl, 'Slug came back empty.');
 
-  // 4. Caption (optional)
   const caption = await prompt(rl, 'Caption (optional): ');
-
-  // 5. Alt text (required)
   const alt = await prompt(rl, 'Alt text (required, for screen readers): ');
   if (!alt) bail(rl, 'Alt text is required.');
 
-  // ────────────────────────────────────────────────────────────────
-  //  Confirm
-  // ────────────────────────────────────────────────────────────────
   const destDir = join(PUBLIC_IMAGES, gallery);
   const destFile = join(destDir, `${slug}${ext}`);
   const webPath = `/images/${gallery}/${slug}${ext}`;
+  const galleryFile = join(GALLERIES_DIR, `${gallery}.yml`);
+
+  // Build the YAML entry. Two-space indent under `photos:`.
+  const escapedAlt = JSON.stringify(alt);
+  const escapedCaption = caption ? JSON.stringify(caption) : null;
+  const entry = caption
+    ? `  - src: ${webPath}\n    alt: ${escapedAlt}\n    caption: ${escapedCaption}`
+    : `  - src: ${webPath}\n    alt: ${escapedAlt}`;
 
   console.log('\n──  About to do  ──────────────────────');
   console.log(`  Copy ${absoluteSrc}`);
   console.log(`    →  ${destFile}`);
-  console.log(`  Append entry to ${gallery} in lib/galleries.ts:`);
-  console.log(`    { src: "${webPath}", caption: ${caption ? JSON.stringify(caption) : 'undefined'}, alt: ${JSON.stringify(alt)} }`);
+  console.log(`  Append entry to ${galleryFile}:`);
+  console.log(entry.replace(/^/gm, '    '));
   const confirm = await prompt(rl, '\nProceed? [Y/n]: ');
   if (confirm && !/^y/i.test(confirm)) bail(rl, 'Cancelled.');
 
-  // ────────────────────────────────────────────────────────────────
-  //  Apply
-  // ────────────────────────────────────────────────────────────────
   await mkdir(destDir, { recursive: true });
   await copyFile(absoluteSrc, destFile);
 
-  const src_ts = await readFile(GALLERIES_FILE, 'utf8');
-
-  // Find the empty array `[]` that follows the gallery key on the SAME
-  // line. We support both:
-  //     gallery_id: [] satisfies Photo[],
-  //     gallery_id: [
-  //       { ... },
-  //     ] satisfies Photo[],
-  // by inserting BEFORE the closing `]`.
-  const newEntry = caption
-    ? `    {\n      src: "${webPath}",\n      caption: ${JSON.stringify(caption)},\n      alt: ${JSON.stringify(alt)},\n    },`
-    : `    {\n      src: "${webPath}",\n      alt: ${JSON.stringify(alt)},\n    },`;
-
-  // Match the gallery's array span. The simplest reliable approach is to
-  // find the gallery key, then the next `]` after it, and insert before.
-  const keyIdx = src_ts.indexOf(`${gallery}:`);
-  if (keyIdx === -1) {
-    bail(rl, `Could not find "${gallery}:" in lib/galleries.ts. Did you rename it?`);
-  }
-  const closingIdx = src_ts.indexOf(']', keyIdx);
-  if (closingIdx === -1) {
-    bail(rl, 'Malformed lib/galleries.ts? Could not find closing `]`.');
-  }
-
-  // Decide if we need a leading newline (only if the array isn't empty).
-  const before = src_ts.slice(keyIdx, closingIdx);
-  const isEmpty = !/\{/.test(before);
-  const insertion = isEmpty ? `\n${newEntry}\n  ` : `${newEntry}\n  `;
-  const updated =
-    src_ts.slice(0, closingIdx) + insertion + src_ts.slice(closingIdx);
-
-  await writeFile(GALLERIES_FILE, updated, 'utf8');
+  const updated = await appendPhotoEntry(galleryFile, entry);
+  await writeFile(galleryFile, updated, 'utf8');
 
   console.log('\n✅  Done.');
   console.log(`  ${webPath}`);
-  console.log(`  Edited lib/galleries.ts → ${gallery}\n`);
-  console.log('  Preview with `pnpm dev`. Ship with `pnpm build`.\n');
+  console.log(`  Edited content/galleries/${gallery}.yml\n`);
+  console.log('  Preview with `pnpm dev`. Ship with `git add … && git push`.\n');
   rl.close();
-}
-
-function bail(rl, msg) {
-  console.error(`\n✗  ${msg}\n`);
-  rl.close();
-  process.exit(1);
 }
 
 main().catch((err) => {
