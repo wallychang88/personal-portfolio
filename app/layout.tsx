@@ -32,7 +32,7 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: 'Wally Chang — the anti-resume',
   description:
-    'The anti-resume. A mix of things I find significant, not all professional. Data scientist at Extend, founder of RodSmith.',
+    'The anti-resume. A mix of things I find significant, not all professional. Data scientist at Extend, working on RodSmith on the side.',
   authors: [{ name: 'Wally Chang' }],
   openGraph: {
     title: 'Wally Chang',
