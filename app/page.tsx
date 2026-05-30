@@ -81,7 +81,7 @@ export default function HomePage() {
           cols={4}
           rows={1}
         >
-          <Eyebrow>Founder · Ongoing · Fall 2025 →</Eyebrow>
+          <Eyebrow>Project · Ongoing · Fall 2025 →</Eyebrow>
           <TileTitle>RodSmith — a knowledge-first marketplace for custom rods.</TileTitle>
           <TileHook>
             Builders meet anglers. Bespoke commissions, made-to-order spec,
@@ -250,7 +250,23 @@ function Hero() {
         style={{ fontVariationSettings: '"opsz" 24, "wght" 400' }}
       >
         The anti-resume. A mix of things that I find significant, not all
-        professional. Get to know me!
+        professional.
+      </p>
+      <p
+        className="mt-6 font-serif text-[17px] sm:text-[18px] leading-[1.6] text-ink-muted max-w-[720px] [text-wrap:pretty]"
+        style={{ fontVariationSettings: '"opsz" 24, "wght" 400' }}
+      >
+        Hey! I&rsquo;m Wally. Data scientist at Extend, working on RodSmith
+        (custom fishing rods) on the side, and the best bagel-maker in San
+        Francisco &mdash; I&rsquo;m willing to defend that one. The longer
+        version is on the{' '}
+        <Link
+          href="/about/"
+          className="text-ink border-b border-ink-faint hover:border-ink transition-colors"
+        >
+          about page
+        </Link>
+        .
       </p>
     </section>
   );

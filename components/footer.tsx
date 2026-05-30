@@ -7,7 +7,7 @@ export function Footer() {
         <div>
           <div className="font-serif italic text-xl text-ink">Wally Chang</div>
           <div className="text-sm text-ink-soft mt-1">
-            San Francisco · Data Scientist at Extend · Founder of RodSmith
+            San Francisco · Data Scientist at Extend · RodSmith on the side
           </div>
         </div>
         <ul className="-mx-2 flex flex-wrap gap-x-4 sm:gap-x-5 text-[12px] uppercase tracking-eyebrow text-ink-soft">
@@ -31,14 +31,13 @@ export function Footer() {
           </li>
           <li>
             <Link href="/about/" className="block px-2 py-1.5 hover:text-ink transition-colors">
-              Colophon
+              About
             </Link>
           </li>
         </ul>
       </div>
       <div className="max-w-page mx-auto px-6 sm:px-10 pb-10 text-xs text-ink-faint">
-        © {new Date().getFullYear()} Walter S. Chang. Built with Next.js, hosted as
-        static HTML.
+        © {new Date().getFullYear()} Walter S. Chang.
       </div>
     </footer>
   );

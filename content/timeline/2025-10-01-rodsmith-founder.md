@@ -1,8 +1,8 @@
 ---
 sortDate: 2025-10-01
 date: Fall 2025 →
-kind: role
-kindLabel: Role · founder
+kind: project
+kindLabel: Project · ongoing
 title: RodSmith — knowledge-first marketplace for custom fishing rods
 tags:
   - Marketplace
