@@ -176,10 +176,16 @@ Deferred:
   the repo is pushed to GitHub.
 - **`vercel link` + GitHub-Vercel connect** — needs Wally's Vercel
   account auth; documented in CLAUDE.md, not run by the agent.
-- **Decap collections for timeline / trophies / galleries** — these
-  still live in `lib/*.ts` because they had content already and lower
-  edit frequency. Migrate when there's a clear editing-from-browser
-  need (e.g. on a phone while away from VS Code).
+- ~~**Decap collections for timeline / trophies / galleries**~~ — shipped
+  2026-05-30. Trophies migrated to `content/trophies/*.mdx` + Decap
+  folder collection. Hero copy for `/sweat/`, `/kitchen/`, `/writing/`,
+  `/timeline/` migrated to single-file MDX (`content/{page}.mdx`) + Decap
+  file entries under "Pages". Timeline and galleries collections already
+  shipped previously. Homepage Bento intentionally stays hand-curated in
+  `app/page.tsx` — tile data is structured around React ornament
+  components (cols/rows/href/eyebrow/cat) and migrating would require a
+  full Decap object-list collection that doesn't pay off until tile
+  churn is much higher.
 
 ---
 

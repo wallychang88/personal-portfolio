@@ -11,20 +11,27 @@ import {
 } from '@/components/ornaments';
 import { GALLERIES, type GalleryId } from '@/lib/galleries';
 import { TROPHIES, type Trophy } from '@/lib/trophies';
+import { getSweat } from '@/lib/sweat';
+
+const sweat = getSweat();
 
 export const metadata: Metadata = {
-  title: 'Sweat — Wally Chang',
-  description:
-    'Three trophy days from the field atlas — Mount Whitney, Tioga Road, and IRONMAN 70.3 Indian Wells.',
+  title: sweat.metaTitle,
+  description: sweat.metaDescription,
 };
 
-const GALLERY_FOR: Record<Trophy['slug'], GalleryId> = {
+/**
+ * Trophy slug → gallery id + route ornament. Adding a new trophy means
+ * dropping an entry in both maps; an unknown slug renders without a
+ * route ornament and falls back to the placeholder strip.
+ */
+const GALLERY_FOR: Record<string, GalleryId> = {
   whitney: 'sweat_whitney',
   tioga:   'sweat_tioga',
   ironman: 'sweat_ironman',
 };
 
-const ROUTE_FOR: Record<Trophy['slug'], React.ReactNode> = {
+const ROUTE_FOR: Record<string, React.ReactNode> = {
   whitney: <RouteWhitney />,
   tioga:   <RouteTioga />,
   ironman: <RouteIronman />,
@@ -55,7 +62,7 @@ function Masthead() {
     <header className="pt-10 pb-5 mb-2 flex items-start justify-between border-b border-paper-edge">
       <div>
         <div className="font-mono text-[10.5px] tracking-[0.18em] uppercase text-sage mb-1">
-          Field atlas · vol. III
+          {sweat.volumeLabel}
         </div>
         <Link
           href="/"
@@ -76,30 +83,27 @@ function Hero() {
   return (
     <section className="pt-12 pb-12 sm:pt-14 sm:pb-16 max-w-[960px]">
       <div className="text-[11px] font-sans font-semibold tracking-eyebrow uppercase text-sage mb-5">
-        Trophy days
+        {sweat.eyebrow}
       </div>
       <h1
         className="font-serif text-[44px] sm:text-[56px] @[1100px]:text-[68px] leading-[1.02] tracking-[-0.02em] text-ink mb-6 [text-wrap:balance]"
         style={{ fontVariationSettings: '"opsz" 144, "wght" 400' }}
       >
-        The routes that named the years.
+        {sweat.heading}
       </h1>
       <p
         className="font-serif text-[18px] sm:text-[20px] leading-[1.55] text-ink-muted max-w-[720px] [text-wrap:pretty]"
         style={{ fontVariationSettings: '"opsz" 24, "wght" 400' }}
       >
-        Some days you finish a route and the year hangs off it for months —
-        every other day in the calendar becomes &ldquo;before that&rdquo; or
-        &ldquo;after that.&rdquo; This is the file of those. Three trophies,
-        with maps, numbers, and the parts of the story that won&rsquo;t fit
-        on a Strava page.
+        {sweat.dek}
       </p>
     </section>
   );
 }
 
 function TrophyBlock({ trophy }: { trophy: Trophy }) {
-  const photos = GALLERIES[GALLERY_FOR[trophy.slug]];
+  const galleryId = GALLERY_FOR[trophy.slug];
+  const photos = galleryId ? GALLERIES[galleryId] : [];
   return (
     <article id={trophy.slug} className="relative scroll-mt-24 mb-20 last:mb-0">
       <div className="absolute top-0 right-0 font-mono text-[11px] tracking-meta text-ink-soft">

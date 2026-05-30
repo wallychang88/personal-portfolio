@@ -67,6 +67,71 @@ collections:
             default_language: markdown
             hint: "Markdown with embedded JSX. Wrap top-of-page prose in <Prose>...</Prose>. Use <Section accent=\"sage|honey|rust|slate|clay\" symbol=\"◆\" eyebrow=\"Sweat identity\" heading=\"…\">…</Section> for accented sections; nest <SectionOrnament>…</SectionOrnament> inside for the top-right ornament. Available components: Section, SectionOrnament, Prose, Callout, OrnCompassRose, OrnEndurance, OrnThumbStamp."
 
+      # /sweat/ page chrome (hero + masthead). Trophy entries live in
+      # the separate "Trophies" folder collection below.
+      - file: content/sweat.mdx
+        label: Sweat
+        name: sweat
+        fields:
+          - { label: "Meta title",       name: metaTitle,       widget: string, hint: "<title> tag. \"Sweat — Wally Chang\"." }
+          - { label: "Meta description", name: metaDescription, widget: text,   hint: "<meta name=description>. One sentence. Shows in search results and link previews." }
+          - { label: "Volume label",     name: volumeLabel,     widget: string, hint: "Tiny mono caption above the Wally Chang link in the top-left masthead. \"Field atlas · vol. III\"." }
+          - { label: "Eyebrow",          name: eyebrow,         widget: string, hint: "Small-caps label above the hero headline. \"Trophy days\"." }
+          - { label: "Heading",          name: heading,         widget: string, hint: "Hero h1. Sentence case, end with a period." }
+          - { label: "Dek",              name: dek,             widget: text,   hint: "One or two sentences under the headline." }
+
+      # /kitchen/ page chrome. Bake batches live in the "Bake batches"
+      # folder collection further down.
+      - file: content/kitchen.mdx
+        label: Kitchen
+        name: kitchen
+        fields:
+          - { label: "Meta title",         name: metaTitle,         widget: string, hint: "<title> tag." }
+          - { label: "Meta description",   name: metaDescription,   widget: text,   hint: "<meta name=description>. One sentence." }
+          - { label: "Eyebrow",            name: eyebrow,           widget: string, hint: "Small-caps label above the hero headline. \"Kitchen · ongoing\"." }
+          - { label: "Heading",            name: heading,           widget: string, hint: "Hero h1." }
+          - { label: "Dek",                name: dek,               widget: text,   hint: "Hero paragraph under the headline." }
+          - { label: "Bagels — eyebrow",   name: bagelsEyebrow,     widget: string, hint: "Mono eyebrow above \"Bagels.\". \"Section · trophy bake\"." }
+          - { label: "Bagels — heading",   name: bagelsHeading,     widget: string, hint: "h2 for the bagels section." }
+          - { label: "Bagels — empty body", name: bagelsEmpty,      widget: text,   hint: "Italic placeholder shown when there are no bake batches yet." }
+          - { label: "Bagels — empty stamp", name: bagelsEmptyStamp, widget: string, hint: "Thumb-stamp label shown when there are no batches. \"NO BATCH YET\"." }
+          - { label: "Bagels — photos hint", name: bagelsPhotosHint, widget: string, hint: "Empty-state hint shown over the bagel photo strip when there are no photos yet." }
+          - { label: "Practice — eyebrow", name: practiceEyebrow,   widget: string, hint: "Mono eyebrow above \"Bread & pizza.\". \"Section · practice\"." }
+          - { label: "Practice — heading", name: practiceHeading,   widget: string, hint: "h2 for the bread + pizza section." }
+          - { label: "Practice — dek",     name: practiceDek,       widget: text,   hint: "Italic paragraph under the practice heading." }
+          - { label: "Bread label",        name: breadLabel,        widget: string, hint: "Column label above the bread photo grid." }
+          - { label: "Bread photos hint",  name: breadPhotosHint,   widget: string, hint: "Empty-state hint shown over the bread photo grid." }
+          - { label: "Pizza label",        name: pizzaLabel,        widget: string, hint: "Column label above the pizza photo grid." }
+          - { label: "Pizza photos hint",  name: pizzaPhotosHint,   widget: string, hint: "Empty-state hint shown over the pizza photo grid." }
+
+      # /writing/ index page chrome. Individual essays live in the
+      # "Essays" folder collection further down.
+      - file: content/writing.mdx
+        label: Writing
+        name: writing
+        fields:
+          - { label: "Meta title",       name: metaTitle,       widget: string, hint: "<title> tag." }
+          - { label: "Meta description", name: metaDescription, widget: text,   hint: "<meta name=description>. One sentence." }
+          - { label: "Eyebrow",          name: eyebrow,         widget: string, hint: "Small-caps label above the hero headline. \"Writing\"." }
+          - { label: "Heading",          name: heading,         widget: string, hint: "Hero h1." }
+          - { label: "Dek",              name: dek,             widget: text,   hint: "Hero paragraph under the headline." }
+          - { label: "Empty body",       name: emptyBody,       widget: text,   hint: "Italic paragraph shown when the essay list is empty." }
+          - { label: "Empty caption",    name: emptyCaption,    widget: string, hint: "Mono caption under the empty-state paragraph. \"No essays · 0 of 0 · come back soon\"." }
+
+      # /timeline/ index page chrome. Individual entries live in the
+      # "Timeline" folder collection further down. (Filename is
+      # timeline-page.mdx — not timeline.mdx — so Decap doesn't confuse
+      # it with the timeline folder.)
+      - file: content/timeline-page.mdx
+        label: Timeline (page chrome)
+        name: timeline_page
+        fields:
+          - { label: "Meta title",       name: metaTitle,       widget: string, hint: "<title> tag." }
+          - { label: "Meta description", name: metaDescription, widget: text,   hint: "<meta name=description>. One sentence." }
+          - { label: "Eyebrow",          name: eyebrow,         widget: string, hint: "Small-caps label above the hero headline." }
+          - { label: "Heading",          name: heading,         widget: string, hint: "Hero h1." }
+          - { label: "Dek",              name: dek,             widget: text,   hint: "Hero paragraph under the headline." }
+
   - name: galleries
     label: Galleries
     label_singular: Gallery
@@ -118,6 +183,67 @@ collections:
             widget: string
             required: false
             hint: "Optional. Short caption shown under the image."
+
+  - name: trophies
+    label: Trophies (sweat)
+    label_singular: Trophy
+    folder: content/trophies
+    # Disable create — the /sweat/ page maps trophy slug → gallery id +
+    # route ornament via static maps in app/sweat/page.tsx. Adding a new
+    # trophy from /admin/ without wiring those up would render a trophy
+    # block with no photo strip and no elevation profile. Editing existing
+    # trophies is safe.
+    create: false
+    identifier_field: title
+    extension: mdx
+    format: frontmatter
+    summary: "{{order}} · {{title}}"
+    fields:
+      - label: "Sort order"
+        name: order
+        widget: number
+        value_type: int
+        min: 1
+        hint: "Lower = earlier on /sweat/. Whitney=1, Tioga=2, Ironman=3."
+
+      - label: "Kicker"
+        name: kicker
+        widget: string
+        hint: "Mono eyebrow over the title. \"TROPHY · JULY 12–13, 2025\"."
+
+      - label: "Title"
+        name: title
+        widget: string
+        hint: "Display title. Editorial, not athletic. \"Mount Whitney, alpine start.\" Sentence case, end with a period."
+
+      - label: "Dek"
+        name: dek
+        widget: string
+        hint: "Italic deck under the title. \"Whitney Zone · Inyo National Forest · 14,505 ft\"."
+
+      - label: "Coordinates"
+        name: coords
+        widget: string
+        hint: "Mono lat/long stamp in the top-right corner of the trophy block."
+
+      - label: "Stats"
+        name: stats
+        widget: list
+        min: 4
+        max: 4
+        summary: "{{fields.label}} — {{fields.value}}"
+        hint: "Exactly four stats. Render in a 4-up panel under the prose."
+        fields:
+          - { label: "Label", name: label, widget: string, hint: "Mono eyebrow above the value. \"Trip distance\"." }
+          - { label: "Value", name: value, widget: string, hint: "Display-weight serif. \"21.5 mi\"." }
+          - { label: "Sub",   name: sub,   widget: string, required: false, hint: "Optional mono annotation under the value." }
+
+      - label: "Body (MDX)"
+        name: body
+        widget: code
+        output_code_only: true
+        default_language: markdown
+        hint: "The trophy paragraphs. Plain markdown — paragraphs separated by blank lines. Voice: warm, specific, no embellishment past WALLY.md. Only ship facts you can defend."
 
   - name: timeline
     label: Timeline

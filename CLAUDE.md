@@ -102,6 +102,8 @@ corporate about-us, NOT a Bootstrap-style resume.
 | `content/timeline/{date}-{slug}.md` | Homepage timeline entries. One file per entry — frontmatter has date + kind + tags, body is the hook prose. Loaded by `lib/timeline.ts`, sorted newest-first. |
 | `content/galleries/{id}.yml` | Photo manifest, one file per gallery. Frontmatter has `label`, optional `hint`, and a `photos:` list of `{ src, alt, caption? }`. Empty `photos:` renders an elegant placeholder. Loaded by `lib/galleries.ts`. |
 | `content/projects/{slug}.mdx` | Project deep-dives. Frontmatter holds the header chrome (kicker / title / dek / meta / tags / corner badges); body is MDX (prose + figures + marginalia). Loaded by `lib/projects.ts`; dynamic route at `app/projects/[slug]/page.tsx` builds one HTML file per slug. |
+| `content/trophies/{slug}.mdx` | Sweat-page trophy entries (Whitney / Tioga / Ironman). Frontmatter holds kicker / title / dek / coords / stats / order; body is the prose paragraphs (split on blank lines). Loaded by `lib/trophies.ts`. Slug maps to a gallery id + route ornament via the static maps in `app/sweat/page.tsx`. |
+| `content/sweat.mdx`, `content/kitchen.mdx`, `content/writing.mdx`, `content/timeline-page.mdx` | Page chrome for `/sweat/`, `/kitchen/`, `/writing/`, `/timeline/`. Frontmatter only — `metaTitle`, `metaDescription`, hero `eyebrow` / `heading` / `dek`, plus any per-section labels the page needs. Composition stays in `app/{route}/page.tsx`. Loaded by `lib/sweat.ts`, `lib/kitchen.ts`, `lib/writing-page.ts`, `lib/timeline-page.ts`. |
 
 ## Tech stack
 
@@ -126,12 +128,13 @@ corporate about-us, NOT a Bootstrap-style resume.
 ## Information architecture
 
 ```
-/                      Timeline-driven homepage              (built)
+/                      Timeline-driven homepage              (built — Bento copy hand-curated in app/page.tsx)
 /projects/[slug]/      Long-form deep-dives                  (built — MDX from content/projects/*.mdx; doorpi drafted, rodsmith pending — see TODO.md)
-/sweat/                Three trophy activities, photo strips (built — galleries empty)
-/kitchen/              Cooking + baking, image-led           (pending — split from /writing/ on 2026-05-21)
-/writing/              Index of essays                       (pending)
+/sweat/                Three trophy activities, photo strips (built — page chrome from content/sweat.mdx, trophies from content/trophies/*.mdx, galleries empty)
+/kitchen/              Cooking + baking, image-led           (built — page chrome from content/kitchen.mdx; galleries empty)
+/writing/              Index of essays                       (chrome built — content/writing.mdx; essay list still empty)
 /writing/[slug]/       Individual posts                      (pending)
+/timeline/             Flat list of every entry              (built — page chrome from content/timeline-page.mdx; entries from content/timeline/*.md)
 /about/                Bio + endurance + kitchen identity    (built — MDX from content/about.mdx)
 ```
 
@@ -167,16 +170,26 @@ lib/
 ├── essays.ts               Loads content/essays/*.md
 ├── batches.ts              Loads content/batches/*.md
 ├── galleries.ts            Loads content/galleries/*.yml
+├── kitchen.ts              Loads content/kitchen.mdx (page chrome)
 ├── projects.ts             Loads content/projects/*.mdx
-└── timeline.ts             Loads content/timeline/*.md
+├── sweat.ts                Loads content/sweat.mdx (page chrome)
+├── timeline.ts             Loads content/timeline/*.md
+├── timeline-page.ts        Loads content/timeline-page.mdx (page chrome)
+├── trophies.ts             Loads content/trophies/*.mdx
+└── writing-page.ts         Loads content/writing.mdx (page chrome)
 
 content/
 ├── about.mdx               Bio page
-├── essays/                 One markdown per essay
+├── kitchen.mdx             Kitchen page chrome
+├── sweat.mdx               Sweat page chrome
+├── timeline-page.mdx       Timeline page chrome
+├── writing.mdx             Writing page chrome
 ├── batches/                One markdown per bake batch
+├── essays/                 One markdown per essay
 ├── galleries/              One YAML per photo gallery
 ├── projects/               One MDX per project deep-dive
-└── timeline/               One markdown per timeline entry
+├── timeline/               One markdown per timeline entry
+└── trophies/               One MDX per /sweat/ trophy
 
 scripts/
 └── new-photo.mjs           `pnpm new-photo` interactive helper — CLI alt to /admin/
@@ -404,6 +417,12 @@ When you change one of these, search the codebase for the others:
   uses a component that isn't already in the components map at
   `app/projects/[slug]/page.tsx`, add it there too (imports inside MDX
   are silently dropped by `next-mdx-remote/rsc`).
+- New trophy on /sweat/ → add `content/trophies/{slug}.mdx` (frontmatter
+  `order` controls position) + wire `{slug}` into both `GALLERY_FOR`
+  and `ROUTE_FOR` maps in `app/sweat/page.tsx` + create
+  `content/galleries/sweat_{slug}.yml` + add a `Route{Slug}` ornament
+  component for the elevation profile. `create: false` on the Decap
+  Trophies collection means new entries are CLI-only — by design.
 - Tailwind token change → `globals.css` `.prose-editorial` styles may
   reference colors directly via `theme()`.
 
