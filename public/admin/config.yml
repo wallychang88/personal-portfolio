@@ -238,12 +238,14 @@ collections:
           - { label: "Value", name: value, widget: string, hint: "Display-weight serif. \"21.5 mi\"." }
           - { label: "Sub",   name: sub,   widget: string, required: false, hint: "Optional mono annotation under the value." }
 
-      - label: "Body (MDX)"
+      - label: "Body"
         name: body
-        widget: code
-        output_code_only: true
-        default_language: markdown
-        hint: "The trophy paragraphs. Plain markdown — paragraphs separated by blank lines. Voice: warm, specific, no embellishment past WALLY.md. Only ship facts you can defend."
+        widget: markdown
+        # Plain paragraphs only — no JSX in trophy bodies — so we use the
+        # real markdown widget (WYSIWYG toolbar) instead of the dark code
+        # editor that projects + about need. The lib/trophies.ts loader
+        # splits the body on blank lines into a paragraph array.
+        hint: "The trophy paragraphs. Hit Enter twice for a new paragraph. Voice: warm, specific, no embellishment past WALLY.md. Only ship facts you can defend."
 
   - name: timeline
     label: Timeline
