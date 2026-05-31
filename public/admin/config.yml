@@ -143,10 +143,17 @@ collections:
     # without also wiring them into a page is a footgun. Disable create;
     # existing galleries are still editable.
     create: false
-    identifier_field: label
+    # Sidebar listing uses the prettier label via summary, but the
+    # entry's *slug* (which {{slug}} below resolves to) stays the YAML
+    # filename — `sweat_whitney`, not the slugified label. Don't set
+    # `identifier_field: label` here: Decap derives {{slug}} from the
+    # identifier field when one is set, which caused uploads to land in
+    # public/images/sweat-—-mount-whitney/ (slugified label) instead of
+    # public/images/sweat_whitney/ (filename).
+    summary: "{{label}}"
     # Photo uploads land in public/images/{gallery-id}/ so the per-gallery
     # folder structure stays consistent (matches what `pnpm new-photo`
-    # writes). `{{slug}}` here is the gallery file's slug — the YAML
+    # writes). `{{slug}}` is the gallery file's slug — the YAML
     # filename minus .yml — not the photo's slug.
     media_folder: "/public/images/{{slug}}"
     public_folder: "/images/{{slug}}"
