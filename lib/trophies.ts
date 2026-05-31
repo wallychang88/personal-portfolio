@@ -42,6 +42,10 @@ const TrophyFrontmatter = z.object({
   coords: z.string().min(1),
   /** 4-up stat panel beneath the prose. */
   stats: z.array(TrophyStat).min(1),
+  /** Mono caption above the right-column panel. Defaults to
+   * "Route · elevation profile" — override when the panel art isn't an
+   * elevation profile (e.g. football career arc). */
+  panelLabel: z.string().optional(),
 });
 
 export type TrophyFrontmatter = z.infer<typeof TrophyFrontmatter>;

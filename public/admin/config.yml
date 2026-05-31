@@ -226,6 +226,12 @@ collections:
         widget: string
         hint: "Mono lat/long stamp in the top-right corner of the trophy block."
 
+      - label: "Panel label"
+        name: panelLabel
+        widget: string
+        required: false
+        hint: "Optional mono caption above the right-column ornament. Leave blank for the default \"Route · elevation profile\" — override when the ornament isn't an elevation profile (e.g. \"Career · 2021 → 2024\" for football)."
+
       - label: "Stats"
         name: stats
         widget: list

@@ -5,6 +5,7 @@ import { StatPanel } from '@/components/stat-panel';
 import {
   ContourBackground,
   OrnCompassRose,
+  RouteFootball,
   RouteIronman,
   RouteTioga,
   RouteWhitney,
@@ -26,15 +27,17 @@ export const metadata: Metadata = {
  * route ornament and falls back to the placeholder strip.
  */
 const GALLERY_FOR: Record<string, GalleryId> = {
-  whitney: 'sweat_whitney',
-  tioga:   'sweat_tioga',
-  ironman: 'sweat_ironman',
+  whitney:  'sweat_whitney',
+  tioga:    'sweat_tioga',
+  ironman:  'sweat_ironman',
+  football: 'sweat_football',
 };
 
 const ROUTE_FOR: Record<string, React.ReactNode> = {
-  whitney: <RouteWhitney />,
-  tioga:   <RouteTioga />,
-  ironman: <RouteIronman />,
+  whitney:  <RouteWhitney />,
+  tioga:    <RouteTioga />,
+  ironman:  <RouteIronman />,
+  football: <RouteFootball />,
 };
 
 export default function SweatPage() {
@@ -140,7 +143,7 @@ function TrophyBlock({ trophy }: { trophy: Trophy }) {
         </div>
         <div className="rounded border border-paper-edge bg-paper/70 px-4 py-4 sm:px-[18px]">
           <div className="font-mono text-[10.5px] tracking-stat uppercase text-sage mb-2">
-            Route · elevation profile
+            {trophy.panelLabel ?? 'Route · elevation profile'}
           </div>
           {ROUTE_FOR[trophy.slug]}
         </div>
