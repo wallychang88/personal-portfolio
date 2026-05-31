@@ -1,6 +1,15 @@
-label: "Sweat — Mount Whitney"
-hint: >-
-  3-5 photos. Trout at 12k, alpine camp at dusk, summit at sunrise,
-  the descent, the trailhead sign at the end. Wide landscape orientation
-  looks best in the strip layout.
-photos: []
+label: Sweat — Mount Whitney
+hint: 3-5 photos. Trout at 12k, alpine camp at dusk, summit at sunrise, the
+  descent, the trailhead sign at the end. Wide landscape orientation looks best
+  in the strip layout.
+photos:
+  - src: /images/sweat-—-mount-whitney/img_1694.jpeg
+    alt: img
+  - src: /images/sweat-—-mount-whitney/img_0222.jpeg
+    alt: img
+  - src: /images/sweat-—-mount-whitney/img_1704.jpeg
+    alt: img
+  - src: /images/sweat-—-mount-whitney/img_1688.jpeg
+    alt: img
+  - src: /images/sweat-—-mount-whitney/img_1673.jpeg
+    alt: img
