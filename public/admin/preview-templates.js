@@ -648,4 +648,448 @@
   });
 
   CMS.registerPreviewTemplate('projects', ProjectPreview);
+
+  /* ------------------------------------------------------------------
+     Page-chrome preview helpers.
+     The /sweat/, /kitchen/, /writing/, /timeline/ singletons are
+     frontmatter-only — there's no body to render. The preview mirrors
+     the hero block from each page (eyebrow + h1 + dek) and lists any
+     additional fields below as named meta rows so the editor knows
+     what they're typing into.
+     ------------------------------------------------------------------ */
+
+  function pageHero(eyebrowAccent, eyebrow, heading, dek) {
+    return [
+      h(
+        'div',
+        {
+          key: 'eyebrow',
+          className: 'eyebrow ' + (eyebrowAccent || ''),
+        },
+        eyebrow || empty('eyebrow')
+      ),
+      h(
+        'h1',
+        {
+          key: 'h',
+          className: 'essay-title',
+          style: { fontSize: '52px', lineHeight: '1.04' },
+        },
+        heading || empty('Add a heading (ends with a period)')
+      ),
+      dek
+        ? h(
+            'p',
+            {
+              key: 'd',
+              className: 'essay-hook',
+              style: { fontSize: '19px', fontStyle: 'normal' },
+            },
+            dek
+          )
+        : h('p', { key: 'd', className: 'essay-hook' }, empty('Add a dek')),
+    ];
+  }
+
+  function metaRow(label, value) {
+    return h(
+      'div',
+      {
+        key: label,
+        style: {
+          display: 'grid',
+          gridTemplateColumns: '160px 1fr',
+          gap: '14px',
+          padding: '6px 0',
+          borderTop: '1px solid #E8E1CE',
+          fontSize: '13px',
+          lineHeight: '1.5',
+        },
+      },
+      h(
+        'div',
+        {
+          style: {
+            fontFamily: 'JetBrains Mono, monospace',
+            fontSize: '10.5px',
+            letterSpacing: '0.08em',
+            textTransform: 'uppercase',
+            color: '#8A8678',
+            paddingTop: '2px',
+          },
+        },
+        label
+      ),
+      h('div', { style: { color: '#1C1B17' } }, value || empty('—'))
+    );
+  }
+
+  function metaBlock(rows) {
+    return h(
+      'div',
+      {
+        style: {
+          marginTop: '32px',
+          paddingTop: '4px',
+          borderBottom: '1px solid #E8E1CE',
+        },
+      },
+      rows
+    );
+  }
+
+  /* ------------------------------------------------------------------
+     Sweat (page chrome) preview.
+     ------------------------------------------------------------------ */
+  var SweatPreview = createClass({
+    render: function () {
+      var data = this.props.entry.get('data');
+      var eyebrow = data.get('eyebrow') || '';
+      var heading = data.get('heading') || '';
+      var dek = data.get('dek') || '';
+      var volumeLabel = data.get('volumeLabel') || '';
+      var metaTitle = data.get('metaTitle') || '';
+      var metaDescription = data.get('metaDescription') || '';
+
+      return h(
+        'div',
+        { className: 'preview-shell' },
+        volumeLabel
+          ? h(
+              'div',
+              {
+                style: {
+                  fontFamily: 'JetBrains Mono, monospace',
+                  fontSize: '10.5px',
+                  letterSpacing: '0.18em',
+                  textTransform: 'uppercase',
+                  color: '#4B5A35',
+                  marginBottom: '6px',
+                },
+              },
+              volumeLabel
+            )
+          : null,
+        pageHero('sage', eyebrow, heading, dek),
+        metaBlock([
+          metaRow('Meta · title', metaTitle),
+          metaRow('Meta · description', metaDescription),
+        ])
+      );
+    },
+  });
+
+  CMS.registerPreviewTemplate('sweat', SweatPreview);
+
+  /* ------------------------------------------------------------------
+     Kitchen (page chrome) preview.
+     Renders the hero + a stacked summary of the two named sections
+     (Bagels + Bread/Pizza) so the editor can see how the labels click
+     together on the deployed page.
+     ------------------------------------------------------------------ */
+  var KitchenPreview = createClass({
+    render: function () {
+      var data = this.props.entry.get('data');
+      var get = function (k) { return data.get(k) || ''; };
+
+      function sectionBlock(eyebrow, heading, body) {
+        return h(
+          'div',
+          {
+            style: {
+              marginTop: '24px',
+              paddingTop: '20px',
+              borderTop: '1px solid #E8E1CE',
+            },
+          },
+          h(
+            'div',
+            {
+              style: {
+                fontFamily: 'JetBrains Mono, monospace',
+                fontSize: '10.5px',
+                letterSpacing: '0.08em',
+                textTransform: 'uppercase',
+                color: '#6E5A1F',
+                marginBottom: '8px',
+              },
+            },
+            eyebrow || empty('eyebrow')
+          ),
+          h(
+            'h2',
+            {
+              className: 'essay-title',
+              style: { fontSize: '26px', lineHeight: '1.18', marginBottom: '8px' },
+            },
+            heading || empty('heading')
+          ),
+          body
+            ? h(
+                'p',
+                {
+                  className: 'essay-hook',
+                  style: { fontStyle: 'italic', fontSize: '15px' },
+                },
+                body
+              )
+            : null
+        );
+      }
+
+      return h(
+        'div',
+        { className: 'preview-shell' },
+        pageHero('honey', get('eyebrow'), get('heading'), get('dek')),
+        sectionBlock(get('bagelsEyebrow'), get('bagelsHeading'), get('bagelsEmpty')),
+        sectionBlock(get('practiceEyebrow'), get('practiceHeading'), get('practiceDek')),
+        metaBlock([
+          metaRow('Meta · title', get('metaTitle')),
+          metaRow('Meta · description', get('metaDescription')),
+          metaRow('Bagels · empty stamp', get('bagelsEmptyStamp')),
+          metaRow('Bagels · photos hint', get('bagelsPhotosHint')),
+          metaRow('Bread · label', get('breadLabel')),
+          metaRow('Bread · photos hint', get('breadPhotosHint')),
+          metaRow('Pizza · label', get('pizzaLabel')),
+          metaRow('Pizza · photos hint', get('pizzaPhotosHint')),
+        ])
+      );
+    },
+  });
+
+  CMS.registerPreviewTemplate('kitchen', KitchenPreview);
+
+  /* ------------------------------------------------------------------
+     Writing index (page chrome) preview.
+     ------------------------------------------------------------------ */
+  var WritingPreview = createClass({
+    render: function () {
+      var data = this.props.entry.get('data');
+      var get = function (k) { return data.get(k) || ''; };
+
+      return h(
+        'div',
+        { className: 'preview-shell' },
+        pageHero('clay', get('eyebrow'), get('heading'), get('dek')),
+        h(
+          'div',
+          {
+            style: {
+              marginTop: '28px',
+              paddingTop: '20px',
+              borderTop: '1px solid #E8E1CE',
+            },
+          },
+          h(
+            'p',
+            {
+              style: {
+                fontFamily: 'Fraunces, serif',
+                fontStyle: 'italic',
+                fontSize: '18px',
+                lineHeight: '1.5',
+                color: '#5C5A52',
+              },
+            },
+            get('emptyBody') || empty('emptyBody')
+          ),
+          h(
+            'p',
+            {
+              style: {
+                marginTop: '14px',
+                fontFamily: 'JetBrains Mono, monospace',
+                fontSize: '11px',
+                letterSpacing: '0.08em',
+                textTransform: 'uppercase',
+                color: '#8A8678',
+              },
+            },
+            get('emptyCaption') || empty('emptyCaption')
+          )
+        ),
+        metaBlock([
+          metaRow('Meta · title', get('metaTitle')),
+          metaRow('Meta · description', get('metaDescription')),
+        ])
+      );
+    },
+  });
+
+  CMS.registerPreviewTemplate('writing', WritingPreview);
+
+  /* ------------------------------------------------------------------
+     Timeline index (page chrome) preview.
+     ------------------------------------------------------------------ */
+  var TimelinePagePreview = createClass({
+    render: function () {
+      var data = this.props.entry.get('data');
+      var get = function (k) { return data.get(k) || ''; };
+
+      return h(
+        'div',
+        { className: 'preview-shell' },
+        pageHero('clay', get('eyebrow'), get('heading'), get('dek')),
+        metaBlock([
+          metaRow('Meta · title', get('metaTitle')),
+          metaRow('Meta · description', get('metaDescription')),
+        ])
+      );
+    },
+  });
+
+  CMS.registerPreviewTemplate('timeline_page', TimelinePagePreview);
+
+  /* ------------------------------------------------------------------
+     Trophy preview.
+     Mirrors the TrophyBlock in app/sweat/page.tsx — kicker, title, dek,
+     coords stamp, paragraphs, 4-up stat panel. Renders the actual body
+     paragraphs (the markdown widget gives us widgetFor('body') as HTML).
+     ------------------------------------------------------------------ */
+  var TrophyPreview = createClass({
+    render: function () {
+      var data = this.props.entry.get('data');
+      var kicker = data.get('kicker') || '';
+      var title = data.get('title') || '';
+      var dek = data.get('dek') || '';
+      var coords = data.get('coords') || '';
+      var stats = data.get('stats');
+      var statsArr = stats && stats.toJS ? stats.toJS() : [];
+
+      return h(
+        'div',
+        { className: 'preview-shell' },
+        h(
+          'div',
+          { style: { position: 'relative' } },
+          coords
+            ? h(
+                'div',
+                {
+                  style: {
+                    position: 'absolute',
+                    top: 0,
+                    right: 0,
+                    fontFamily: 'JetBrains Mono, monospace',
+                    fontSize: '11px',
+                    letterSpacing: '0.06em',
+                    color: '#5C5A52',
+                  },
+                },
+                coords
+              )
+            : null,
+          h(
+            'div',
+            { className: 'eyebrow sage', style: { marginBottom: '14px' } },
+            kicker || empty('kicker (e.g. TROPHY · JULY 12–13, 2025)')
+          ),
+          h(
+            'h1',
+            {
+              className: 'essay-title',
+              style: { fontSize: '40px', lineHeight: '1.04', marginBottom: '10px' },
+            },
+            title || empty('Add a title (ends with a period)')
+          ),
+          dek
+            ? h(
+                'p',
+                {
+                  className: 'essay-hook',
+                  style: { fontStyle: 'italic', fontSize: '20px' },
+                },
+                dek
+              )
+            : h('p', { className: 'essay-hook' }, empty('Add a dek'))
+        ),
+
+        h(
+          'div',
+          {
+            style: {
+              marginTop: '24px',
+              fontFamily: 'Fraunces, serif',
+              fontSize: '17px',
+              lineHeight: '1.65',
+              color: '#1C1B17',
+            },
+          },
+          this.props.widgetFor('body')
+        ),
+
+        statsArr.length > 0
+          ? h(
+              'dl',
+              {
+                style: {
+                  marginTop: '28px',
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(' + Math.min(statsArr.length, 4) + ', 1fr)',
+                  gap: '0',
+                  borderTop: '1px solid #E8E1CE',
+                  borderBottom: '1px solid #E8E1CE',
+                },
+              },
+              statsArr.map(function (s, i) {
+                return h(
+                  'div',
+                  {
+                    key: i,
+                    style: {
+                      padding: '14px 16px',
+                      borderRight:
+                        i < statsArr.length - 1 ? '1px solid #E8E1CE' : 'none',
+                    },
+                  },
+                  h(
+                    'dt',
+                    {
+                      style: {
+                        fontFamily: 'JetBrains Mono, monospace',
+                        fontSize: '10.5px',
+                        letterSpacing: '0.08em',
+                        textTransform: 'uppercase',
+                        color: '#8A8678',
+                        marginBottom: '6px',
+                      },
+                    },
+                    s.label || '—'
+                  ),
+                  h(
+                    'dd',
+                    {
+                      style: {
+                        margin: 0,
+                        fontFamily: 'Fraunces, serif',
+                        fontSize: '24px',
+                        lineHeight: '1.1',
+                        color: '#1C1B17',
+                        marginBottom: '4px',
+                      },
+                    },
+                    s.value || '—'
+                  ),
+                  s.sub
+                    ? h(
+                        'div',
+                        {
+                          style: {
+                            fontFamily: 'JetBrains Mono, monospace',
+                            fontSize: '10.5px',
+                            color: '#5C5A52',
+                          },
+                        },
+                        s.sub
+                      )
+                    : null
+                );
+              })
+            )
+          : null
+      );
+    },
+  });
+
+  CMS.registerPreviewTemplate('trophies', TrophyPreview);
 })();
