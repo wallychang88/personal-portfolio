@@ -418,11 +418,14 @@ When you change one of these, search the codebase for the others:
   `app/projects/[slug]/page.tsx`, add it there too (imports inside MDX
   are silently dropped by `next-mdx-remote/rsc`).
 - New trophy on /sweat/ → add `content/trophies/{slug}.mdx` (frontmatter
-  `order` controls position) + wire `{slug}` into both `GALLERY_FOR`
+  `order` controls position; optional `panelLabel` overrides the
+  "Route · elevation profile" caption when the right-column ornament
+  isn't an elevation profile) + wire `{slug}` into both `GALLERY_FOR`
   and `ROUTE_FOR` maps in `app/sweat/page.tsx` + create
   `content/galleries/sweat_{slug}.yml` + add a `Route{Slug}` ornament
-  component for the elevation profile. `create: false` on the Decap
-  Trophies collection means new entries are CLI-only — by design.
+  component (export from `components/ornaments/index.ts`). `create: false`
+  on the Decap Trophies collection means new entries are CLI-only — by
+  design.
 - Tailwind token change → `globals.css` `.prose-editorial` styles may
   reference colors directly via `theme()`.
 

@@ -30,3 +30,4 @@ export { ContourBackground } from './ContourBackground';
 export { RouteWhitney }     from './routes/RouteWhitney';
 export { RouteTioga }       from './routes/RouteTioga';
 export { RouteIronman }     from './routes/RouteIronman';
+export { RouteFootball }    from './routes/RouteFootball';
