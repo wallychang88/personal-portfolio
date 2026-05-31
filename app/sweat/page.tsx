@@ -109,7 +109,9 @@ function TrophyBlock({ trophy }: { trophy: Trophy }) {
   const photos = galleryId ? GALLERIES[galleryId] : [];
   return (
     <article id={trophy.slug} className="relative scroll-mt-24 mb-20 last:mb-0">
-      <div className="absolute top-0 right-0 font-mono text-[11px] tracking-meta text-ink-soft">
+      {/* Coords stamp: top-right on wide viewports, inline below the dek
+          on narrow ones so it doesn't crash into the kicker. */}
+      <div className="hidden @[768px]:block absolute top-0 right-0 font-mono text-[11px] tracking-meta text-ink-soft">
         {trophy.coords}
       </div>
 
@@ -124,10 +126,13 @@ function TrophyBlock({ trophy }: { trophy: Trophy }) {
         {trophy.title}
       </h2>
       <div
-        className="font-serif italic text-[18px] sm:text-[22px] text-ink-soft mb-8 [text-wrap:balance] max-w-[720px]"
+        className="font-serif italic text-[18px] sm:text-[22px] text-ink-soft mb-3 @[768px]:mb-8 [text-wrap:balance] max-w-[720px]"
         style={{ fontVariationSettings: '"opsz" 36, "wght" 400' }}
       >
         {trophy.dek}
+      </div>
+      <div className="@[768px]:hidden font-mono text-[11px] tracking-meta text-ink-soft mb-8">
+        {trophy.coords}
       </div>
 
       <div className="grid grid-cols-1 @[1024px]:grid-cols-[1.05fr_1fr] gap-10 @[1024px]:gap-12 items-start">
