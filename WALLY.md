@@ -58,7 +58,7 @@ please react / correct / fill these in before I resume building.
 | Fall 2023 | INFO 6350 — text-mining 359 movie subtitle files | Cornell course final |
 | Fall 2023 | INFO 4900 — BERT date prediction on Morning Brew newsletters | Independent research |
 | Dec 2023 | Cornell BS, magna cum laude | |
-| Feb–May 2024 | American Express ML research (via Cornell) | HDBSCAN + Louvain + LSTM for label-noise mitigation in transformer support-ticket routing; led 8 ML engineers |
+| Feb–May 2024 | American Express ML research (via Cornell) | HDBSCAN + Louvain + LSTM to detect mislabeled training data in a BERT customer-service classifier (Banking77); clustering surfaced the mislabels, the LSTM noise-detector didn't pan out; led 8 ML engineers |
 | Apr 2024 | STSCI 5610 — 2008 financial crisis CAPM project | R, rolling-window beta for GS / JPM |
 | May 2024 | Cornell MPS, Data Science · GPA 3.99 | |
 | Aug 2024 – May 2025 | Carrick Capital PE Analyst | Cyber + GRC coverage; built an internal market-map ranking tool that cut analysis time ~80% and set up three RSA Conference meetings |
