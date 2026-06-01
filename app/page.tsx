@@ -196,18 +196,28 @@ export default function HomePage() {
 
         <Tile
           cat="slate"
-          ariaLabel="American Express label-noise research"
+          href="/projects/amex/"
+          ariaLabel="American Express project deep-dive"
           cols={2}
           rows={1}
         >
           <Eyebrow>Research · Feb – May 2024</Eyebrow>
-          <TileTitle>AmEx label-noise mitigation.</TileTitle>
+          <TileTitle>AmEx mislabel detection.</TileTitle>
           <TileHook>
-            HDBSCAN + Louvain + LSTM for transformer support-ticket routing.
-            Led eight ML engineers.
+            HDBSCAN, Louvain, and an LSTM, pointed at the mislabeled training
+            data behind a BERT classifier&rsquo;s confident mistakes. Led an
+            eight-person team.
           </TileHook>
           <div className="mt-auto pt-3">
-            <OrnSparkline width={260} height={56} delay={4} cat="slate" label="AUC · 6 MO" endLabel="0.91" />
+            <OrnSparkline
+              width={260}
+              height={56}
+              delay={4}
+              cat="slate"
+              label="MISLABEL SHARE OF ERRORS"
+              endLabel=">80%"
+              data={[0.28, 0.31, 0.35, 0.41, 0.47, 0.54, 0.61, 0.67, 0.73, 0.78, 0.81, 0.82]}
+            />
           </div>
           <TileTags tags={['ML', 'Research']} />
         </Tile>

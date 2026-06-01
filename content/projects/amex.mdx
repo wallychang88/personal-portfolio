@@ -1,0 +1,53 @@
+---
+title: AmEx — when the classifier was most confident, suspect the label.
+dek: A research project with American Express. We used a BERT classifier's own confidence to hunt down the mislabeled tickets hiding in its "ground-truth" training data — and learned exactly where a second, fancier approach broke down.
+kicker: Research · American Express, via Cornell · Feb – May 2024
+meta: Master's research · led an eight-person team
+tags:
+  - ML
+  - Research
+  - NLP
+cat: slate
+description: A Cornell master's research project with American Express — using HDBSCAN and Louvain clustering over BERT-Banking77 to surface mislabeled training data, plus an LSTM noise detector that didn't pan out.
+order: 2
+---
+
+<Prose>
+
+In the spring of 2024, near the end of my master's at Cornell, I led an eight-person team on a research problem brought to us by American Express: how do you find the mistakes a customer-service classifier makes *with total confidence?*
+
+It's the problem every support team eventually hits. Incoming messages get sorted into intents — "my card hasn't arrived," "the transfer was declined," "what's my cash-withdrawal limit" — and a model learns that sorting from examples people labeled by hand. But a model trained on hand-labeled data inherits the labelers' mistakes, and the most dangerous of those are the ones it then repeats confidently. We worked over BERT-Banking77, a public benchmark of 77 intent labels where a fine-tuned BERT already scored about 93% on the test set. What was left over — the errors — was the interesting part.
+
+</Prose>
+
+<Section accent="slate" symbol="◆" eyebrow="The tell" heading="A wrong answer, held with conviction.">
+
+One example stuck with the whole team. A customer wrote that their account "was charged for a withdraw I tried to make that was decline." The true intent was a *pending* cash withdrawal; the model called it a *declined* one — and put a probability of 0.96 on that wrong answer. It wasn't confused. It was confidently echoing a label that was itself wrong.
+
+That pattern — high confidence sitting on top of a bad label — became the thing we learned to hunt for. A genuinely ambiguous message makes a model hesitate. A mislabel makes it sure.
+
+<OrnPullQuote>A model trained on someone else's mistakes doesn't get confused. It gets confident.</OrnPullQuote>
+
+</Section>
+
+<Section accent="slate" symbol="▣" eyebrow="What worked" heading="Cluster the data, then trust the disagreement.">
+
+The approach that paid off was unsupervised. We took BERT's own embeddings and clustered them two ways — HDBSCAN by density, Louvain by community structure — after consolidating the 77 fine-grained intents into twelve broader topics like "transfers" and "card delivery." Then we asked one question of every error: did it stay inside its own topic, or jump to a different one?
+
+Most errors stayed within-topic, and once we sorted those by confidence the split was stark. At low confidence the model was just guessing at genuinely ambiguous messages. At high confidence the errors were overwhelmingly mislabels — on the Louvain pass, more than four out of five within-topic errors turned out to be the label's fault, not the model's. It surfaced 181 likely-bad examples that way.
+
+That handed American Express something usable without retraining anything: pick a confidence threshold, and let the points that land in the suspicious band — confident, but out of step with their neighbors — route automatically to a person for review. A way to point scarce QA attention exactly where it changes the data.
+
+</Section>
+
+<Section accent="slate" symbol="✱" eyebrow="What didn't" heading="The noise detector that wouldn't generalize.">
+
+The second idea was more ambitious, and it's the one I'd write the postmortem on. Instead of inspecting a finished model, we tried to catch mislabels from how the model *learned.* We trained a BERT model on data we'd deliberately poisoned with 10% label noise, recorded each example's softmax trajectory across thirty epochs, and trained an LSTM to read those trajectories and call each one "noisy" or "clean." The theory: a mislabeled example fights the model the whole way through training, and that fight should be visible in the curve.
+
+It mostly wasn't. The LSTM overtrained no matter what we threw at it — class weighting, a learning-rate scheduler, dropout, smaller hidden layers — train accuracy climbing while validation accuracy fell. Run on clean training dynamics, it did flag about 10% of the data as noisy, which matched the noise we'd injected, but its precision was only around 10%: most of what it flagged was fine. Our read was that adding artificial noise distorted the very confidence signal we were trying to measure, and that the labels just weren't separable on training dynamics alone.
+
+The honest result is that this one didn't work. But knowing *why* it didn't — and watching the simpler, unsupervised method quietly succeed where it failed — is most of what made the clustering result worth trusting.
+
+</Section>
+
+<EndNote>Final presentation delivered May 2024 — Cornell MPS Data Science × American Express. Long-form writeup of the clustering method and the LSTM postmortem in progress.</EndNote>
