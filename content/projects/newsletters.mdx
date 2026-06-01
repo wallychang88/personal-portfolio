@@ -1,0 +1,51 @@
+---
+title: Morning newsletters — telling the Times from the Brew was the easy part.
+dek: An independent-research project text-mining a year of two morning newsletters, scraped by hand. A classifier could tell which was which at about 89%. Predicting the date a newsletter went out — by topic, by token, by fine-tuned BERT — never worked at all.
+kicker: Independent research · Cornell INFO 4900 · Fall 2023
+meta: Solo · advised by Prof. Matthew Wilkens
+tags:
+  - NLP
+  - Text Mining
+  - BERT
+cat: sage
+description: A Cornell independent-research project text-mining a year of Morning Brew and the New York Times' morning newsletter — logistic-regression classification reached ~89% accuracy while topic-, token-, and BERT-based attempts to predict publication date all failed.
+order: 3
+---
+
+<Prose>
+
+In the fall of 2023 I was reading more morning newsletters than was strictly reasonable — seven or eight of them — and I kept wondering what, exactly, made each one feel like itself. So I turned it into an independent-research project under Professor Matthew Wilkens: take a year of two of them, *The New York Times*' "The Morning" and *The Morning Brew*, and ask two questions a model might be able to answer. Which newsletter is this one? And what day did it go out?
+
+The first question turned out to be easy. The second one never gave an inch — and the contrast between the two is the whole story.
+
+</Prose>
+
+<Section accent="sage" symbol="◆" eyebrow="The corpus" heading="A year of mornings, scraped by hand.">
+
+The dataset was the unglamorous part, which is to say most of it. I scraped a full year — October 11, 2022 to October 11, 2023 — of both newsletters with BeautifulSoup. The Brew came down cleanly; the Times fought back, so each of its editions had to be saved to disk by hand before it could be parsed. What came out the other end was 305 Brew editions and 365 from the Times — the Brew skips Sundays, which is the entire 60-issue gap.
+
+Even before any modeling, the two had different physiques. The Brew's median edition ran about 2,549 tokens to the Times' 1,956 — roughly thirty percent longer. The Brew talks more.
+
+</Section>
+
+<Section accent="sage" symbol="▣" eyebrow="What worked" heading="The two newsletters do not sound alike.">
+
+The classification task — given an edition, name its publisher — worked almost immediately. Reducing the 700 most frequent terms with truncated SVD already split the two into visibly separate clouds, and K-means landed on the same boundary unsupervised. From there a logistic-regression classifier on token features reached about 89% accuracy. Topic-model features, the more abstract representation, trailed it at roughly 0.66 to 0.76 — the raw words carried more signal than the themes I tried to distill out of them.
+
+The honest footnote is that the very best run skipped a proper train/test split, so 89% is the optimistic ceiling rather than a guarantee. But the shape of the result was never in doubt: these two newsletters are stylistically distinct enough that telling them apart is, for a model, not much of a challenge.
+
+</Section>
+
+<Section accent="sage" symbol="✱" eyebrow="What didn't" heading="Nothing could read the calendar.">
+
+Then the second question, and a wall. I wanted to predict the publication date from the text — the intuition being that a year of current events should leave some temporal fingerprint. It does not, at least not one a regressor can hold onto. Topic features gave an R² of about −0.02. Token features were worse, −6.5 and then −35.7 as I chunked them. Predicting the *month* instead of the exact date got to −3.2. Every one of those negative numbers means the model did worse than guessing the average.
+
+So I reached for the heavy machine: a BERT model fine-tuned for regression, following Galtier's recipe, trained on a rented V100 for five epochs. It failed too — no discernible relationship between the text and the date. The one flicker of life was a time-series view where a topic spiking in mid-July 2023 lined up with the Women's World Cup. Real, but far too faint for prediction.
+
+<OrnPullQuote>The text screams which newsletter it is and whispers nothing about when it was written.</OrnPullQuote>
+
+The lesson I took is about what a signal even is. Publisher identity is baked into every sentence — voice, format, length, habit. The date is smeared across a whole year of unrelated headlines, with no clean axis for a linear model to follow. A harder-*sounding* task isn't always the harder one; sometimes the target just isn't in the data.
+
+</Section>
+
+<EndNote>Independent research under Prof. Matthew Wilkens — Cornell INFO 4900, Fall 2023. The classification result held up; the date-prediction task is the one I'd still like to crack.</EndNote>
