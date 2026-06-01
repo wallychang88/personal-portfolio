@@ -95,8 +95,9 @@ write the resume into a creation myth.
 
 ### Endurance — the body register
 
-- **Lifelong athlete.** Sprint football at Cornell (DB→WR, 3 years, All-CSFL
-  Academic as senior) is the receipt. Triathlon is the adult expression.
+- **Lifelong athlete.** Sprint football at Cornell (WR all 3 years, #87,
+  All-CSFL Academic as senior) is the receipt. Triathlon is the adult
+  expression.
 - **IRONMAN 70.3 Indian Wells La Quinta — December 8, 2024.**
   - Finish: **5:41:08** · Bib 212 · M18–24
   - Swim 0:43:42 · T1 0:06:20 · **Bike 2:44:15** · T2 0:06:38 · Run 2:00:13

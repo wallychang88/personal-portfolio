@@ -164,7 +164,8 @@ that none of us thought of.
   + LSTM.
 - **2021–2024 · Endurance · varsity** — *Three seasons on Cornell Sprint
   Football (#87).* The 178-lb-cap collegiate league, played by nine
-  schools. DB → WR, All-CSFL Academic honors as senior.
+  schools. Wide receiver all three years; All-CSFL Academic honors as
+  senior.
 - **Dec 2023 · Milestone** — *BS Information Science, Cornell CALS,
   magna cum laude, 3.88 GPA.*
 - **Fall 2023 · Coursework · INFO 6350** — *Text-mining the American

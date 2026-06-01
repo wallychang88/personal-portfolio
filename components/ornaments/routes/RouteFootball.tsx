@@ -2,14 +2,14 @@ import { CAT_HEX } from '../catClass';
 
 /**
  * Cornell Sprint Football career arc — three seasons (2021–22 / 2022–23
- * / 2023–24) with the DB → WR transition in the senior year, roster
- * stamp #87 on the left, and an All-CSFL Academic pin on the senior
- * season. Built for the /sweat/ football trophy spread; mirrors the
- * shape of the elevation profiles in this folder.
+ * / 2023–24) at WR, roster stamp #87 on the left, and an All-CSFL
+ * Academic pin on the senior season. Built for the /sweat/ football
+ * trophy spread; mirrors the shape of the elevation profiles in this
+ * folder.
  *
- * Facts come from WALLY.md + content/timeline/2023-11-30-cornell-sprint-football.md:
+ * Facts come from WALLY.md + content/trophies/football.mdx:
  *   • Three seasons on roster (Sophomore → Senior).
- *   • Defensive back as a sophomore; wide receiver as a junior + senior.
+ *   • Wide receiver all three years.
  *   • Senior season: six games, All-CSFL Academic honors.
  *   • 178-lb collegiate weight cap; nine schools play.
  */
@@ -21,7 +21,7 @@ const SEASONS: ReadonlyArray<{
   highlight?: boolean;
   note?: string;
 }> = [
-  { label: 'SOPHOMORE', year: '2021–22', position: 'DB' },
+  { label: 'SOPHOMORE', year: '2021–22', position: 'WR' },
   { label: 'JUNIOR',    year: '2022–23', position: 'WR' },
   { label: 'SENIOR',    year: '2023–24', position: 'WR', highlight: true, note: 'All-CSFL Academic · 6 games' },
 ];
@@ -48,7 +48,7 @@ export function RouteFootball({
       viewBox={`0 0 ${width} ${height}`}
       className="block"
       role="img"
-      aria-label="Cornell Sprint Football — three seasons, DB to WR, #87, All-CSFL Academic as a senior"
+      aria-label="Cornell Sprint Football — three seasons at WR, #87, All-CSFL Academic as a senior"
     >
       {/* Baseline rule. */}
       <line
@@ -70,7 +70,7 @@ export function RouteFootball({
         fill={accent}
         letterSpacing="0.08em"
       >
-        #87 · DB → WR
+        #87 · WR
       </text>
       <text
         x={padX}

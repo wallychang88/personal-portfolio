@@ -186,7 +186,7 @@ export default function HomePage() {
           <Eyebrow>Legacy · 2021 – 2024</Eyebrow>
           <TileTitle>Cornell Sprint Football #87.</TileTitle>
           <TileHook>
-            Three years on the roster. DB → WR. All-CSFL Academic, senior season.
+            Three years at wide receiver. All-CSFL Academic, senior season.
           </TileHook>
           <div className="mt-auto pt-3">
             <OrnEndurance kind="timeline" width={260} height={56} delay={4} />
