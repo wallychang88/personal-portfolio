@@ -4,7 +4,7 @@ import Link from 'next/link';
 // Body registers (sweat, kitchen) sit before the reflective ones.
 const NAV_ITEMS: { href: string; label: string }[] = [
   { href: '/', label: 'Index' },
-  { href: '/projects/doorpi/', label: 'Projects' },
+  { href: '/projects/', label: 'Projects' },
   { href: '/sweat/', label: 'Sweat' },
   { href: '/kitchen/', label: 'Kitchen' },
   { href: '/writing/', label: 'Writing' },

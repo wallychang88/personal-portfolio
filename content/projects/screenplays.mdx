@@ -32,7 +32,31 @@ Before any modeling, one measurement set the tone. Average cosine similarity bet
 
 We went in expecting the decades to separate clearly — surely a 1947 script and a 2019 script read differently — and expecting winners and losers to blur together. The unsupervised pass agreed with the second half and not the first: K-means never produced a clean elbow, and a truncated-SVD view laid winners and losers right on top of each other. No obvious structure either way.
 
+<Figure label="Fig. 01 · k-means elbow · no knee" caption="wcss vs k · 1–19">
+  <img
+    src="/images/projects/screenplays/kmeans-elbow-no-clean-k.png"
+    alt="Elbow-method line chart of within-cluster sum of squares against number of clusters K from 1 to 19, declining steadily with no distinct bend."
+    className="w-full h-auto rounded border border-paper-edge"
+  />
+</Figure>
+
+<Figure label="Fig. 02 · truncated svd · win vs loss" caption="winners over losers, no boundary">
+  <img
+    src="/images/projects/screenplays/truncated-svd-win-loss-overlap.png"
+    alt="Two-dimensional truncated-SVD scatter plot of scripts colored by award win or loss, with the orange winner points fully intermingled among the blue loser points."
+    className="w-full h-auto rounded border border-paper-edge"
+  />
+</Figure>
+
 Supervised classification flipped it. A Random Forest on 200-token chunks, with stop words removed, separated winners from losers more reliably than logistic regression — which mostly retreated to predicting "loser," the safe call when four of every five nominees lose. Decade classification, the task we'd assumed was easy, came out weaker; the decades with the most films were the only ones the model handled well, which says the limit was data, not language.
+
+<Figure label="Fig. 03 · decade confusion · data-bound diagonal" caption="strong only where films are dense">
+  <img
+    src="/images/projects/screenplays/decade-confusion-matrix.png"
+    alt="Confusion matrix heatmap for decade classification, 1940s to 2020s, showing a strong diagonal only for high-volume decades like the 1990s and 2010s and large off-diagonal spread elsewhere."
+    className="w-full h-auto rounded border border-paper-edge"
+  />
+</Figure>
 
 <OrnPullQuote>We assumed eighty years would separate cleanly and the trophy wouldn't. The model read it exactly backwards.</OrnPullQuote>
 
@@ -43,6 +67,14 @@ Two findings pointed the same way: context beats isolated words. The 200-token c
 <Section accent="clay" symbol="✱" eyebrow="What didn't" heading="The limits of subtitles, and of compute.">
 
 The honest ledger. The BERT decade classifier was estimated at roughly nineteen hours to train on what we had, so it simply never finished — a compute wall, not a result. And the sentiment analysis, run two ways with VADER and DistilBERT, showed almost no difference between winners and losers. Our read is that a sentiment model reads the *plot* — a war film is grim whether or not it won — and not the craft of the writing, which is the thing the award actually rewards.
+
+<Figure label="Fig. 04 · distilbert sentiment · win ≈ loss" caption="mean markers barely move">
+  <img
+    src="/images/projects/screenplays/distilbert-sentiment-win-loss.png"
+    alt="Category scatter of DistilBERT sentiment scores across wins_pos, wins_neg, losses_pos, losses_neg, with red positive-mean and green negative-mean star markers that sit close together between wins and losses."
+    className="w-full h-auto rounded border border-paper-edge"
+  />
+</Figure>
 
 There was one quiet finding hiding in the feature lists: the top words barely changed across eight decades. The likeliest explanation is that movies are written about the era they *depict*, not the era they were *made* in — a 1970s film set in the 1870s speaks 1870s. The corpus dates the setting, not the screenplay. Which is a fitting note to end on, because the whole project kept running into the same wall: subtitles can tell you what a movie is about far more easily than how well it was written.
 
