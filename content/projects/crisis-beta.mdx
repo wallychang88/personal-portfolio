@@ -32,9 +32,27 @@ JP Morgan's beta went 1.29 → 1.85 → 1.43. During the crisis its shares moved
 
 Goldman Sachs did the opposite, and that was the interesting wrinkle: 1.72 → 1.53 → 1.05, falling through the crisis rather than spiking. Chaudhury's paper had Goldman's early-crisis beta rising, though not significantly — so our divergence sits inside the paper's own margin of doubt rather than contradicting it outright. Aggregated across his 31 stocks, the average beta still climbed from 1.30 to 1.72 before easing to 1.61, and the financial names' alpha swung from −0.07 to +0.21 over the same span: battered first, rewarded later.
 
+The price paths underneath those betas carry the same crisis in a different register — indexed to 100 at the start of 2006, both banks ran with or above the market, then cratered through it into early 2009:
+
+<Figure label="Fig. 01 · indexed value · banks vs market" caption="jpm · goldman · 2006–2010">
+  <img
+    src="/images/projects/crisis-beta/portfolio-value-jpm-goldman-sp500.png"
+    alt="Line chart of indexed portfolio value 2006-2010 for JP Morgan (red), Goldman Sachs (blue), and the SP500 (black), all starting at 100. Goldman runs above the index pre-crisis, then both banks fall below the SP500 into early 2009 before recovering."
+    className="w-full h-auto rounded border border-paper-edge"
+  />
+</Figure>
+
 <OrnPullQuote>In a calm market a bank has its own story. In a crisis it only has the market's.</OrnPullQuote>
 
 The two large-cap controls barely flinched — Home Depot 1.10 → 1.01 → 0.93, Chevron 0.84 → 1.04 → 0.97. That flatness is what made the bank story legible; without something that *didn't* move, the moves wouldn't mean anything.
+
+<Figure label="Fig. 02 · indexed value · the controls" caption="home depot · chevron · 2006–2010">
+  <img
+    src="/images/projects/crisis-beta/portfolio-value-homedepot-chevron-sp500.png"
+    alt="Line chart of indexed portfolio value 2006-2010 for Home Depot (red), Chevron (blue), and the SP500 (black), all starting at 100. Chevron rises above the index while Home Depot stays below it; the two controls track the market without the violent crisis swing of the banks."
+    className="w-full h-auto rounded border border-paper-edge"
+  />
+</Figure>
 
 </Section>
 
@@ -43,6 +61,14 @@ The two large-cap controls barely flinched — Home Depot 1.10 → 1.01 → 0.93
 The part we added ourselves was a hypothesis: if a crisis born in subprime mortgages drives beta up, then the assets sitting closest to the fire — real estate — should show the most extreme inflation of all. So we ran the same three-window regression on a set of REITs.
 
 It held. The real-estate funds (IYR, VNQ, EPR) jumped from roughly 0.95 / 0.87 / 1.14 before the crisis to 1.62 / 1.66 / 1.79 during it — a wider swing than the big banks took. The likeliest reason the banks' blow looks softer in comparison is the obvious one: the banks got a government backstop, and the REITs, levered against collapsing property values, mostly did not. The epicenter moved the most. The model agreed with the geography of the crisis.
+
+<Figure label="Fig. 03 · indexed value · the reit extension" caption="iyr · vnq · epr · indexed to 100">
+  <img
+    src="/images/projects/crisis-beta/portfolio-value-reits-iyr-vnq-epr.png"
+    alt="Line chart of indexed portfolio value 2006-2010 for three REITs — IYR (red), VNQ (blue), EPR Properties (green) — against the SP500 (black). The real-estate funds climb pre-crisis then fall harder than any other series into early 2009, the epicenter of the collapse."
+    className="w-full h-auto rounded border border-paper-edge"
+  />
+</Figure>
 
 </Section>
 

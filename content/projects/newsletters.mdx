@@ -32,6 +32,22 @@ Even before any modeling, the two had different physiques. The Brew's median edi
 
 The classification task — given an edition, name its publisher — worked almost immediately. Reducing the 700 most frequent terms with truncated SVD already split the two into visibly separate clouds, and K-means landed on the same boundary unsupervised. From there a logistic-regression classifier on token features reached about 89% accuracy. Topic-model features, the more abstract representation, trailed it at roughly 0.66 to 0.76 — the raw words carried more signal than the themes I tried to distill out of them.
 
+<Figure label="Fig. 01 · truncated svd · times vs brew" caption="700 token features → 2-D">
+  <img
+    src="/images/projects/newsletters/svd-newsletter-clusters.png"
+    alt="Scatter plot of newsletter editions reduced by truncated SVD, with blue New York Times points forming an upper-left cloud and orange Morning Brew points forming a separate lower-right cloud."
+    className="w-full h-auto rounded border border-paper-edge"
+  />
+</Figure>
+
+<Figure label="Fig. 02 · k-means · k = 3, unsupervised" caption="same boundary the labels mark">
+  <img
+    src="/images/projects/newsletters/kmeans-newsletter-clusters.png"
+    alt="Two scatter panels: left shows uncolored SVD-reduced newsletter points, right shows the same points split by K-means into three colored clusters that recover the same dividing line."
+    className="w-full h-auto rounded border border-paper-edge"
+  />
+</Figure>
+
 The honest footnote is that the very best run skipped a proper train/test split, so 89% is the optimistic ceiling rather than a guarantee. But the shape of the result was never in doubt: these two newsletters are stylistically distinct enough that telling them apart is, for a model, not much of a challenge.
 
 </Section>
@@ -41,6 +57,14 @@ The honest footnote is that the very best run skipped a proper train/test split,
 Then the second question, and a wall. I wanted to predict the publication date from the text — the intuition being that a year of current events should leave some temporal fingerprint. It does not, at least not one a regressor can hold onto. Topic features gave an R² of about −0.02. Token features were worse, −6.5 and then −35.7 as I chunked them. Predicting the *month* instead of the exact date got to −3.2. Every one of those negative numbers means the model did worse than guessing the average.
 
 So I reached for the heavy machine: a BERT model fine-tuned for regression, following Galtier's recipe, trained on a rented V100 for five epochs. It failed too — no discernible relationship between the text and the date. The one flicker of life was a time-series view where a topic spiking in mid-July 2023 lined up with the Women's World Cup. Real, but far too faint for prediction.
+
+<Figure label="Fig. 03 · bert date regression · test R²" caption="per batch · never clears zero">
+  <img
+    src="/images/projects/newsletters/bert-date-r2-failure.png"
+    alt="Line chart of test R-squared per batch for the BERT date model, hovering just below zero across all batches before dropping sharply to about negative 1.25 at the last batch."
+    className="w-full h-auto rounded border border-paper-edge"
+  />
+</Figure>
 
 <OrnPullQuote>The text screams which newsletter it is and whispers nothing about when it was written.</OrnPullQuote>
 
