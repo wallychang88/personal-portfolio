@@ -256,9 +256,10 @@ function Hero() {
         className="mt-6 font-serif text-[17px] sm:text-[18px] leading-[1.6] text-ink-muted max-w-[720px] [text-wrap:pretty]"
         style={{ fontVariationSettings: '"opsz" 24, "wght" 400' }}
       >
-        I&rsquo;m Wally. Data scientist at Extend, working on RodSmith
-        (custom fishing rods) on the side, and the best bagel-maker in San
-        Francisco &mdash; I&rsquo;m willing to defend that one. The longer
+        I&rsquo;m Wally. Data scientist at Extend, previously in software
+        investing and consulting, working on RodSmith (custom fishing rods)
+        on the side, and the best bagel-maker in San Francisco &mdash; I&rsquo;m
+        willing to defend that one. The longer
         version is on the{' '}
         <Link
           href="/about/"
