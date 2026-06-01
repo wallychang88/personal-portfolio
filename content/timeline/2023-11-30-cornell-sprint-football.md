@@ -11,4 +11,4 @@ href: https://cornellbigred.com/sports/sprint-football/roster/wally-chang/73826
 external: true
 ---
 
-The 178-lb-weight-cap collegiate league, played by exactly nine schools. Defensive back as a sophomore, wide receiver junior and senior years; six games and All-CSFL Academic honors as a senior. The receipt for everything I do now.
+The 178-lb-weight-cap collegiate league, played by exactly nine schools. Three seasons at wide receiver, #87; six games and All-CSFL Academic honors as a senior. The receipt for everything I do now.
