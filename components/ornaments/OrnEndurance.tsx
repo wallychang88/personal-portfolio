@@ -29,9 +29,16 @@ export function OrnEndurance({
   const color = CAT_HEX.sage;
 
   if (kind === 'tioga') {
+    // Same west-to-east silhouette as the large /sweat/ RouteTioga
+    // profile (downsampled): Crane Flat → rolling climb → Tuolumne
+    // Meadows → Tioga Pass peak at ~53% across → the long drop to Mono
+    // Lake, which ends lower than the start. Keep this in step with
+    // routes/RouteTioga.tsx so the homepage tile matches the detail page.
     const pts: ReadonlyArray<readonly [number, number]> = [
-      [0, 60], [20, 55], [40, 48], [65, 40], [90, 32], [115, 22],
-      [140, 16], [160, 22], [185, 32], [210, 42], [240, 58],
+      [0, 41.8], [16.4, 34.2], [32.7, 29.3], [49.1, 32.1], [65.5, 28.3],
+      [81.8, 26.6], [92.7, 28.3], [106.4, 24.8], [117.3, 21.0], [128.2, 15.9],
+      [141.8, 27.9], [158.2, 33.5], [174.5, 37.7], [190.9, 43.2], [207.3, 48.8],
+      [223.6, 54.3], [240, 57.1],
     ];
     const sx = width / 240;
     const sy = height / 70;
@@ -41,7 +48,7 @@ export function OrnEndurance({
       `M0,${height} ` +
       sp.map((p) => `L${p[0].toFixed(1)},${p[1].toFixed(1)}`).join(' ') +
       ` L${width},${height} Z`;
-    const peak = sp[6];
+    const peak = sp[9];
     return (
       <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} className="block" aria-hidden="true">
         <line x1="0" y1={height - 0.5} x2={width} y2={height - 0.5} stroke={color} strokeWidth="0.4" opacity="0.5" />

@@ -10,4 +10,4 @@ tags:
 href: /sweat/
 ---
 
-Yosemite, opening day of the road over Tioga Pass — the few-day window every spring after Caltrans plows it clear and before it reopens to traffic. 88 miles, 7,680 feet of climbing, a stranger at sunrise who became a friend by the descent.
+Yosemite, opening day of the road over Tioga Pass — the few-day window every spring after Caltrans plows it clear and before it reopens to traffic. 90 miles, 7,680 feet of climbing, a stranger at sunrise who became a friend by the descent.

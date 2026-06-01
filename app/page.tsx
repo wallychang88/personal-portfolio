@@ -62,11 +62,11 @@ export default function HomePage() {
           <Eyebrow>Sweat · Trophy day · May 2026</Eyebrow>
           <TileTitle big>Tioga Road, before the cars.</TileTitle>
           <TileHook>
-            88 miles through Yosemite on opening weekend, after the road was plowed
-            but before the gate opened to cars. Crane Flat to Mono Lake, 9,945 ft.
+            90 miles through Yosemite on opening weekend, after the road was plowed
+            but before the gate opened to cars. Crane Flat to Mono Lake, 9,718 ft.
           </TileHook>
           <div className="mt-auto pt-3">
-            <OrnEndurance kind="tioga" width={520} height={92} delay={1} summitLabel="9,945 ft" />
+            <OrnEndurance kind="tioga" width={520} height={92} delay={1} summitLabel="9,718 ft" />
           </div>
           <TileTags tags={['Cycling', 'Sierras']} />
         </Tile>
@@ -87,10 +87,9 @@ export default function HomePage() {
             Builders meet anglers. Bespoke commissions, made-to-order spec,
             and in-stock inventory in one shape.
           </TileHook>
-          <div className="mt-auto pt-3">
-            <OrnSparkline width={360} height={56} delay={2} cat="slate" label="DISCOVERY · 8 MO" endLabel="→" />
+          <div className="mt-auto">
+            <TileTags tags={['Marketplace', 'Founding']} />
           </div>
-          <TileTags tags={['Marketplace', 'Founding']} />
         </Tile>
 
         <Tile

@@ -2,7 +2,7 @@ import { CAT_HEX } from '../catClass';
 
 /**
  * Large Tioga Road elevation profile — Crane Flat west of the gate,
- * climbing through Tuolumne Meadows to Tioga Pass at 9,945 ft, then the
+ * climbing through Tuolumne Meadows to Tioga Pass at 9,718 ft, then the
  * long drop east toward Mono Lake. Built for the /sweat/ Tioga
  * trophy spread.
  *
@@ -21,15 +21,15 @@ export function RouteTioga({
   const sx = width / 880;
   const sy = height / 220;
 
-  // Chart spans 3,000–10,500 ft so the route (≈6,200 → 9,945 → 4,000)
+  // Chart spans 3,000–10,500 ft so the route (≈6,200 → 9,718 → 4,000)
   // fills the canvas. All point y-values are computed from this range so
   // they line up with the printed gridline labels.
   const altMin = 3000;
   const altMax = 10500;
   const yFor = (alt: number) => ((altMax - alt) / (altMax - altMin)) * 220;
 
-  // 88-mile west-to-east point-to-point: Crane Flat (≈6,200 ft) →
-  // Tuolumne Meadows (≈8,650) → Tioga Pass (9,945) → Lee Vining drop →
+  // 90-mile west-to-east point-to-point: Crane Flat (≈6,200 ft) →
+  // Tuolumne Meadows (≈8,650) → Tioga Pass (9,718) → Lee Vining drop →
   // out toward Mono Basin (≈4,000). Meadows sit *before* the pass on
   // the climb, not after.
   const pts: ReadonlyArray<readonly [number, number]> = [
@@ -42,14 +42,14 @@ export function RouteTioga({
     [340, yFor(8150)],   // Tenaya Lake dip
     [390, yFor(8650)],   // Tuolumne Meadows ← meadows marker (sp[7])
     [430, yFor(9200)],
-    [470, yFor(9945)],   // Tioga Pass ← peak (sp[9])
+    [470, yFor(9718)],   // Tioga Pass ← peak (sp[9])
     [520, yFor(8200)],
     [580, yFor(7400)],
     [640, yFor(6800)],   // Lee Vining
     [700, yFor(6000)],
     [760, yFor(5200)],
     [820, yFor(4400)],
-    [880, yFor(4000)],   // Mile 88
+    [880, yFor(4000)],   // Mile 90 (out toward Mono Basin)
   ];
   const sp = pts.map(([px, py]) => [px * sx, py * sy] as const);
   const d = sp.map((p, i) => `${i === 0 ? 'M' : 'L'}${p[0].toFixed(1)},${p[1].toFixed(1)}`).join(' ');
@@ -115,7 +115,7 @@ export function RouteTioga({
         fontWeight="700"
         fill={accent}
       >
-        Tioga Pass · 9,945 ft
+        Tioga Pass · 9,718 ft
       </text>
 
       {/* Tuolumne Meadows mid-route — label sits BELOW the dot, away from
@@ -136,7 +136,7 @@ export function RouteTioga({
         Mi 0
       </text>
       <text x={width - 6} y={height - 6} textAnchor="end" fontSize="9.5" fontFamily="JetBrains Mono, monospace" fill="#5C5A52">
-        Mi 88
+        Mi 90
       </text>
     </svg>
   );
